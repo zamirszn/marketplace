@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:marketplace/presentation/resources/font_manager.dart';
 
 class LiquidSwipeCard extends StatelessWidget {

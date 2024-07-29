@@ -1,8 +1,9 @@
+import 'package:blobs/blobs.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:marketplace/app/constant.dart';
 import 'package:marketplace/presentation/resources/asset_manager.dart';
 import 'package:marketplace/presentation/resources/color_manager.dart';
+import 'package:marketplace/presentation/resources/routes_manager.dart';
 import 'package:marketplace/presentation/resources/string_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
 import 'package:marketplace/presentation/ui/onboarding/liquid_card_swipe.dart';
@@ -42,10 +43,31 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
           /// First page
           LiquidSwipeCard(
             useCustomWidget: true,
-            customWidget: Lottie.asset(LottieAsset.bag),
+            customWidget: Center(
+              child: Blob.animatedFromID(
+                id: const [
+                  '7-4-66047',
+                  '7-4-32',
+                  '7-4-26',
+                  '7-4-587933',
+                  '7-4-57'
+                ],
+                duration: const Duration(seconds: 4),
+                size: 350,
+                styles: BlobStyles(
+                    fillType: BlobFillType.fill, color: Colors.blue.shade200),
+                loop: true,
+                child: Transform.scale(
+                  scale: .6,
+                  child: Image.asset(
+                    ImageAsset.cart,
+                  ),
+                ),
+              ),
+            ),
             onTapName: () => liquidSwipeController?.previous(),
             onSkip: () async {
-              goHome();
+              goToNextPage();
             },
             name: Constant.appName,
             action: AppStrings.skip,
@@ -53,10 +75,10 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
             title: AppStrings.shop,
             subtitle: AppStrings.discoverGreatDeals,
             body: AppStrings.exploreVast,
-            buttonColor: ColorManager.primary,
-            titleColor: ColorManager.greyLight,
-            subtitleColor: ColorManager.greyDark,
-            bodyColor: ColorManager.primary,
+            buttonColor: ColorManager.color1,
+            titleColor: ColorManager.black,
+            subtitleColor: ColorManager.color4,
+            bodyColor: ColorManager.color2,
             gradient: const LinearGradient(
               colors: [Colors.white, Colors.white],
               begin: Alignment.topLeft,
@@ -67,10 +89,31 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
           /// Second page
           LiquidSwipeCard(
             useCustomWidget: true,
-            customWidget: Lottie.asset(LottieAsset.money),
+            customWidget: Center(
+              child: Blob.animatedFromID(
+                id: const [
+                  '7-4-66047',
+                  '7-4-32',
+                  '7-4-26',
+                  '7-4-587933',
+                  '7-4-57'
+                ],
+                duration: const Duration(seconds: 4),
+                size: 350,
+                styles: BlobStyles(
+                    fillType: BlobFillType.fill, color: Colors.red.shade200),
+                loop: true,
+                child: Transform.scale(
+                  scale: .5,
+                  child: Image.asset(
+                    ImageAsset.cart2,
+                  ),
+                ),
+              ),
+            ),
             onTapName: () => liquidSwipeController?.previous(),
             onSkip: () async {
-              goHome();
+              goToNextPage();
             },
             name: AppStrings.back,
             action: AppStrings.done,
@@ -83,7 +126,7 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
             subtitleColor: Colors.grey.shade200,
             bodyColor: Colors.white.withOpacity(0.8),
             gradient: LinearGradient(
-              colors: [Colors.grey, ColorManager.primary],
+              colors: [ColorManager.color3, ColorManager.color1],
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
             ),
@@ -93,11 +136,7 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
     );
   }
 
-  void goHome() async {
-    // navigator.pushReplacement(
-    //   MaterialPageRoute(
-    //     builder: (context) => const BottomNav(),
-    //   ),
-    // );
+  void goToNextPage() async {
+    goPush(context, Routes.loginOrRegisterPage);
   }
 }

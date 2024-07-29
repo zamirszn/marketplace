@@ -3,11 +3,9 @@ const express = require("express");
 
 const mongoose = require("mongoose");
 
-const authRouter = require("./routes/auth");
+const authRouter = require("./routes/auth").default;
 
 const app = express();
-
-const PORT = 3000;
 
 const mongoDBConnectionString = process.env.MONGO_URI;
 
@@ -24,8 +22,8 @@ mongoose
     console.log(e);
   });
 
-app.listen(PORT, () => {
-  console.log(`server started at port : ${PORT}`);
+app.listen(process.env.BASE_URL, () => {
+  console.log(`Server started at : ${process.env.BASE_URL}`);
 });
 
 app.get("/helloworld", (req, res) => {

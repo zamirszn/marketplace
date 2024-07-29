@@ -1,7 +1,9 @@
 const mongoose = require("mongoose");
 
+// const userOTPVerification = require("./otp_verification");
+
 const userSchema = mongoose.Schema({
-  name: {
+  fullName: {
     required: true,
     type: String,
     trim: true,
@@ -35,14 +37,16 @@ const userSchema = mongoose.Schema({
 
   role: {
     type: String,
-    default: "user",
+    default: "User",
+    enum: ["Admin", "User"],
   },
 
-  accountType: {
-    type: String,
-    required: true,
-    trim: true,
+  emailVerified: {
+    type: Boolean,
+    default: false,
   },
+
+  refreshToken: { type: String },
 });
 
 const User = mongoose.model("User", userSchema);

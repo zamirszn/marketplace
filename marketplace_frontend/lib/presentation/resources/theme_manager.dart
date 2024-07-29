@@ -16,13 +16,13 @@ ThemeData appTheme = ThemeData(
     ),
     scaffoldBackgroundColor: ColorManager.white,
     popupMenuTheme: const PopupMenuThemeData(surfaceTintColor: Colors.white),
-    colorScheme: ColorScheme.fromSeed(seedColor: ColorManager.primary),
+    colorScheme: ColorScheme.fromSeed(seedColor: ColorManager.color1),
     radioTheme: RadioThemeData(
-        fillColor: WidgetStateProperty.all(ColorManager.primary)),
+        fillColor: WidgetStateProperty.all(ColorManager.color1)),
     inputDecorationTheme: InputDecorationTheme(
       // contentPadding: const EdgeInsets.all(AppPadding.p8),
       hintStyle: getRegularStyle(
-        color: ColorManager.textLight,
+        color: ColorManager.color1,
         fontSize: FontSize.s16,
       ),
 
@@ -31,23 +31,23 @@ ThemeData appTheme = ThemeData(
 //         // error style
       errorStyle: getRegularStyle(color: ColorManager.red),
 
-      outlineBorder: BorderSide(color: ColorManager.primary),
+      outlineBorder: BorderSide(color: ColorManager.color1),
 
       border: OutlineInputBorder(
           borderSide:
-              BorderSide(color: ColorManager.primary, width: AppSize.s1),
+              BorderSide(color: ColorManager.color1, width: AppSize.s1),
           borderRadius: const BorderRadius.all(Radius.circular(AppSize.s6))),
 
 //         // enabled border
       enabledBorder: OutlineInputBorder(
           borderSide:
-              BorderSide(color: ColorManager.primary, width: AppSize.s1),
+              BorderSide(color: ColorManager.color1, width: AppSize.s1),
           borderRadius: const BorderRadius.all(Radius.circular(AppSize.s6))),
 
 //         // focused border
       focusedBorder: OutlineInputBorder(
           borderSide:
-              BorderSide(color: ColorManager.primary, width: AppSize.s1),
+              BorderSide(color: ColorManager.color1, width: AppSize.s1),
           borderRadius: const BorderRadius.all(Radius.circular(AppSize.s6))),
 
       // error border
@@ -57,11 +57,11 @@ ThemeData appTheme = ThemeData(
       // focused error border
       focusedErrorBorder: OutlineInputBorder(
           borderSide:
-              BorderSide(color: ColorManager.primary, width: AppSize.s1),
+              BorderSide(color: ColorManager.color1, width: AppSize.s1),
           borderRadius: const BorderRadius.all(Radius.circular(AppSize.s6))),
     ),
     // main colors of the app
-    primaryColor: ColorManager.primary,
+    primaryColor: ColorManager.color1,
     // primaryColorLight: ColorManager.primaryOpacity70,
     // primaryColorDark: ColorManager.darkPrimary,
     // disabledColor: ColorManager.grey1,
@@ -71,13 +71,13 @@ ThemeData appTheme = ThemeData(
     // card view theme
     fontFamily: FontConstants.poppins,
     cardTheme: CardTheme(
-        color: ColorManager.white,
+        color: ColorManager.color1,
         // shadowColor: ColorManager.grey,
         elevation: AppSize.s4),
     // App bar theme
     appBarTheme: AppBarTheme(
       centerTitle: true,
-      color: ColorManager.primary,
+      color: ColorManager.color1,
       elevation: AppSize.s4,
 
       // shadowColor: ColorManager.primaryOpacity70,
@@ -91,7 +91,7 @@ ThemeData appTheme = ThemeData(
     buttonTheme: ButtonThemeData(
       shape: const StadiumBorder(),
       // disabledColor: ColorManager.grey1,
-      buttonColor: ColorManager.primary,
+      buttonColor: ColorManager.color1,
       // splashColor: ColorManager.primaryOpacity70,
     ));
 

@@ -1,5 +1,5 @@
 name: marketplace
-description: "A new Flutter project."
+description: "Market place mobile app."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -40,6 +40,18 @@ dependencies:
   dio: ^5.5.0+1
   provider: ^6.1.2
   flutter_secure_storage: ^9.2.2
+  visibility_detector: ^0.4.0+2
+  # palette_generator: ^0.3.3+4
+
+  palette_generator:
+    git:
+      url: https://github.com/jmshrv/packages.git
+      branch: pallete-generator-isolates
+      ref: 4992c3b
+      path: packages/palette_generator
+
+  cached_network_image: ^3.3.1
+  image: ^4.2.0
 
 dev_dependencies:
   flutter_test:

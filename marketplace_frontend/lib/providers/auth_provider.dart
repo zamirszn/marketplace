@@ -16,10 +16,8 @@ class AuthProvider extends DisposableProvider {
   void signUp({
     required String fullName,
     required String email,
+    
     required String password,
-    required Function(String? message) onFail,
-    required Function(String? message) onSuccess,
-    required VoidCallback onRequestComplete,
   }) async {
     final response = await authService.signUp(
         fullName: fullName, email: email, password: password);

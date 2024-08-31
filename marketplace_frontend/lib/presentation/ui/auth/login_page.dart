@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:blobs/blobs.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
@@ -30,6 +31,15 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    if (kDebugMode) {
+      emailController.text = "fakeUser@gmail.com";
+      passwordController.text = "strongPassword001#";
+    }
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -217,24 +227,20 @@ class _LoginPageState extends State<LoginPage> {
                                     )),
                               ),
                               space(h: AppSize.s40),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: AppPadding.p5),
-                                child: SizedBox(
-                                  height: AppSize.s50,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          elevation: 0,
-                                          backgroundColor: ColorManager.color2),
-                                      onPressed: () {
-                                        login(context, state);
-                                      },
-                                      child: Text(
-                                        AppStrings.logIn,
-                                        style: getSemiBoldStyle(
-                                            color: ColorManager.white),
-                                      )),
-                                ),
+                              SizedBox(
+                                height: AppSize.s50,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        elevation: 0,
+                                        backgroundColor: ColorManager.color2),
+                                    onPressed: () {
+                                      login(context, state);
+                                    },
+                                    child: Text(
+                                      AppStrings.logIn,
+                                      style: getSemiBoldStyle(
+                                          color: ColorManager.white),
+                                    )),
                               ),
                               space(h: AppSize.s20),
                               GestureDetector(
@@ -273,6 +279,7 @@ class _LoginPageState extends State<LoginPage> {
   void login(BuildContext context, AuthProvider state) {
     if (formKey.currentState!.validate()) {
       formKey.currentState?.save();
+      goto(context, Routes.bottomNav);
     }
   }
 }

@@ -8,6 +8,7 @@ class ColorManager {
   static Color color3 = HexColor.fromHex("#8697C4");
   static Color color4 = HexColor.fromHex("#ADBBDA");
   static Color color5 = HexColor.fromHex("#EDE8F5");
+  static Color color6 = const Color.fromARGB(255, 96, 177, 244);
   static Color red = Colors.red;
   static Color black = Colors.black;
   static Color white = Colors.white;

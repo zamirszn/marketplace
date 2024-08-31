@@ -1,8 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:marketplace/presentation/resources/asset_manager.dart';
 import 'package:marketplace/presentation/resources/string_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
 
+
+
+import 'package:flutter/material.dart';
+
+class FadeRoute<T> extends MaterialPageRoute<T> {
+  FadeRoute({
+    required super.builder,
+  });
+
+  @override
+  Duration get transitionDuration => const Duration(milliseconds: 500);
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    return FadeTransition(opacity: animation, child: child);
+  }
+}
+
+// TODO: remove
+List<String> testImages = [
+  ImageAsset.cart,
+  ImageAsset.cart2,
+  ImageAsset.megaphone,
+  ImageAsset.paperbag,
+];
+
+  
 String? phoneValidator(
   String? value,
 ) {
@@ -59,6 +88,19 @@ SizedBox space({double h = 0, double w = 0}) {
     height: h,
   );
 }
+
+
+SliverToBoxAdapter sliverSpace({double h = 0, double w = 0}) {
+  return SliverToBoxAdapter(
+    child: SizedBox(
+      width: w,
+      height: h,
+    ),
+  );
+}
+   
+   
+   
 
 double deviceHeight(BuildContext context) {
   return MediaQuery.of(context).size.height;

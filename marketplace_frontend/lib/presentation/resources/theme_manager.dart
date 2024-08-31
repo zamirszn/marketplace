@@ -6,6 +6,9 @@ import 'package:marketplace/presentation/resources/styles_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
 
 ThemeData appTheme = ThemeData(
+    navigationBarTheme: NavigationBarThemeData(
+        labelTextStyle: WidgetStateProperty.all(
+            getRegularStyle(font: FontConstants.poppins))),
     pageTransitionsTheme: const PageTransitionsTheme(
       builders: {
         TargetPlatform.android: FadeInPageTransition(),

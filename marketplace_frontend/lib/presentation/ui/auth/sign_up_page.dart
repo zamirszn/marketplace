@@ -220,7 +220,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     },
                                     controller: passwordController,
                                     autofillHints: const [
-                                      AutofillHints.password
+                                      AutofillHints.newPassword
                                     ],
                                     inputFormatters: [
                                       LengthLimitingTextInputFormatter(
@@ -258,24 +258,20 @@ class _SignUpPageState extends State<SignUpPage> {
                                     )),
                               ),
                               space(h: AppSize.s40),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: AppPadding.p5),
-                                child: SizedBox(
-                                  height: AppSize.s50,
-                                  child: ElevatedButton(
-                                      style: ElevatedButton.styleFrom(
-                                          elevation: 0,
-                                          backgroundColor: ColorManager.color2),
-                                      onPressed: () {
-                                        signUp(context, state);
-                                      },
-                                      child: Text(
-                                        AppStrings.signUp,
-                                        style: getSemiBoldStyle(
-                                            color: ColorManager.white),
-                                      )),
-                                ),
+                              SizedBox(
+                                height: AppSize.s50,
+                                child: ElevatedButton(
+                                    style: ElevatedButton.styleFrom(
+                                        elevation: 0,
+                                        backgroundColor: ColorManager.color2),
+                                    onPressed: () {
+                                      signUp(context, state);
+                                    },
+                                    child: Text(
+                                      AppStrings.signUp,
+                                      style: getSemiBoldStyle(
+                                          color: ColorManager.white),
+                                    )),
                               ),
                               space(h: AppSize.s20),
                               GestureDetector(

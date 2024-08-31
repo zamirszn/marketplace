@@ -1,0 +1,5 @@
+.env
+staticfiles/
+venv/
+market_venv/
+

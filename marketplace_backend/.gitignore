@@ -1,5 +1,7 @@
 .env
 staticfiles/
 venv/
+.venv/
 market_venv/
-
+Dockerfile
+fly.toml

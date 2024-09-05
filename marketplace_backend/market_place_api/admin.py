@@ -92,9 +92,9 @@ class OrderAdmin(admin.ModelAdmin):
     class Meta:
         models = Order
 
-    list_filter = ["placed_at", "payment_status"]
-    search_fields = ["id", "placed_at", "payment_status"]
-    list_display = ["id", "placed_at", "payment_status", "owner", "owner_id"]
+    list_filter = ["placed_at", "order_status"]
+    search_fields = ["id", "placed_at", "order_status"]
+    list_display = ["id", "placed_at", "order_status", "owner", "owner_id"]
 
 
 @admin.register(Review)

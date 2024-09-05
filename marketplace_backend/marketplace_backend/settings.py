@@ -17,31 +17,33 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 import os
-import dj_database_url
-import environ
 from django.core.management.utils import get_random_secret_key
+import environ
+import environ
 
-env = environ.Env(
-    DEBUG=(bool, False),
-)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-environ.Env.read_env(BASE_DIR / ".env")
 
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
+
+environ.Env.read_env(BASE_DIR / ".env")  # <-- Updated!
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str("SECRET_KEY", default=get_random_secret_key())
+SECRET_KEY = env.str("SECRET_KEY", default=get_random_secret_key())  # <-- Updated!
 
-ALLOWED_HOSTS = env("ALLOWED_HOSTS")
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = env("DEBUGMODE")
-
+DEBUG = env("DEBUGMODE", default=False)
 
 # Application definition
 
@@ -105,13 +107,31 @@ WSGI_APPLICATION = "marketplace_backend.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "HOST": "postgres://marketplace_backend_morning_tree_2355:lYPwGLCIHtasBrZ@marketplace-backend-morning-tree-2355-db.flycast",
-        "PORT": "5432",
+if DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",  # The database engine to use (PostgreSQL in this case)
+            "NAME": env("DB_NAME"),  # The name of your database
+            "USER": env("DB_USER"),  # Your database username
+            "PASSWORD": env("DB_PASSWORD"),  # Your database password
+            "HOST": env(
+                "DB_HOST"
+            ),  # The host where your database is located, 'localhost' means it's on your local machine
+            "PORT": env(
+                "DB_PORT"
+            ),  # The port PostgreSQL is listening on, default is 5432
+        }
     }
-}
+
+else:
+    DATABASES = {
+        "default": env.db(
+            "DATABASE_URL", default="postgres://postgres:postgres@localhost:5432/blog"
+        )
+    }
+
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -147,11 +167,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
+
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"  # <-- Updated!
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, "static"),
@@ -187,10 +207,14 @@ SIMPLE_JWT = {
 DJOSER = {"SERIALIZERS": {"user_create": "core.serializers.UserSerializer"}}
 
 cloudinary.config(
-    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
-    api_key=os.getenv("CLOUDINARY_API_KEY"),
-    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    cloud_name=env("CLOUDINARY_CLOUD_NAME"),
+    api_key=env("CLOUDINARY_API_KEY"),
+    api_secret=env("CLOUDINARY_API_SECRET"),
 )
+
+
+STRIPE_SECRET_KEY = env("STRIPE_SK")
+STRIPE_PUBLISHABLE_KEY = env("STRIPE_PK")
 
 
 UNFOLD = {

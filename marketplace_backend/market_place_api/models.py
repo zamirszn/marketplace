@@ -5,12 +5,12 @@ from cloudinary.models import CloudinaryField
 
 
 class Category(models.Model):
-    title = models.CharField(max_length=225)  # Removed the comma
+    title = models.CharField(max_length=225)
     category_id = models.UUIDField(
         default=uuid.uuid4, editable=False, primary_key=True, unique=True
     )
     slug = models.SlugField(default=None)
-    featured_product = models.OneToOneField(  # Removed the comma
+    featured_product = models.OneToOneField(
         "Product",
         on_delete=models.CASCADE,
         blank=True,
@@ -124,15 +124,17 @@ class Order(models.Model):
     PAYMENT_STATUS_PENDING = "P"
     PAYMENT_STATUS_COMPLETE = "C"
     PAYMENT_STATUS_FAILED = "F"
+    ORDER_DELIVERED = "D"
 
     PAYMENT_STATUS_CHOICES = [
         (PAYMENT_STATUS_PENDING, "Pending"),
         (PAYMENT_STATUS_COMPLETE, "Complete"),
         (PAYMENT_STATUS_FAILED, "Failed"),
+        (ORDER_DELIVERED, "Delivered"),
     ]
 
     placed_at = models.DateTimeField(auto_now_add=True)
-    payment_status = models.CharField(
+    order_status = models.CharField(
         max_length=50,
         choices=PAYMENT_STATUS_CHOICES,
         default=PAYMENT_STATUS_PENDING,
@@ -141,6 +143,13 @@ class Order(models.Model):
 
     def __str__(self):
         return self.owner.email + " - " + str(self.placed_at)
+
+    @property
+    def total_price(self):
+        items = self.items.all()
+
+        total = sum([item.quantity * item.product.price for item in items])
+        return total
 
 
 class OrderItem(models.Model):

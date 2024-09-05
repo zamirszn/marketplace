@@ -15,6 +15,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import status
+from rest_framework.decorators import action
 
 
 class ProductViewSet(ModelViewSet):
@@ -86,7 +87,43 @@ class CartItemViewset(ModelViewSet):
         return context
 
 
+def initialize_payment(amount, email, order_id):
+    pass
+
+
 class OrderViewSet(ModelViewSet):
+
+    @action(detail=True, methods=["POST"])
+    def make_payment(self, request, pk=None):
+        order = self.get_object()
+        print(order.items.all())
+
+        for item in order.items.all():
+            print("item is" + str(item) + str(item.quantity))
+            if item.product.inventory < item.quantity:
+                return Response(
+                    {"error": f"Insufficient stock for {item.product.name}."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+        amount = order.total_price
+        email = request.user.email
+        order_id = str(order.id)
+        data = {"message": "Payment successful", "data": "Fake"}
+        return Response(data)
+        # initialize_payment(amount, email, order_id)
+
+    @action(detail=False, methods=["POST"])
+    def confirm_payment(self, request):
+        order_id = request.GET.get("order_id")
+        order = Order.objects.get(id=order_id)
+        order.order_status = "C"
+        order.save()
+
+        serializer = OrderSerializer(order)
+
+        data = {"message": "Payment successful", "data": serializer.data}
+        return Response(data)
 
     http_method_names = ["get", "patch", "post", "delete", "options", "head"]
 

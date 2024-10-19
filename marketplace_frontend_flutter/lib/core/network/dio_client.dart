@@ -6,12 +6,14 @@ import 'package:marketplace/core/network/interceptor.dart';
 const String applicationJson = "application/json";
 const String contentType = "content-type";
 const String accept = "accept";
-const String authorization = "authorization";
+const String authorization = "Authorization";
 const String defaultLanguage = "language";
 Duration timeOut = const Duration(minutes: 1);
 
 class DioClient {
   late final Dio _dio;
+  String? _authToken;
+
   DioClient()
       : _dio = Dio(BaseOptions(
           baseUrl: ApiUrls.baseUrl,
@@ -25,6 +27,25 @@ class DioClient {
         ))
           ..interceptors.addAll([LoggerInterceptor()]);
 
+  Options _getOptions(Options? options) {
+    options ??= Options();
+    if (_authToken != null) {
+      options.headers ??= {};
+      options.headers![authorization] = 'JWT $_authToken';
+    }
+    return options;
+  }
+
+  void setAuthToken(String token) {
+    _authToken = token;
+    _dio.options.headers[authorization] = 'JWT $token';
+  }
+
+  void clearAuthToken() {
+    _authToken = null;
+    _dio.options.headers.remove(authorization);
+  }
+
   Future<Response> get(
     String url, {
     Map<String, dynamic>? queryParameters,
@@ -36,20 +57,20 @@ class DioClient {
       final Response response = await _dio.get(
         url,
         queryParameters: queryParameters,
-        options: options,
+        options: _getOptions(options),
         cancelToken: cancelToken,
         onReceiveProgress: onReceiveProgress,
       );
 
-      return response;
-    } on DioException {
-      rethrow;
+      return _processResponse(response);
+    } on DioException catch (e) {
+      throw _handleDioError(e);
     }
   }
 
   Future<Response> post(
     String url, {
-    data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
     Options? options,
     ProgressCallback? onSendProgress,
@@ -59,13 +80,15 @@ class DioClient {
       final Response response = await _dio.post(
         url,
         data: data,
-        options: options,
+        queryParameters: queryParameters,
+        options: _getOptions(options),
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      return response;
-    } catch (e) {
-      rethrow;
+
+      return _processResponse(response);
+    } on DioException catch (e) {
+      throw _handleDioError(e);
     }
   }
 
@@ -83,20 +106,21 @@ class DioClient {
         url,
         data: data,
         queryParameters: queryParameters,
-        options: options,
+        options: _getOptions(options),
         cancelToken: cancelToken,
         onSendProgress: onSendProgress,
         onReceiveProgress: onReceiveProgress,
       );
-      return response;
-    } catch (e) {
-      rethrow;
+
+      return _processResponse(response);
+    } on DioException catch (e) {
+      throw _handleDioError(e);
     }
   }
 
-  Future<dynamic> delete(
+  Future<Response> delete(
     String url, {
-    data,
+    dynamic data,
     Map<String, dynamic>? queryParameters,
     Options? options,
     CancelToken? cancelToken,
@@ -106,12 +130,80 @@ class DioClient {
         url,
         data: data,
         queryParameters: queryParameters,
-        options: options,
+        options: _getOptions(options),
         cancelToken: cancelToken,
       );
-      return response.data;
-    } catch (e) {
-      rethrow;
+
+      return _processResponse(response);
+    } on DioException catch (e) {
+      throw _handleDioError(e);
     }
+  }
+
+  // Response processor
+  dynamic _processResponse(Response response) {
+    if (response.statusCode != null &&
+        response.statusCode! >= 200 &&
+        response.statusCode! < 300) {
+      // Return successful response
+      return response;
+    } else if (response.statusCode != null &&
+        response.statusCode! >= 400 &&
+        response.statusCode! < 500) {
+      // Client-side error
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        error: _formatErrorMessages(response),
+      );
+    } else if (response.statusCode != null && response.statusCode! >= 500) {
+      // Server-side error
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        error: 'Server error: ${response.statusCode}',
+      );
+    } else {
+      // Unknown error
+      throw DioException(
+        requestOptions: response.requestOptions,
+        response: response,
+        error: 'Unknown error occurred.',
+      );
+    }
+  }
+
+  // Error formatting
+  String _formatErrorMessages(Response response) {
+    // Handle specific error response structures
+    if (response.data is Map<String, dynamic>) {
+      StringBuffer errorMessage = StringBuffer();
+
+      response.data.forEach((key, value) {
+        if (value is List) {
+          for (var msg in value) {
+            if (value.length < 2) {
+              errorMessage.write('$msg');
+            } else {
+              errorMessage.writeln('$msg');
+            }
+          }
+        } else {
+          errorMessage.write('$value');
+        }
+      });
+
+      return errorMessage.toString();
+    } else {
+      return response.statusMessage ?? 'Unknown error';
+    }
+  }
+
+  // Handle Dio errors centrally
+  _handleDioError(DioException e) {
+    if (e.response != null && e.response?.data != null) {
+      return _formatErrorMessages(e.response!);
+    }
+    return e.message;
   }
 }

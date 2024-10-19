@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:marketplace/core/config/theme/color_manager.dart';
 
 class Constant {
-  static const String xAuthToken = "x-auth-token";
+  static const String accessToken = "access";
+  static const String refreshToken = "refresh";
   static const String appName = "Market Place";
   static int phoneLength = 20;
   static int passwordLength = 20;
@@ -44,5 +45,13 @@ class Constant {
       blurRadius: 10, // The blur radius
       spreadRadius: 0,
     ),
+  ];
+
+  static const List<String> blob = [
+    '7-4-66047',
+    '7-4-32',
+    '7-4-26',
+    '7-4-587933',
+    '7-4-57'
   ];
 }

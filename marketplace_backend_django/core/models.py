@@ -1,6 +1,7 @@
-from datetime import timezone
+import random
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
+from django.utils import timezone
 
 
 class UserManager(BaseUserManager):
@@ -52,6 +53,17 @@ class User(AbstractUser, PermissionsMixin):
     USERNAME_FIELD = "email"
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = []
+    otp = models.CharField(max_length=6, blank=True, null=True)
+    otp_expiry = models.DateTimeField(blank=True, null=True)
+
+    def generate_otp(self):
+        otp = str(random.randint(100000, 999999))  # Generate a 6-digit OTP
+        self.otp = otp
+        self.otp_expiry = timezone.now() + timezone.timedelta(
+            minutes=10
+        )  # OTP expires in 10 minutes
+        self.save()
+        return otp
 
     class Meta:
         verbose_name = "User"

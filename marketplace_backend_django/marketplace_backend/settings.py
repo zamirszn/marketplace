@@ -18,7 +18,10 @@ import cloudinary.uploader
 import cloudinary.api
 import os
 from django.core.management.utils import get_random_secret_key
+from django.urls import reverse_lazy
 import environ
+from django.templatetags.static import static
+from django.utils.translation import gettext_lazy as lzy
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -34,21 +37,33 @@ environ.Env.read_env(BASE_DIR / ".env")
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-DEBUG = env("DEBUGMODE", default=False, cast=bool)
+DEBUG = env.bool("DEBUG", default=False)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
-print(DEBUG)
+SECRET_KEY = env.str("SECRET_KEY", default=get_random_secret_key())
 
-SECRET_KEY = env.str("SECRET_KEY", default=get_random_secret_key())  # <-- Updated!
 
-# ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
-print(ALLOWED_HOSTS)
+if not DEBUG:
+    ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
+else:
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
+
+EMAIL_BACKEND = env.str("EMAIL_BACKEND")
+EMAIL_HOST = env.str("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_USE_TLS = env.bool(
+    "EMAIL_USE_TLS",
+    default=True,
+)
+EMAIL_HOST_USER = env.str("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env.str("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL")
 
 
 # Application definition
@@ -217,7 +232,17 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=2),
 }
 
-DJOSER = {"SERIALIZERS": {"user_create": "core.serializers.UserSerializer"}}
+DJOSER = {
+    "SERIALIZERS": {"user_create": "core.serializers.UserSerializer"},
+    "SEND_ACTIVATION_EMAIL": True,
+    "SEND_CONFIRMATION_EMAIL": True,
+    "LOGOUT_ON_PASSWORD_CHANGE": True,
+    "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
+    "ACTIVATION_URL": "activate/{uid}/{token}/",
+    "EMAIL": {
+        "activation": "djoser.email.ActivationEmail",
+    },
+}
 
 cloudinary.config(
     cloud_name=env("CLOUDINARY_CLOUD_NAME"),
@@ -235,6 +260,11 @@ UNFOLD = {
     "SITE_SYMBOL": "settings",  # symbol from icon set
     "SHOW_HISTORY": True,  # show/hide "History" button, default: True
     "SHOW_VIEW_ON_SITE": True,  # show/hide "View on site" button, default: True
+    "STYLES": [
+        lambda request: static("css/styles.css"),
+    ],
+    "ENVIRONMENT": "marketplace_backend.utils.environment_callback",
+    "DASHBOARD_CALLBACK": "market_place_api.views.dashboard_callback",
     "COLORS": {
         "primary": {
             "50": "250 245 255",
@@ -250,48 +280,71 @@ UNFOLD = {
             "950": "59 7 100",
         },
     },
-    "EXTENSIONS": {
-        "modeltranslation": {
-            "flags": {
-                "en": "🇬🇧",
-                "fr": "🇫🇷",
-                "nl": "🇧🇪",
-            },
-        },
-    },
+    # "EXTENSIONS": {
+    #     "modeltranslation": {
+    #         "flags": {
+    #             "en": "🇬🇧",
+    #             "fr": "🇫🇷",
+    #             "nl": "🇧🇪",
+    #         },
+    #     },
+    # },
     "SIDEBAR": {
         "show_search": True,  # Search in applications and models names
         "show_all_applications": True,  # Dropdown with all applications and models
-        # "navigation": [
-        #     {
-        #         "separator": True,  # Top border
-        #         "collapsible": True,  # Collapsible group of links
-        #         "items": [
-        #             #     {
-        #             #         "icon": "dashboard",  # Supported icon set: https://fonts.google.com/icons
-        #             #         "link": reverse_lazy("admin:index"),
-        #             #         "badge": "sample_app.badge_callback",
-        #             #         "permission": lambda request: request.user.is_superuser,
-        #             #     },
-        #             #     {
-        #             #         "icon": "people",
-        #             #         "link": reverse_lazy("admin:users_user_changelist"),
-        #             #     },
-        #         ],
-        #     },
-        # ],
+        "navigation": [
+            {
+                "separator": True,  # Top border
+                "collapsible": False,  # Collapsible group of links
+                "title": lzy("Home"),
+                "items": [
+                    {
+                        "icon": "dashboard",
+                        "title": lzy("Dashboard"),
+                        "link": reverse_lazy("admin:index"),
+                        # "badge": "sample_app.badge_callback",
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                ],
+            },
+            {
+                "separator": True,  # Top border
+                "collapsible": True,  # Collapsible group of links
+                "title": lzy("Account"),
+                "items": [
+                    {
+                        "icon": "manage_accounts",
+                        "title": lzy("Users"),
+                        "link": reverse_lazy("admin:core_user_changelist"),
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                ],
+            },
+            {
+                "separator": True,  # Top border
+                "collapsible": True,  # Collapsible group of links
+                "title": lzy("Orders"),
+                "items": [
+                    {
+                        "icon": "shopping_bag",
+                        "title": lzy("Orders"),
+                        "link": reverse_lazy("admin:market_place_api_order_changelist"),
+                        "badge": "market_place_api.views.badge_callback",
+                    },
+                ],
+            },
+        ],
     },
     # "TABS": [
     #     {
-    #         "models": [
-    #             "app_label.model_name_in_lowercase",
+    #         "models": ["core.User"],
+    #         "items": [
+    #             {
+    #                 "title": lzy("Core"),
+    #                 "icon": "sports_motorsports",
+    #                 "link": reverse_lazy("admin:core_user_changelist"),
+    #             },
     #         ],
-    #         # "items": [
-    #         #     {
-    #         #         "link": reverse_lazy("admin:app_label_model_name_changelist"),
-    #         #         "permission": "sample_app.permission_callback",
-    #         #     },
-    #         # ],
     #     },
     # ],
 }

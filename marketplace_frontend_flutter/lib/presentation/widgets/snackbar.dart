@@ -7,13 +7,13 @@ void showMessage(
 ) {
   final snackBar = SnackBar(
     content: Text(message),
-    backgroundColor: ColorManager.color2,
+    backgroundColor: ColorManager.color5,
     behavior: SnackBarBehavior.floating,
     margin: const EdgeInsets.only(
-        top: 40,
+        top: 20,
         left: 20,
         right: 20,
-        bottom: 30), // Adjust the top margin to position it below the app bar
+        bottom: 20), 
   );
 
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -28,10 +28,10 @@ void showErrorMessage(
     backgroundColor: ColorManager.red,
     behavior: SnackBarBehavior.floating,
     margin: const EdgeInsets.only(
-        top: 40,
+        top: 20,
         left: 20,
         right: 20,
-        bottom: 30), // Adjust the top margin to position it below the app bar
+        bottom: 20), // Adjust the top margin to position it below the app bar
   );
 
   ScaffoldMessenger.of(context).showSnackBar(snackBar);

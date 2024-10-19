@@ -3,29 +3,29 @@ part of 'signup_bloc.dart';
 @immutable
 sealed class SignUpEvent {}
 
-class FullNameChanged extends SignUpEvent {
+class SignUpFullNameChangedEvent extends SignUpEvent {
   final String fullName;
-  FullNameChanged(this.fullName);
+  SignUpFullNameChangedEvent(this.fullName);
 }
 
-class EmailChanged extends SignUpEvent {
+class EmailChangedEvent extends SignUpEvent {
   final String email;
-  EmailChanged(this.email);
+  EmailChangedEvent(this.email);
 }
 
-class PasswordChanged extends SignUpEvent {
+class SignUpPasswordChangedEvent extends SignUpEvent {
   final String password;
-  PasswordChanged(this.password);
+  SignUpPasswordChangedEvent(this.password);
 }
 
-class SignUpSubmitted extends SignUpEvent {
+class SignUpSubmittedEvent extends SignUpEvent {
   final SignupParamsModel params;
 
-  SignUpSubmitted({required this.params});
+  SignUpSubmittedEvent({required this.params});
 }
 
-class TogglePasswordVisibility extends SignUpEvent {
+class SignUpPasswordVisibilityEvent extends SignUpEvent {
   final bool isPasswordVisible;
 
-  TogglePasswordVisibility({required this.isPasswordVisible});
+  SignUpPasswordVisibilityEvent({required this.isPasswordVisible});
 }

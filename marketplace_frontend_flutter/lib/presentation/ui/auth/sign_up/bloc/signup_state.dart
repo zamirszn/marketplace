@@ -3,13 +3,13 @@ part of 'signup_bloc.dart';
 @immutable
 sealed class SignUpState {}
 
-class SignUpInitial extends SignUpState {
+class SignUpInitialState extends SignUpState {
   final bool isFullNameValid;
   final bool isEmailValid;
   final bool isPasswordValid;
   final bool isPasswordVisible;
 
-  SignUpInitial({
+  SignUpInitialState({
     this.isFullNameValid = true,
     this.isEmailValid = true,
     this.isPasswordValid = true,
@@ -17,27 +17,27 @@ class SignUpInitial extends SignUpState {
   });
 }
 
-class SignUpLoading extends SignUpState {}
+class SignUpLoadingState extends SignUpState {}
 
-class SignUpSuccess extends SignUpState {}
+class SignUpSuccessState extends SignUpState {}
 
-class SignUpFailure extends SignUpState {
+class SignUpFailureState extends SignUpState {
   final String error;
-  SignUpFailure(this.error);
+  SignUpFailureState(this.error);
 }
 
-class SignUpTogglePassword extends SignUpState {
+class SignUpTogglePasswordState extends SignUpState {
   final bool isPasswordVisible;
 
-  SignUpTogglePassword({required this.isPasswordVisible});
+  SignUpTogglePasswordState({required this.isPasswordVisible});
 }
 
-class SignUpFormUpdate extends SignUpState {
+class SignUpFormUpdateState extends SignUpState {
   final bool isFullNameValid;
   final bool isEmailValid;
   final bool isPasswordValid;
 
-  SignUpFormUpdate({
+  SignUpFormUpdateState({
     required this.isFullNameValid,
     required this.isEmailValid,
     required this.isPasswordValid,

@@ -12,6 +12,9 @@ class ColorManager {
   static Color red = Colors.red;
   static Color black = Colors.black;
   static Color white = Colors.white;
-  
-
+  static Color grey = Colors.grey.shade200;
+  static Color primary = Colors.lime.shade400;
+  static Color secondary = Colors.grey.shade200;
+  static Color rose = Colors.pink.shade100;
+  static Color lime = Colors.lime.shade300;
 }

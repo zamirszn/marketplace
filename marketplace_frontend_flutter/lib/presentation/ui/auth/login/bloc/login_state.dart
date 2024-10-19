@@ -3,33 +3,39 @@ part of 'login_bloc.dart';
 @immutable
 sealed class LoginState {}
 
-class LoginInitial extends LoginState {
+class LoginInitialState extends LoginState {
   final bool isUsernameValid;
   final bool isPasswordValid;
   final bool isPasswordVisible;
 
-  LoginInitial(
-      {this.isUsernameValid = true,
-      this.isPasswordValid = true,
-      this.isPasswordVisible = false});
+  LoginInitialState({
+    this.isUsernameValid = true,
+    this.isPasswordValid = true,
+    this.isPasswordVisible = false,
+  });
 }
 
-class LoginLoading extends LoginState {}
+class LoginLoadingState extends LoginState {}
 
-class LoginSuccess extends LoginState {}
+class LoginSuccessState extends LoginState {}
 
-class LoginFailure extends LoginState {
+class LoginFailureState extends LoginState {
   final String error;
-  LoginFailure(this.error);
+  LoginFailureState(this.error);
 }
 
-class LoginFormUpdate extends LoginState {
+class LoginFormUpdateState extends LoginState {
   final bool isUsernameValid;
   final bool isPasswordValid;
-  final bool isPasswordVisible; // Add this line
 
-  LoginFormUpdate(
+  LoginFormUpdateState(
       {required this.isUsernameValid,
       required this.isPasswordValid,
-      required this.isPasswordVisible}); // Update constructor
+  });
+}
+
+class LoginTogglePasswordState extends LoginState {
+  final bool isPasswordVisible;
+
+  LoginTogglePasswordState({required this.isPasswordVisible});
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:marketplace/presentation/ui/auth/email_verification/email_verification.dart';
+import 'package:marketplace/presentation/ui/auth/account_verification/account_verification.dart';
 import 'package:marketplace/presentation/ui/bottom_nav/bottom_nav.dart';
 import 'package:marketplace/presentation/widgets/error_404_page.dart';
 import 'package:marketplace/presentation/ui/auth/login_or_register_page.dart';
@@ -11,7 +11,8 @@ import 'package:marketplace/presentation/ui/home/item_details_page.dart';
 import 'package:marketplace/presentation/ui/onboarding/onboarding_screen.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: Routes.signUpPage,
+  //TODO: add onboarding and auth check
+  initialLocation: Routes.loginPage,
   debugLogDiagnostics: kDebugMode,
   routes: [
     GoRoute(
@@ -31,8 +32,8 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => SignUpPage(),
     ),
     GoRoute(
-      path: Routes.emailVerification,
-      builder: (context, state) => EmailVerification(),
+      path: Routes.accountVerificationPage,
+      builder: (context, state) => const AccountVerification(),
     ),
     GoRoute(
       path: Routes.bottomNav,
@@ -66,7 +67,7 @@ class Routes {
   static const String bottomNav = "/bottomNav";
   static const String itemDetailsPage = "/itemDetailsPage";
   static const String loginOrRegisterPage = "/loginOrRegisterPage";
-  static const String emailVerification = "/emailVerification";
+  static const String accountVerificationPage = "/accountVerificationPage";
 }
 
 Future<void> goPush(BuildContext context, String routeName,

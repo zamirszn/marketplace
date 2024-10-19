@@ -24,7 +24,7 @@ class SignupParamsModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
-      'fullName': fullName,
+      'full_name': fullName,
       'email': email,
       'password': password,
     };

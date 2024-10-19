@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marketplace/core/config/theme/color_manager.dart';
 
 class LiquidSwipeHandle extends StatelessWidget {
   /// A circular handle for the liquid swipe curtain
@@ -22,7 +23,7 @@ class LiquidSwipeHandle extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: Colors.white.withOpacity(0.2),
+          color: ColorManager.black,
         ),
       ),
       height: diameter,
@@ -32,9 +33,9 @@ class LiquidSwipeHandle extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           customBorder: const StadiumBorder(),
-          child: const Icon(
+          child: Icon(
             Icons.chevron_right,
-            color: Colors.white,
+            color: ColorManager.black,
           ),
         ),
       ),

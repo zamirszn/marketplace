@@ -132,7 +132,6 @@ class LiquidSwipeState extends State<LiquidSwipe>
               children: [
                 /// Background
                 widget.children!.first,
-                
 
                 /// Next page
                 ClipPath(

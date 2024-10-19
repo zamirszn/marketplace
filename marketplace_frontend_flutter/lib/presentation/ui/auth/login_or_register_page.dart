@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:blobs/blobs.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:marketplace/app/functions.dart';
+import 'package:marketplace/core/constants/constant.dart';
 import 'package:marketplace/presentation/resources/asset_manager.dart';
 import 'package:marketplace/core/config/theme/color_manager.dart';
 import 'package:marketplace/presentation/resources/font_manager.dart';
@@ -11,6 +13,8 @@ import 'package:marketplace/presentation/resources/string_manager.dart';
 import 'package:marketplace/presentation/resources/styles_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
 import 'package:marketplace/presentation/widgets/back_button.dart';
+import 'package:marketplace/presentation/widgets/move_bounce_animation.dart';
+import 'package:marketplace/presentation/widgets/round_icon_text_button.dart';
 
 class LoginOrRegisterPage extends StatelessWidget {
   const LoginOrRegisterPage({super.key});
@@ -18,126 +22,92 @@ class LoginOrRegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: GoBackButton(
-          color: ColorManager.white,
-        ),
-        forceMaterialTransparency: true,
-      ),
       extendBodyBehindAppBar: true,
-      body: SizedBox(
-        height: deviceHeight(context),
-        width: deviceWidth(context),
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-// add a blue and pink gradient color
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    ColorManager.color1,
-                    ColorManager.color2,
-                    ColorManager.color3,
-                    ColorManager.color4,
-                  ],
-                ),
-              ),
-              height: deviceHeight(context),
-              width: deviceWidth(context),
-            ),
-            BackdropFilter(
-                blendMode: BlendMode.color,
-                filter: ImageFilter.blur(
-                  sigmaX: 100,
-                  sigmaY: 100,
-                ),
-                child: Container(
-                  color: Colors.transparent,
-                )),
-            SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: AppPadding.p10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    space(h: AppSize.s100),
-                    Center(
-                        child: Text(
-                      AppStrings.shopAnExtensive,
-                      textAlign: TextAlign.center,
-                      style: getRegularStyle(
-                          color: ColorManager.white,
-                          font: FontConstants.ojuju,
-                          fontSize: FontSize.s30),
-                    )),
-                    space(h: AppSize.s20),
-                    Center(
-                        child: Text(
-                      AppStrings.fromTheLatest,
-                      textAlign: TextAlign.center,
-                      style: getRegularStyle(
-                          fontSize: FontSize.s14,
-                          color: ColorManager.white,
-                          font: FontConstants.poppins),
-                    )),
-                    Center(
-                      child: Blob.animatedFromID(
-                        id: const [
-                          '7-4-66047',
-                          '7-4-32',
-                          '7-4-26',
-                          '7-4-587933',
-                          '7-4-57'
-                        ],
-                        duration: const Duration(seconds: 4),
-                        size: 350,
-                        styles: BlobStyles(
-                            fillType: BlobFillType.fill,
-                            color: Colors.green.shade200),
-                        loop: true,
-                        child: Transform.scale(
-                          scale: .5,
+      body: ColoredBox(
+        color: ColorManager.rose,
+        child: SizedBox(
+          height: deviceHeight(context),
+          width: deviceWidth(context),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: AppPadding.p10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Center(
+                    child: Blob.animatedFromID(
+                      id: Constant.blob,
+                      duration: const Duration(seconds: 4),
+                      size: 350,
+                      styles: BlobStyles(
+                          fillType: BlobFillType.fill,
+                          color: ColorManager.black),
+                      loop: true,
+                      child: Transform.scale(
+                        scale: .5,
+                        child: MoveAndBounceAnimation(
                           child: Image.asset(
-                            ImageAsset.megaphone,
+                            ImageAsset.paperbag,
                           ),
                         ),
                       ),
                     ),
-                    space(h: AppSize.s36),
-                    SizedBox(
-                      height: AppSize.s50,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: AppPadding.p20),
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(elevation: 0),
-                            onPressed: () {
-                              goPush(context, Routes.loginPage);
-                            },
-                            child: const Text(AppStrings.logIn)),
-                      ),
+                  ),
+                  Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: AppPadding.p20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          AppStrings.shopAnExtensive,
+                          style: getSemiBoldStyle(
+                              color: ColorManager.black,
+                              font: FontConstants.ojuju,
+                              fontSize: FontSize.s30),
+                        ),
+                        space(h: AppSize.s20),
+                        Text(
+                          AppStrings.fromTheLatest,
+                          style: getRegularStyle(
+                              fontSize: FontSize.s14,
+                              color: ColorManager.black,
+                              font: FontConstants.poppins),
+                        ),
+                      ],
                     ),
-                    space(h: AppSize.s20),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: AppPadding.p20),
-                      child: SizedBox(
-                        height: AppSize.s50,
-                        child: OutlinedButton(
-                            onPressed: () {
-                              goPush(context, Routes.signUpPage);
-                            },
-                            child: const Text(AppStrings.register)),
+                  ),
+                  space(h: AppSize.s100),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      RoundIconTextButton(
+                        bgColor: ColorManager.black,
+                        textColor: ColorManager.rose,
+                        iconColor: ColorManager.black,
+                        text: AppStrings.logIn,
+                        onPressed: () {
+                          goPush(context, Routes.loginPage);
+                        },
+                        iconData: Iconsax.key,
                       ),
-                    ),
-                    space(h: AppSize.s20),
-                  ],
-                ),
+                      RoundIconTextButton(
+                        iconAlignment: IconAlignment.end,
+                        bgColor: ColorManager.black,
+                        textColor: ColorManager.rose,
+                        iconColor: ColorManager.black,
+                        text: AppStrings.register,
+                        onPressed: () {
+                          goPush(context, Routes.signUpPage);
+                        },
+                        iconData: Iconsax.user,
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            )
-          ],
+            ),
+          ),
         ),
       ),
     );

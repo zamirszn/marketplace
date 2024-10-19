@@ -7,6 +7,8 @@ import 'package:marketplace/presentation/resources/routes_manager.dart';
 import 'package:marketplace/presentation/resources/string_manager.dart';
 import 'package:marketplace/presentation/ui/onboarding/liquid_card_swipe.dart';
 import 'package:marketplace/presentation/ui/onboarding/liquid_swipe_view.dart';
+import 'package:marketplace/presentation/widgets/grow_animation.dart';
+import 'package:marketplace/presentation/widgets/move_bounce_animation.dart';
 
 class LiquidSwipeOnboarding extends StatefulWidget {
   const LiquidSwipeOnboarding({super.key});
@@ -43,13 +45,7 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
             useCustomWidget: true,
             customWidget: Center(
               child: Blob.animatedFromID(
-                id: const [
-                  '7-4-66047',
-                  '7-4-32',
-                  '7-4-26',
-                  '7-4-587933',
-                  '7-4-57'
-                ],
+                id: Constant.blob,
                 duration: const Duration(seconds: 4),
                 size: 350,
                 styles: BlobStyles(
@@ -57,8 +53,10 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
                 loop: true,
                 child: Transform.scale(
                   scale: .6,
-                  child: Image.asset(
-                    ImageAsset.cart,
+                  child: MoveAndBounceAnimation(
+                    child: Image.asset(
+                      ImageAsset.cart,
+                    ),
                   ),
                 ),
               ),
@@ -73,12 +71,12 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
             title: AppStrings.shop,
             subtitle: AppStrings.discoverGreatDeals,
             body: AppStrings.exploreVast,
-            buttonColor: ColorManager.color1,
-            titleColor: ColorManager.black,
-            subtitleColor: ColorManager.color4,
-            bodyColor: ColorManager.color2,
+            buttonColor: ColorManager.white,
+            titleColor: ColorManager.white,
+            subtitleColor: Colors.blue.shade200,
+            bodyColor: ColorManager.white,
             gradient: const LinearGradient(
-              colors: [Colors.white, Colors.white],
+              colors: [Colors.black, Colors.black],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -89,22 +87,18 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
             useCustomWidget: true,
             customWidget: Center(
               child: Blob.animatedFromID(
-                id: const [
-                  '7-4-66047',
-                  '7-4-32',
-                  '7-4-26',
-                  '7-4-587933',
-                  '7-4-57'
-                ],
+                id: Constant.blob,
                 duration: const Duration(seconds: 4),
                 size: 350,
                 styles: BlobStyles(
-                    fillType: BlobFillType.fill, color: Colors.red.shade200),
+                    fillType: BlobFillType.fill, color: ColorManager.black),
                 loop: true,
-                child: Transform.scale(
-                  scale: .5,
-                  child: Image.asset(
-                    ImageAsset.cart2,
+                child: MoveAndBounceAnimation(
+                  child: Transform.scale(
+                    scale: .9,
+                    child: Image.asset(
+                      ImageAsset.atm,
+                    ),
                   ),
                 ),
               ),
@@ -119,12 +113,12 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
             title: AppStrings.browse,
             subtitle: AppStrings.exploreAWideSelection,
             body: AppStrings.findExactly,
-            buttonColor: Colors.white,
-            titleColor: Colors.black,
-            subtitleColor: Colors.grey.shade200,
-            bodyColor: Colors.white.withOpacity(0.8),
-            gradient: LinearGradient(
-              colors: [ColorManager.color3, ColorManager.color1],
+            buttonColor: ColorManager.black,
+            titleColor: ColorManager.black,
+            subtitleColor: ColorManager.grey,
+            bodyColor: ColorManager.black,
+            gradient: const LinearGradient(
+              colors: [Colors.yellow, Colors.yellow],
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
             ),

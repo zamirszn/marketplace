@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:marketplace/app/functions.dart';
 import 'package:marketplace/core/config/theme/color_manager.dart';
 import 'package:marketplace/presentation/resources/font_manager.dart';
 import 'package:marketplace/presentation/resources/styles_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
+import 'package:marketplace/presentation/ui/home/bloc/home_page_bloc.dart';
 import 'package:marketplace/presentation/widgets/market_item_widget.dart';
 import 'package:marketplace/presentation/widgets/popular_products_carousel.dart';
 import 'package:marketplace/presentation/ui/home/products_category_list_widget.dart';
@@ -37,79 +39,86 @@ class HomePage extends StatelessWidget {
           space(w: AppSize.s8),
         ],
       ),
-      body: CustomScrollView(
-        slivers: [
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: AppPadding.p7),
-            sliver: SliverToBoxAdapter(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Popular Products",
-                  style: getSemiBoldStyle(
-                    font: FontConstants.ojuju,
-                    fontSize: AppSize.s24,
-                  ),
-                ),
-                IconButton(
-                    onPressed: () {}, icon: const Icon(Iconsax.setting_4)),
-              ],
-            )),
-          ),
-          sliverSpace(h: AppSize.s10),
-          const ProductsCategoriesListWidget(),
-          sliverSpace(h: AppSize.s20),
-          const SliverToBoxAdapter(
-            child: SizedBox(height: 300, child: PopularProductsCarousel()),
-          ),
-          sliverSpace(h: AppSize.s20),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: AppPadding.p7),
-            sliver: SliverToBoxAdapter(
-                child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "Discover Products",
-                  style: getSemiBoldStyle(
-                    font: FontConstants.ojuju,
-                    fontSize: AppSize.s24,
-                  ),
-                ),
-                Column(
-                  children: [
-                    Text(
-                      "View all",
-                      style: getLightStyle(
-                        font: FontConstants.poppins,
-                        fontSize: AppSize.s14,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            )),
-          ),
-          sliverSpace(h: AppSize.s10),
-          SliverPadding(
-            padding: const EdgeInsets.symmetric(horizontal: AppPadding.p7),
-            sliver: SliverGrid.builder(
-              itemCount: testImages.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1 / 1.5,
-                  crossAxisSpacing: AppSize.s10,
-                  mainAxisSpacing: 10),
-              itemBuilder: (context, index) {
-                return MarketItemWidget(
-                  shouldExtractColor: true,
-                  productImagePath: testImages[index],
-                );
-              },
-            ),
-          ),
+      body: MultiBlocProvider(
+        providers: [
+          // BlocProvider<HomePageBloc>(
+          //     create: (context) =>
+          //         HomePageBloc()..add(GetProductCategoryEvent())),
         ],
+        child: CustomScrollView(
+          slivers: [
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: AppPadding.p7),
+              sliver: SliverToBoxAdapter(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Popular Products",
+                    style: getSemiBoldStyle(
+                      font: FontConstants.ojuju,
+                      fontSize: AppSize.s24,
+                    ),
+                  ),
+                  IconButton(
+                      onPressed: () {}, icon: const Icon(Iconsax.setting_4)),
+                ],
+              )),
+            ),
+            sliverSpace(h: AppSize.s10),
+            const ProductsCategoriesListWidget(),
+            sliverSpace(h: AppSize.s20),
+            const SliverToBoxAdapter(
+              child: SizedBox(height: 300, child: PopularProductsCarousel()),
+            ),
+            sliverSpace(h: AppSize.s20),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: AppPadding.p7),
+              sliver: SliverToBoxAdapter(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Discover Products",
+                    style: getSemiBoldStyle(
+                      font: FontConstants.ojuju,
+                      fontSize: AppSize.s24,
+                    ),
+                  ),
+                  Column(
+                    children: [
+                      Text(
+                        "View all",
+                        style: getLightStyle(
+                          font: FontConstants.poppins,
+                          fontSize: AppSize.s14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              )),
+            ),
+            sliverSpace(h: AppSize.s10),
+            SliverPadding(
+              padding: const EdgeInsets.symmetric(horizontal: AppPadding.p7),
+              sliver: SliverGrid.builder(
+                itemCount: testImages.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1 / 1.5,
+                    crossAxisSpacing: AppSize.s10,
+                    mainAxisSpacing: 10),
+                itemBuilder: (context, index) {
+                  return MarketItemWidget(
+                    shouldExtractColor: true,
+                    productImagePath: testImages[index],
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

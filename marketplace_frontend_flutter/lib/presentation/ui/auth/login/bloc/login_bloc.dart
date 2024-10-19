@@ -1,84 +1,69 @@
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
+import 'package:flutter/material.dart';
 import 'package:marketplace/app/functions.dart';
-import 'package:meta/meta.dart';
+import 'package:marketplace/data/models/login_params_model.dart';
+import 'package:marketplace/domain/usecases/auth_usecase.dart';
+import 'package:marketplace/presentation/service_locator.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  LoginBloc() : super(LoginInitial()) {
-    on<UsernameChanged>(_onUsernameChanged);
-    on<PasswordChanged>(_onPasswordChanged);
-    on<LoginSubmitted>(_onLoginSubmitted);
-    on<TogglePasswordVisibility>(_onTogglePasswordVisibility);
+  LoginBloc() : super(LoginInitialState()) {
+    on<LoginFullNameChangedEvent>(_onUsernameChanged);
+    on<LoginPasswordChangedEvent>(_onPasswordChanged);
+    on<LoginSubmittedEvent>(_onLoginSubmitted);
+    on<LoginPasswordVisibileEvent>(_onTogglePasswordVisibility);
   }
 
   void _onTogglePasswordVisibility(
-      TogglePasswordVisibility event, Emitter<LoginState> emit) {
-    final currentState = state;
-
-    if (currentState is LoginFormUpdate) {
-      emit(LoginFormUpdate(
-        isUsernameValid: currentState.isUsernameValid,
-        isPasswordValid: currentState.isPasswordValid,
-        isPasswordVisible:
-            !currentState.isPasswordVisible, // Toggle the visibility
-      ));
-    }
+      LoginPasswordVisibileEvent event, Emitter<LoginState> emit) {
+    emit(LoginTogglePasswordState(isPasswordVisible: event.isPasswordVisible));
   }
 
-  void _onLoginSubmitted(LoginSubmitted event, Emitter<LoginState> emit) async {
-    final currentState = state;
+  void _onLoginSubmitted(
+      LoginSubmittedEvent event, Emitter<LoginState> emit) async {
+    emit(LoginLoadingState());
 
-    if (currentState is LoginFormUpdate &&
-        currentState.isUsernameValid &&
-        currentState.isPasswordValid) {
-      emit(LoginLoading());
-
-      // Simulating a login process
-      await Future.delayed(const Duration(seconds: 2));
-
-      // In a real scenario, call an authentication API here
-      const success = true; // Mocking a successful login response
-
-      if (success == true) {
-        emit(LoginSuccess());
-      } else {
-        emit(LoginFailure("Invalid username or password"));
-      }
-    }
+    Either response = await sl<LogInUseCase>().call(params: event.params);
+    response.fold((error) {
+      emit(LoginFailureState(error));
+    }, (data) {
+      emit(LoginSuccessState());
+    });
   }
 
-  void _onUsernameChanged(UsernameChanged event, Emitter<LoginState> emit) {
-    final isUsernameValid = validateUsername(event.username);
+  void _onUsernameChanged(
+      LoginFullNameChangedEvent event, Emitter<LoginState> emit) {
+    final isUsernameValid = validateUsername(event.fullName);
     final currentState = state;
 
-    if (currentState is LoginInitial || currentState is LoginFormUpdate) {
-      emit(LoginFormUpdate(
+    if (currentState is LoginInitialState ||
+        currentState is LoginFormUpdateState) {
+      emit(LoginFormUpdateState(
         isUsernameValid: isUsernameValid,
-        isPasswordValid: (currentState is LoginFormUpdate)
+        isPasswordValid: (currentState is LoginFormUpdateState)
             ? currentState.isPasswordValid
             : true,
-        isPasswordVisible: (currentState is LoginFormUpdate)
-            ? currentState.isPasswordVisible
-            : false,
+       
       ));
     }
   }
 
-  void _onPasswordChanged(PasswordChanged event, Emitter<LoginState> emit) {
+  void _onPasswordChanged(
+      LoginPasswordChangedEvent event, Emitter<LoginState> emit) {
     final isPasswordValid = validatePassword(event.password);
     final currentState = state;
 
-    if (currentState is LoginInitial || currentState is LoginFormUpdate) {
-      emit(LoginFormUpdate(
-        isUsernameValid: (currentState is LoginFormUpdate)
+    if (currentState is LoginInitialState ||
+        currentState is LoginFormUpdateState) {
+      emit(LoginFormUpdateState(
+        isUsernameValid: (currentState is LoginFormUpdateState)
             ? currentState.isUsernameValid
             : true,
         isPasswordValid: isPasswordValid,
-        isPasswordVisible: (currentState is LoginFormUpdate)
-            ? currentState.isPasswordVisible
-            : false,
+      
       ));
     }
   }

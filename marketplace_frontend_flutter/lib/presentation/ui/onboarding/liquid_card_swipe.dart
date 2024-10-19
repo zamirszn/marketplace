@@ -120,7 +120,7 @@ class LiquidSwipeCard extends StatelessWidget {
                 style: TextStyle(
                     fontSize: 16,
                     color: bodyColor,
-                    fontWeight: FontWeightManager.light,
+                    fontWeight: FontWeightManager.regular,
                     fontFamily: FontConstants.poppins),
               ),
             ),

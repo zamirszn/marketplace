@@ -1,6 +1,12 @@
 class AppStrings {
   static const String noRouteFound = "no_route_found";
   static const String back = "Back";
+  static const String apply = "Apply";
+  static const String promoCode = "Promo Code";
+  static const String cart = "Cart";
+  static const String discoverProducts = "Discover Products";
+  static const String viewAll = "View all";
+  static const String search = "Search";
   static const String pleaseSignInHere = "Please sign in here";
   static const String pleaseSignUpHere = "Please sign up here";
   static const String resendCode = "Resend code";
@@ -14,6 +20,8 @@ class AppStrings {
   static const String alreadyHaveAnAccount = "Already have an account?";
   static const String register = "Register";
   static const String logIn = "Log In";
+  static const String popularProducts = "Popular Products";
+  static const String discoverOurNewItems = "Discover\nour new items";
   static const String done = "Done";
   static const String signUp = "Sign Up";
   static const String emailAddress = "Email Address";

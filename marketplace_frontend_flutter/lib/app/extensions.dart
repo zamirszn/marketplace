@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marketplace/core/config/theme/color_manager.dart';
 
 extension HexColor on Color {
   static Color fromHex(String hexColorString) {
@@ -58,6 +59,21 @@ class RedBox extends StatelessWidget {
     return ColoredBox(
       color: Colors.red,
       child: child,
+    );
+  }
+}
+
+class RoundCorner extends StatelessWidget {
+  const RoundCorner({super.key, required this.child, this.borderRadius});
+  final Widget child;
+  final double? borderRadius;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius ?? 10),
+      child:
+          ColoredBox(color: ColorManager.color2.withOpacity(.3), child: child),
     );
   }
 }

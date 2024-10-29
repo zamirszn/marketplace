@@ -1,0 +1,212 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:marketplace/app/extensions.dart';
+import 'package:marketplace/app/functions.dart';
+import 'package:marketplace/core/config/theme/color_manager.dart';
+import 'package:marketplace/data/models/product_model.dart';
+import 'package:marketplace/presentation/resources/font_manager.dart';
+import 'package:marketplace/presentation/resources/styles_manager.dart';
+import 'package:marketplace/presentation/resources/values_manager.dart';
+import 'package:marketplace/presentation/widgets/3d_flip_widget.dart';
+import 'package:marketplace/presentation/widgets/favourite_button.dart';
+import 'package:marketplace/presentation/widgets/interactive_3d_effect.dart';
+import 'package:marketplace/presentation/ui/home/item_details_page.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+
+class NewProductWidget extends StatelessWidget {
+  const NewProductWidget({
+    super.key,
+    required this.product,
+  });
+  final ProductModel product;
+
+  @override
+  Widget build(BuildContext context) {
+    return Interactive3DEffect(
+      child: Container(
+        width: AppSize.s200,
+        decoration: BoxDecoration(
+            color: Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(AppSize.s20)),
+        padding: EdgeInsets.symmetric(
+            vertical: AppPadding.p12, horizontal: AppPadding.p12),
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: RoundCorner(
+                    child: CachedNetworkImage(
+                      imageUrl: product.image ?? "",
+                      height: 120,
+                      width: 200,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => SizedBox(
+                        child: FlutterLogo(),
+                      ),
+                      errorWidget: (context, url, error) => Skeletonizer(
+                          child: Container(
+                        color: ColorManager.white,
+                        height: 100,
+                        width: 100,
+                      )),
+                    ),
+                  ),
+                ),
+                space(h: AppSize.s10),
+                Text(
+                  product.title ?? "",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Row(
+                  children: [
+                    Text(
+                      "\$${product.price}",
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                          decoration: product.discountPrice != null
+                              ? TextDecoration.lineThrough
+                              : null,
+                          fontSize: FontSize.s18,
+                          fontFamily: FontConstants.ojuju),
+                    ),
+                    if (product.discountPrice != null)
+                      Padding(
+                        padding: const EdgeInsets.only(left: AppPadding.p10),
+                        child: Text(
+                          "\$${product.discountPrice}",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: FontSize.s18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: FontConstants.ojuju),
+                        ),
+                      ),
+                  ],
+                ),
+              ],
+            ),
+            Positioned(
+              bottom: 0,
+              right: 2,
+              child: RoundCorner(
+                  child: IconButton(
+                      splashColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onPressed: () {},
+                      icon: const Icon(Iconsax.box_add))),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// class NewProductWidget extends StatefulWidget {
+//   const NewProductWidget({
+//     super.key,
+//     required this.productImagePath,
+//   });
+
+//   final String productImagePath;
+
+//   @override
+//   State<NewProductWidget> createState() => _NewProductWidgetState();
+// }
+
+// class _NewProductWidgetState extends State<NewProductWidget>
+//     with TickerProviderStateMixin {
+//   AnimationController? itemAnimationController;
+
+//   @override
+//   void initState() {
+//     // initAnimation();
+
+//     super.initState();
+//   }
+
+//   // void initAnimation() {
+//   //   itemAnimationController = AnimationController(
+//   //     vsync: this,
+//   //     duration: const Duration(seconds: 2),
+//   //   );
+
+//   //   itemAnimationController?.addStatusListener((status) {
+//   //     if (status == AnimationStatus.completed) {
+//   //       gotoNextDetailsPage().then((_) => itemAnimationController?.reset());
+//   //     }
+//   //   });
+//   // }
+
+//   // Future gotoNextDetailsPage() async {
+//   //   Navigator.of(context).push(FadeRoute(
+//   //     builder: (context) => const ItemDetailsPage(),
+//   //   ));
+//   // }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return ColoredBox(
+//       color: Colors.red,
+//       child: Interactive3DEffect(
+//         child: GestureDetector(
+//           onTap: () {
+//             // goPush(
+//             //   context,
+//             //   Routes.itemDetailsPage,
+//             // );
+//           },
+//           child: Flip3DPage(
+//             nextPage: ClipRRect(
+//               borderRadius: BorderRadius.circular(AppSize.s10),
+//               child: SizedBox(
+//                 width: deviceWidth(context),
+//                 height: deviceHeight(context),
+//               ),
+//             ),
+//             currentPage: SizedBox(
+//               height: deviceHeight(context),
+//               width: deviceWidth(context) / 2,
+//               child: Padding(
+//                 padding: const EdgeInsets.all(AppSize.s10),
+//                 child: Column(
+//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                   crossAxisAlignment: CrossAxisAlignment.start,
+//                   children: [
+//                     Text(
+//                       "Product",
+//                       overflow: TextOverflow.ellipsis,
+//                       style: getMediumStyle(
+//                         color: ColorManager.white,
+//                         fontSize: FontSize.s17,
+//                       ),
+//                     ),
+//                     Row(
+//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                       children: [
+//                         Text(
+//                           "\$20.99",
+//                           overflow: TextOverflow.ellipsis,
+//                           style: getSemiBoldStyle(
+//                             color: ColorManager.white,
+//                             fontSize: FontSize.s17,
+//                           ),
+//                         ),
+//                         const FavouriteButton(),
+//                       ],
+//                     )
+//                   ],
+//                 ),
+//               ),
+//             ),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

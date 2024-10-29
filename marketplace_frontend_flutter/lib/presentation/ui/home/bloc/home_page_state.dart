@@ -10,9 +10,9 @@ final class HomePageCategoryLoading extends HomePageState {}
 final class HomePageCategoryFailure extends HomePageState {}
 
 final class HomePageCategorySuccess extends HomePageState {
-  final List<String> categories;
+  final List<ProductCategoryEntity> productCategories;
 
-  HomePageCategorySuccess({required this.categories});
+  HomePageCategorySuccess({required this.productCategories});
 }
 
 final class HomePageCategoryUpdate extends HomePageState {

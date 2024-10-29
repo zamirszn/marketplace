@@ -12,7 +12,7 @@ import 'package:marketplace/presentation/ui/onboarding/onboarding_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   //TODO: add onboarding and auth check
-  initialLocation: Routes.loginPage,
+  initialLocation: Routes.bottomNav,
   debugLogDiagnostics: kDebugMode,
   routes: [
     GoRoute(

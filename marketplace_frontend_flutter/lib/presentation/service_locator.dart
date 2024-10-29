@@ -10,6 +10,7 @@ import 'package:marketplace/domain/repository/auth_repo.dart';
 import 'package:marketplace/domain/repository/products_repo.dart';
 import 'package:marketplace/domain/repository/secure_storage_repo.dart';
 import 'package:marketplace/domain/usecases/auth_usecase.dart';
+import 'package:marketplace/domain/usecases/products_usecase.dart';
 import 'package:marketplace/domain/usecases/user_usecase.dart';
 import 'package:marketplace/data/source/secure_storage_data_source.dart';
 
@@ -32,4 +33,5 @@ void setupServiceLocator() {
   sl.registerSingleton<SignupUseCase>(SignupUseCase());
   sl.registerSingleton<LogInUseCase>(LogInUseCase());
   sl.registerSingleton<UserUsecase>(UserUsecase());
+  sl.registerSingleton<ProductsUsecase>(ProductsUsecase());
 }

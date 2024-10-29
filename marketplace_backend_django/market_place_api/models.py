@@ -167,12 +167,13 @@ class OrderItem(models.Model):
 class Profile(models.Model):
     name = models.CharField(max_length=225)
     bio = models.TextField()
+    picture = models.ImageField(blank=True, null=True)
 
-    picture = CloudinaryField(
-        "profile_images",
-        blank=True,
-        null=True,
-    )
+    # picture = CloudinaryField(
+    #     "profile_images",
+    #     blank=True,
+    #     null=True,
+    # )
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
     )

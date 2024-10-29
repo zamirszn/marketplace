@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:marketplace/data/models/product_model.dart';
 import 'package:marketplace/presentation/resources/asset_manager.dart';
 import 'package:marketplace/presentation/resources/string_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
@@ -18,6 +19,15 @@ class FadeRoute<T> extends MaterialPageRoute<T> {
     return FadeTransition(opacity: animation, child: child);
   }
 }
+
+final testProductModel = ProductModel(
+    image: "image",
+    title: "Product Name " * 2,
+    description: "Long ispum de something dummy text",
+    rating: 5,
+    price: 50,
+    discountPrice: 38,
+    inventory: 4);
 
 // TODO: remove
 List<String> testImages = [

@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:marketplace/app/extensions.dart';
+import 'package:marketplace/app/functions.dart';
 import 'package:marketplace/core/config/theme/color_manager.dart';
+import 'package:marketplace/domain/entities/product_category_entity.dart';
+import 'package:marketplace/presentation/resources/font_manager.dart';
 import 'package:marketplace/presentation/resources/styles_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
 import 'package:marketplace/presentation/ui/home/bloc/home_page_bloc.dart';
+import 'package:marketplace/presentation/widgets/loading_widget.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductsCategoriesListWidget extends StatelessWidget {
   const ProductsCategoriesListWidget({
@@ -19,45 +25,74 @@ class ProductsCategoriesListWidget extends StatelessWidget {
           create: (context) => HomePageBloc()..add(GetProductCategoryEvent()),
           child: BlocBuilder<HomePageBloc, HomePageState>(
             builder: (context, state) {
-              return ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                itemCount: state is HomePageCategorySuccess
-                    ? state.categories.length
-                    : 0,
-                itemBuilder: (context, index) {
-                  String category = state is HomePageCategorySuccess
-                      ? state.categories[index]
-                      : "";
-                  return GestureDetector(
-                    // onTap: () => state.updateSelectedCategory(category),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: AppSize.s18, vertical: AppSize.s2),
-                      margin:
-                          const EdgeInsets.symmetric(horizontal: AppSize.s2),
-                      alignment: Alignment.center,
-                      decoration: ShapeDecoration(
-                        color: state is HomePageCategoryUpdate
-                            ? state.selectedCategory == category
-                                ? ColorManager.black.withOpacity(.85)
-                                : ColorManager.color2.withOpacity(.3)
-                            : null,
-                        shape: const StadiumBorder(),
+              if (state is HomePageCategoryLoading ||
+                  state is HomePageCategoryFailure) {
+                return ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  itemCount: 10,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                          right: AppPadding.p5, left: AppPadding.p5),
+                      child: Skeletonizer(
+                        effect: PulseEffect(
+                            from: ColorManager.color1.withOpacity(.1),
+                            duration: Duration(seconds: 5),
+                            to: ColorManager.black.withOpacity(.01)),
+                        child: Text(
+                          "******",
+                          style: getRegularStyle(fontSize: FontSize.s30),
+                        ),
                       ),
-                      child: Text(
-                        category,
-                        style: getRegularStyle(
-                            color: state is HomePageCategoryUpdate
-                                ? state.selectedCategory == category
-                                    ? ColorManager.white
-                                    : ColorManager.black
-                                : null),
+                    );
+                  },
+                );
+              }
+
+              if (state is HomePageCategorySuccess) {
+                return ListView.builder(
+                  physics: const BouncingScrollPhysics(),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.productCategories.length,
+                  itemBuilder: (context, index) {
+                    ProductCategoryEntity category =
+                        state.productCategories[index];
+                    return GestureDetector(
+                      // onTap: () => state.updateSelectedCategory(category),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: AppSize.s18, vertical: AppSize.s2),
+                        margin:
+                            const EdgeInsets.symmetric(horizontal: AppSize.s6),
+                        alignment: Alignment.center,
+                        decoration: ShapeDecoration(
+                          // color: state is HomePageCategoryUpdate
+                          //     ? state.selectedCategory == category
+                          //         ? ColorManager.black.withOpacity(.85)
+                          //         : ColorManager.color2.withOpacity(.3)
+                          //     : null,
+
+                          color: ColorManager.color2.withOpacity(.3),
+                          shape: const StadiumBorder(),
+                        ),
+                        child: Text(
+                          category.title,
+                          // style: getRegularStyle(
+                          //     // color: state is HomePageCategoryUpdate
+                          //     //     ? state.selectedCategory == category
+                          //     //         ? ColorManager.white
+                          //     //         : ColorManager.black
+                          //     //     : null
+                          //     ),
+                        ),
                       ),
-                    ),
-                  );
-                },
-              );
+                    );
+                  },
+                );
+              }
+
+              return SizedBox();
             },
           ),
         ),

@@ -23,10 +23,8 @@ class ProductCategoryModel {
     );
   }
 
-  String toJson() => json.encode(toMap());
 
-  factory ProductCategoryModel.fromJson(String source) =>
-      ProductCategoryModel.fromMap(json.decode(source) as Map<String, dynamic>);
+ 
 }
 
 extension ProductCategoryXModel on ProductCategoryModel {

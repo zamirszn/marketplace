@@ -25,7 +25,8 @@ class LoginPage extends StatelessWidget {
   LoginPage({super.key});
   // TODO: remove filled data
   final emailController =
-      TextEditingController(text: kDebugMode ? "jatratolte@gufum.com" : null);
+      TextEditingController(
+      text: kDebugMode ? "testmail1731058460607234@gmail.com" : null);
   final passwordController =
       TextEditingController(text: kDebugMode ? "StrongPassword52#" : null);
   final formKey = GlobalKey<FormState>();
@@ -47,7 +48,7 @@ class LoginPage extends StatelessWidget {
             child: Form(
               key: formKey,
               child: ColoredBox(
-                color: ColorManager.black,
+                color: ColorManager.primary,
                 child: SizedBox(
                     height: deviceHeight(context),
                     width: deviceWidth(context),
@@ -61,7 +62,7 @@ class LoginPage extends StatelessWidget {
                             AppStrings.helloWelcome,
                             textAlign: TextAlign.center,
                             style: getBoldStyle(
-                                color: ColorManager.lime,
+                                color: ColorManager.black,
                                 font: FontConstants.ojuju,
                                 fontSize: FontSize.s35),
                           )),
@@ -69,10 +70,10 @@ class LoginPage extends StatelessWidget {
                             child: Blob.animatedFromID(
                               id: Constant.blob,
                               duration: const Duration(seconds: 4),
-                              size: 300,
+                              size: 320,
                               styles: BlobStyles(
                                   fillType: BlobFillType.fill,
-                                  color: Colors.green.shade100),
+                                  color: ColorManager.secondary),
                               loop: true,
                               child: Transform.scale(
                                 scale: .6,
@@ -84,214 +85,201 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Center(
-                              child: Text(
-                            AppStrings.pleaseSignInHere,
-                            style: getRegularStyle(
-                                color: ColorManager.white,
-                                font: FontConstants.poppins,
-                                fontSize: FontSize.s16),
-                          )),
+                          
                           space(h: AppSize.s20),
                           BlocBuilder<LoginBloc, LoginState>(
                             builder: (context, state) {
-                              return ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(AppSize.s20),
-                                    topRight: Radius.circular(AppSize.s20)),
-                                child: ColoredBox(
-                                  color: ColorManager.lime,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: AppPadding.p20),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
-                                      children: [
-                                        space(h: AppSize.s40),
-                                        Text(
-                                          AppStrings.emailAddress,
-                                          style: getSemiBoldStyle(
-                                              color: ColorManager.black,
-                                              font: FontConstants.ojuju,
-                                              fontSize: FontSize.s16),
-                                        ),
-                                        space(h: AppSize.s10),
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          child: TextFormField(
-                                              validator: (value) {
-                                                return emailNameValidator(
-                                                    value);
-                                              },
-                                              controller: emailController,
-                                              autofillHints: const [
-                                                AutofillHints.email
-                                              ],
-                                              onChanged: (value) {
-                                                context.read<LoginBloc>().add(
-                                                    LoginFullNameChangedEvent(
-                                                        value));
-                                              },
-                                              inputFormatters: [
-                                                LengthLimitingTextInputFormatter(
-                                                    Constant.emailNameLength),
-                                              ],
-                                              decoration: InputDecoration(
-                                                prefixIcon:
-                                                    const Icon(Iconsax.sms),
-                                                border: noOutlineInput,
-                                                contentPadding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical:
-                                                            AppPadding.p14),
-                                                focusedBorder: noOutlineInput,
-                                                enabledBorder: noOutlineInput,
-                                                errorBorder: noOutlineInput,
-                                                disabledBorder: noOutlineInput,
-                                                focusedErrorBorder:
-                                                    noOutlineInput,
-                                                filled: true,
-                                                fillColor:
-                                                    Colors.lime.withOpacity(.8),
-                                              )),
-                                        ),
-                                        //
-                                        // password
-                                        space(h: AppSize.s20),
-                                        Text(
-                                          AppStrings.password,
-                                          style: getSemiBoldStyle(
-                                              color: ColorManager.black,
-                                              font: FontConstants.ojuju,
-                                              fontSize: FontSize.s16),
-                                        ),
-                                        space(h: AppSize.s10),
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          child: TextFormField(
-                                              obscureText: state
-                                                      is LoginTogglePasswordState
-                                                  ? state.isPasswordVisible
-                                                  : false,
-                                              validator: (value) {
-                                                return passwordValidator(value);
-                                              },
-                                              controller: passwordController,
-                                              autofillHints: const [
-                                                AutofillHints.password
-                                              ],
-                                              inputFormatters: [
-                                                LengthLimitingTextInputFormatter(
-                                                    Constant.passwordLength),
-                                              ],
-                                              decoration: InputDecoration(
-                                                prefixIcon: const Icon(
-                                                  Iconsax.lock,
-                                                ),
-                                                suffix: GestureDetector(
-                                                  onTap: () {
-                                                    context.read<LoginBloc>().add(
-                                                        LoginPasswordVisibileEvent(
-                                                            isPasswordVisible: state
-                                                                is! LoginTogglePasswordState));
-                                                  },
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            right: 10.0),
-                                                    child: Icon(
-                                                      (state is LoginTogglePasswordState &&
-                                                              state
-                                                                  .isPasswordVisible)
-                                                          ? Iconsax.eye
-                                                          : Iconsax.eye_slash,
-                                                    ),
+                              return ColoredBox(
+                                color: ColorManager.primaryDark,
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: AppPadding.p20),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      space(h: AppSize.s40),
+                                      Text(
+                                        AppStrings.emailAddress,
+                                        style: getSemiBoldStyle(
+                                            color: ColorManager.primary,
+                                            font: FontConstants.ojuju,
+                                            fontSize: FontSize.s16),
+                                      ),
+                                      space(h: AppSize.s10),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: TextFormField(
+                                            validator: (value) {
+                                              return emailNameValidator(value);
+                                            },
+                                            controller: emailController,
+                                            autofillHints: const [
+                                              AutofillHints.email
+                                            ],
+                                            onChanged: (value) {
+                                              context.read<LoginBloc>().add(
+                                                  LoginFullNameChangedEvent(
+                                                      value));
+                                            },
+                                            inputFormatters: [
+                                              LengthLimitingTextInputFormatter(
+                                                  Constant.emailNameLength),
+                                            ],
+                                            decoration: InputDecoration(
+                                              prefixIcon:
+                                                  const Icon(Iconsax.sms),
+                                              border: noOutlineInput,
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: AppPadding.p14),
+                                              focusedBorder: noOutlineInput,
+                                              enabledBorder: noOutlineInput,
+                                              errorBorder: noOutlineInput,
+                                              disabledBorder: noOutlineInput,
+                                              focusedErrorBorder:
+                                                  noOutlineInput,
+                                              filled: true,
+                                              fillColor:
+                                                  ColorManager.primary
+                                                  .withOpacity(.9),
+                                            )),
+                                      ),
+                                      //
+                                      // password
+                                      space(h: AppSize.s20),
+                                      Text(
+                                        AppStrings.password,
+                                        style: getSemiBoldStyle(
+                                            color: ColorManager.primary,
+                                            font: FontConstants.ojuju,
+                                            fontSize: FontSize.s16),
+                                      ),
+                                      space(h: AppSize.s10),
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: TextFormField(
+                                            obscureText: state
+                                                    is LoginTogglePasswordState
+                                                ? state.isPasswordVisible
+                                                : false,
+                                            validator: (value) {
+                                              return passwordValidator(value);
+                                            },
+                                            controller: passwordController,
+                                            autofillHints: const [
+                                              AutofillHints.password
+                                            ],
+                                            inputFormatters: [
+                                              LengthLimitingTextInputFormatter(
+                                                  Constant.passwordLength),
+                                            ],
+                                            decoration: InputDecoration(
+                                              prefixIcon: const Icon(
+                                                Iconsax.lock,
+                                              ),
+                                              suffix: GestureDetector(
+                                                onTap: () {
+                                                  context.read<LoginBloc>().add(
+                                                      LoginPasswordVisibileEvent(
+                                                          isPasswordVisible: state
+                                                              is! LoginTogglePasswordState));
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 10.0),
+                                                  child: Icon(
+                                                    (state is LoginTogglePasswordState &&
+                                                            state
+                                                                .isPasswordVisible)
+                                                        ? Iconsax.eye
+                                                        : Iconsax.eye_slash,
                                                   ),
                                                 ),
-                                                contentPadding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical:
-                                                            AppPadding.p14),
-                                                border: noOutlineInput,
-                                                focusedBorder: noOutlineInput,
-                                                enabledBorder: noOutlineInput,
-                                                errorBorder: noOutlineInput,
-                                                disabledBorder: noOutlineInput,
-                                                focusedErrorBorder:
-                                                    noOutlineInput,
-                                                filled: true,
-                                                fillColor:
-                                                    Colors.lime.withOpacity(.8),
-                                              )),
-                                        ),
-                                        space(h: AppSize.s40),
-                                        SizedBox(
-                                          height: AppSize.s50,
-                                          child: BlocBuilder<LoginBloc,
-                                              LoginState>(
-                                            builder: (context, state) {
-                                              if (state is LoginLoadingState) {
-                                                return const ButtonLoadingWidget();
-                                              }
-                                              return ElevatedButton(
-                                                  style:
-                                                      ElevatedButton.styleFrom(
-                                                          elevation: 0,
-                                                          backgroundColor:
-                                                              Colors.green
-                                                                  .shade100),
-                                                  onPressed: () {
-                                                    if (formKey.currentState
-                                                            ?.validate() ??
-                                                        false) {
-                                                      context
-                                                          .read<LoginBloc>()
-                                                          .add(LoginSubmittedEvent(
-                                                              params: LoginParamsModel(
-                                                                  email:
-                                                                      emailController
-                                                                          .text,
-                                                                  password:
-                                                                      passwordController
-                                                                          .text)));
-                                                    }
-                                                  },
-                                                  child: Text(
-                                                    AppStrings.logIn,
-                                                    style: getSemiBoldStyle(
-                                                        color:
-                                                            ColorManager.white),
-                                                  ));
-                                            },
-                                          ),
-                                        ),
-                                        space(h: AppSize.s20),
-                                        GestureDetector(
-                                          onTap: () =>
-                                              goto(context, Routes.signUpPage),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              const Text(
-                                                  AppStrings.needAnAccount),
-                                              space(w: AppSize.s4),
-                                              Text(
-                                                AppStrings.signUp,
-                                                style: getSemiBoldStyle(
-                                                    fontSize: FontSize.s14,
-                                                    color: ColorManager.black),
                                               ),
-                                            ],
-                                          ),
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: AppPadding.p14),
+                                              border: noOutlineInput,
+                                              focusedBorder: noOutlineInput,
+                                              enabledBorder: noOutlineInput,
+                                              errorBorder: noOutlineInput,
+                                              disabledBorder: noOutlineInput,
+                                              focusedErrorBorder:
+                                                  noOutlineInput,
+                                              filled: true,
+                                              fillColor:
+                                                  ColorManager.primary
+                                                  .withOpacity(.9),
+                                            )),
+                                      ),
+                                      space(h: AppSize.s40),
+                                      SizedBox(
+                                        height: AppSize.s50,
+                                        child:
+                                            BlocBuilder<LoginBloc, LoginState>(
+                                          builder: (context, state) {
+                                            if (state is LoginLoadingState) {
+                                              return const ButtonLoadingWidget();
+                                            }
+                                            return ElevatedButton(
+                                                style: ElevatedButton.styleFrom(
+                                                    elevation: 0,
+                                                    backgroundColor:
+                                                        ColorManager.primary),
+                                                onPressed: () {
+                                                  if (formKey.currentState
+                                                          ?.validate() ??
+                                                      false) {
+                                                    context
+                                                        .read<LoginBloc>()
+                                                        .add(LoginSubmittedEvent(
+                                                            params: LoginParamsModel(
+                                                                email:
+                                                                    emailController
+                                                                        .text,
+                                                                password:
+                                                                    passwordController
+                                                                        .text)));
+                                                  }
+                                                },
+                                                child: Text(
+                                                  AppStrings.logIn,
+                                                  style: getSemiBoldStyle(
+                                                      color:
+                                                          ColorManager.black),
+                                                ));
+                                          },
                                         ),
+                                      ),
+                                      space(h: AppSize.s20),
+                                      GestureDetector(
+                                        onTap: () =>
+                                            goto(context, Routes.signUpPage),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              AppStrings.needAnAccount,
+                                              style: getRegularStyle(
+                                                  color: ColorManager.primary,
+                                                  fontSize: FontSize.s14),
+                                            ),
+                                            space(w: AppSize.s4),
+                                            Text(
+                                              AppStrings.signUp,
+                                              style: getSemiBoldStyle(
+                                                  fontSize: FontSize.s14,
+                                                  color: ColorManager.primary),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
 
-                                        space(h: AppSize.s40),
-                                      ],
-                                    ),
+                                      space(h: AppSize.s40),
+                                    ],
                                   ),
                                 ),
                               );

@@ -21,10 +21,14 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
 import json
 import random
+from rest_framework.decorators import api_view
 from django.contrib.humanize.templatetags.humanize import intcomma
+from rest_framework.pagination import PageNumberPagination
 
 
 class ProductViewSet(ModelViewSet):
+    http_method_names = ["get"]
+
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -33,7 +37,31 @@ class ProductViewSet(ModelViewSet):
         "name",
         "description",
     ]
-    ordering_fields = ["old_price", "name"]
+    ordering_fields = [
+        "old_price",
+        "name",
+    ]
+
+
+@api_view(["GET"])
+def new_products(request):
+    new_products = Product.objects.all()[:50]
+    serializer = ProductSerializer(new_products, many=True)
+
+    return Response(serializer.data)
+
+
+@api_view(["GET"])
+def popular_products(request):
+    # Filter for popular products (either discounted or in flash sales) , a total of 50
+    popular_products = (
+        Product.objects.filter(discount=True)[:25]
+        | Product.objects.filter(flash_sales=True)[:25]
+    )
+
+    serializer = ProductSerializer(popular_products, many=True)
+
+    return Response(serializer.data)
 
 
 class CategoryViewSet(ModelViewSet):
@@ -52,6 +80,9 @@ class ReviewViewSet(ModelViewSet):
         "date_created",
     ]
 
+    def get_permissions(self):
+        return [IsAuthenticated()]
+
     def get_queryset(self):
         product_pk = self.kwargs.get("product_pk")
         if product_pk is None:
@@ -64,11 +95,36 @@ class ReviewViewSet(ModelViewSet):
         return context
 
 
-class CartViewSet(
-    CreateModelMixin, RetrieveModelMixin, GenericViewSet, DestroyModelMixin
-):
+class CartViewSet(ModelViewSet):
     serializer_class = CartSerializer
-    queryset = Cart.objects.all()
+    permission_classes = [IsAuthenticated]
+    http_method_names = ["post", "patch", "delete"]
+
+    def get_queryset(self):
+        return Cart.objects.filter(owner=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        user = request.user
+
+        cart = self.get_queryset().first()
+        if cart:
+            serializer = self.get_serializer(cart)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        else:
+            # Create a new cart for the user
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            cart = serializer.save(owner=user)
+
+            # Store the cart ID in the user's session
+            request.session["cart_id"] = str(cart.id)
+            request.session.save()
+
+            headers = self.get_success_headers(serializer.data)
+            return Response(
+                serializer.data, status=status.HTTP_201_CREATED, headers=headers
+            )
 
 
 class CartItemViewset(ModelViewSet):
@@ -167,17 +223,18 @@ def stripe_card_payment(request):
 
 
 def initialize_payment(amount, email, order_id, request):
-    card_serializer = CardInformationSerializer(data=request.data)
+    # card_serializer = CardInformationSerializer(data=request.data)
 
-    if card_serializer.is_valid():
-        data_dict = card_serializer.data
-        print(data_dict)
-        return stripe_card_payment(data_dict=data_dict)
-    else:
-        # Return a response with the errors
-        return Response(
-            {"errors": card_serializer.errors}, status=status.HTTP_400_BAD_REQUEST
-        )
+    # if card_serializer.is_valid():
+    #     data_dict = card_serializer.data
+    #     print(data_dict)
+    #     return stripe_card_payment(data_dict=data_dict)
+    # else:
+    #     # Return a response with the errors
+    #     return Response(
+    #         {"errors": card_serializer.errors}, status=status.HTTP_400_BAD_REQUEST
+    #     )
+    pass
 
 
 class OrderViewSet(ModelViewSet):

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:marketplace/core/config/theme/color_manager.dart';
 
 class Constant {
+  static const String doneOnboarding = "doneOnboarding";
   static const String accessToken = "access";
   static const String refreshToken = "refresh";
   static const String appName = "Market Place";
@@ -21,14 +22,14 @@ class Constant {
     "img"
   ];
 
-  static List<BoxShadow> boxShadow1 = [
-    BoxShadow(
-      color: ColorManager.color2, // The color with the opacity
-      offset: const Offset(0, 9), // The horizontal and vertical offset
-      blurRadius: 10, // The blur radius
-      spreadRadius: 0, // The spread radius
-    )
-  ];
+  // static List<BoxShadow> boxShadow1 = [
+  //   BoxShadow(
+  //     color: ColorManager.col, // The color with the opacity
+  //     offset: const Offset(0, 9), // The horizontal and vertical offset
+  //     blurRadius: 10, // The blur radius
+  //     spreadRadius: 0, // The spread radius
+  //   )
+  // ];
   static List<BoxShadow> boxShadow2 = const [
     BoxShadow(
       color: Colors.black12, // The color with the opacity

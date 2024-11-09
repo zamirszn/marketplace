@@ -20,6 +20,7 @@ class ProductAdmin(admin.ModelAdmin):
         "category",
     ]
     list_display = [
+        "name",
         "id",
         "discount",
         "price",
@@ -34,6 +35,7 @@ class ProductAdmin(admin.ModelAdmin):
         "old_price",
         "created_at",
         "category",
+        "average_rating",
     ]
 
     prepopulated_fields = {"slug": ("name",)}
@@ -120,9 +122,7 @@ class ReviewAdmin(admin.ModelAdmin):
         "date_created",
     ]
     list_display = [
-        "id",
         "product",
-        "name",
         "date_created",
     ]
 

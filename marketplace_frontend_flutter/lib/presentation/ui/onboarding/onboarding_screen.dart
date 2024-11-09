@@ -1,13 +1,14 @@
 import 'package:blobs/blobs.dart';
 import 'package:flutter/material.dart';
 import 'package:marketplace/core/constants/constant.dart';
+import 'package:marketplace/data/source/shared_pref_service_impl.dart';
 import 'package:marketplace/presentation/resources/asset_manager.dart';
 import 'package:marketplace/core/config/theme/color_manager.dart';
 import 'package:marketplace/presentation/resources/routes_manager.dart';
 import 'package:marketplace/presentation/resources/string_manager.dart';
+import 'package:marketplace/presentation/service_locator.dart';
 import 'package:marketplace/presentation/ui/onboarding/liquid_card_swipe.dart';
 import 'package:marketplace/presentation/ui/onboarding/liquid_swipe_view.dart';
-import 'package:marketplace/presentation/widgets/grow_animation.dart';
 import 'package:marketplace/presentation/widgets/move_bounce_animation.dart';
 
 class LiquidSwipeOnboarding extends StatefulWidget {
@@ -24,11 +25,13 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
 
   @override
   void initState() {
-    resetAnim();
+    resetAnimation();
     super.initState();
   }
 
-  resetAnim() async {
+  
+
+  resetAnimation() async {
     Future.delayed(const Duration(milliseconds: 50)).then(
       (value) => liquidSwipeController?.previous(),
     );
@@ -49,7 +52,7 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
                 duration: const Duration(seconds: 4),
                 size: 350,
                 styles: BlobStyles(
-                    fillType: BlobFillType.fill, color: Colors.blue.shade200),
+                    fillType: BlobFillType.fill, color: ColorManager.secondary),
                 loop: true,
                 child: Transform.scale(
                   scale: .6,
@@ -62,8 +65,9 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
               ),
             ),
             onTapName: () => liquidSwipeController?.previous(),
-            onSkip: () async {
+            onSkip: () {
               goToNextPage();
+              doneOnboarding();
             },
             name: Constant.appName,
             action: AppStrings.skip,
@@ -71,12 +75,12 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
             title: AppStrings.shop,
             subtitle: AppStrings.discoverGreatDeals,
             body: AppStrings.exploreVast,
-            buttonColor: ColorManager.white,
-            titleColor: ColorManager.white,
-            subtitleColor: Colors.blue.shade200,
-            bodyColor: ColorManager.white,
-            gradient: const LinearGradient(
-              colors: [Colors.black, Colors.black],
+            buttonColor: ColorManager.black,
+            titleColor: ColorManager.black,
+            subtitleColor: ColorManager.secondaryDark,
+            bodyColor: ColorManager.black,
+            gradient: LinearGradient(
+              colors: [ColorManager.white, ColorManager.white],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -91,7 +95,7 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
                 duration: const Duration(seconds: 4),
                 size: 350,
                 styles: BlobStyles(
-                    fillType: BlobFillType.fill, color: ColorManager.black),
+                    fillType: BlobFillType.fill, color: ColorManager.secondary),
                 loop: true,
                 child: MoveAndBounceAnimation(
                   child: Transform.scale(
@@ -104,8 +108,9 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
               ),
             ),
             onTapName: () => liquidSwipeController?.previous(),
-            onSkip: () async {
+            onSkip: () {
               goToNextPage();
+              doneOnboarding();
             },
             name: AppStrings.back,
             action: AppStrings.done,
@@ -113,12 +118,15 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
             title: AppStrings.browse,
             subtitle: AppStrings.exploreAWideSelection,
             body: AppStrings.findExactly,
-            buttonColor: ColorManager.black,
-            titleColor: ColorManager.black,
-            subtitleColor: ColorManager.grey,
-            bodyColor: ColorManager.black,
-            gradient: const LinearGradient(
-              colors: [Colors.yellow, Colors.yellow],
+            buttonColor: ColorManager.secondaryDark,
+            titleColor: ColorManager.secondaryDark,
+            subtitleColor: ColorManager.black,
+            bodyColor: ColorManager.secondaryDark,
+            gradient: LinearGradient(
+              colors: [
+                ColorManager.primary,
+                ColorManager.primary,
+              ],
               begin: Alignment.topRight,
               end: Alignment.bottomLeft,
             ),
@@ -130,5 +138,9 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
 
   void goToNextPage() async {
     goPush(context, Routes.loginOrRegisterPage);
+  }
+
+  void doneOnboarding() async {
+    await sl<SharedPrefDataSource>().writeBool(Constant.doneOnboarding, true);
   }
 }

@@ -20,7 +20,8 @@ class DioClient {
           headers: {
             contentType: applicationJson,
           },
-          validateStatus: (status) => kDebugMode,
+          validateStatus: (status) =>
+              status != null && status >= 200 && status < 300,
           responseType: ResponseType.json,
           sendTimeout: timeOut,
           receiveTimeout: timeOut,
@@ -77,9 +78,11 @@ class DioClient {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
+
       final Response response = await _dio.post(
         url,
         data: data,
+        
         queryParameters: queryParameters,
         options: _getOptions(options),
         onSendProgress: onSendProgress,

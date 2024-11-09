@@ -10,10 +10,24 @@ abstract class SecureStorageDataSource {
 }
 
 class SecureServiceImpl extends SecureStorageDataSource {
+  FlutterSecureStorage? _secureStorage;
+
+  static final SecureServiceImpl _instance = SecureServiceImpl._();
+
+  SecureServiceImpl._();
+
+  factory SecureServiceImpl() {
+    return _instance;
+  }
+
+  Future<void> init() async {
+    _secureStorage = FlutterSecureStorage();
+  }
+
   @override
   Future<Either> write(String key, String value) async {
     try {
-      await sl<SecureStorage>()._secureStorage.write(key: key, value: value);
+      await _secureStorage?.write(key: key, value: value);
       return const Right(null);
     } catch (e) {
       return Left(e);
@@ -23,8 +37,7 @@ class SecureServiceImpl extends SecureStorageDataSource {
   @override
   Future<Either> read(String key) async {
     try {
-      final String? response =
-          await sl<SecureStorage>()._secureStorage.read(key: key);
+      final String? response = await _secureStorage?.read(key: key);
 
       return Right(response);
     } catch (e) {
@@ -35,16 +48,10 @@ class SecureServiceImpl extends SecureStorageDataSource {
   @override
   Future<Either> delete(String key) async {
     try {
-      await sl<SecureStorage>()._secureStorage.delete(key: key);
+      await _secureStorage?.delete(key: key);
       return const Right(null);
     } catch (e) {
       return Left(e);
     }
   }
-}
-
-class SecureStorage {
-  late final FlutterSecureStorage _secureStorage;
-
-  SecureStorage() : _secureStorage = const FlutterSecureStorage();
 }

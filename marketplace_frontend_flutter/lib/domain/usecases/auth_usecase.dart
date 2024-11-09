@@ -18,3 +18,11 @@ class LogInUseCase implements Usecase<Either, LoginParamsModel> {
     return sl<AuthRepository>().login(params!);
   }
 }
+class RefreshTokenUsecase implements Usecase<Either, String> {
+  @override
+  Future<Either> call({String? params}) async {
+    return sl<AuthRepository>().refresh(params!);
+  }
+}
+
+

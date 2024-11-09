@@ -24,7 +24,7 @@ class LoginOrRegisterPage extends StatelessWidget {
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: ColoredBox(
-        color: ColorManager.rose,
+        color: ColorManager.primary,
         child: SizedBox(
           height: deviceHeight(context),
           width: deviceWidth(context),
@@ -33,6 +33,7 @@ class LoginOrRegisterPage extends StatelessWidget {
               padding: const EdgeInsets.symmetric(vertical: AppPadding.p10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Center(
                     child: Blob.animatedFromID(
@@ -41,7 +42,7 @@ class LoginOrRegisterPage extends StatelessWidget {
                       size: 350,
                       styles: BlobStyles(
                           fillType: BlobFillType.fill,
-                          color: ColorManager.black),
+                          color: ColorManager.secondary),
                       loop: true,
                       child: Transform.scale(
                         scale: .5,
@@ -62,7 +63,7 @@ class LoginOrRegisterPage extends StatelessWidget {
                         Text(
                           AppStrings.shopAnExtensive,
                           style: getSemiBoldStyle(
-                              color: ColorManager.black,
+                              color: ColorManager.secondaryDark,
                               font: FontConstants.ojuju,
                               fontSize: FontSize.s30),
                         ),
@@ -71,38 +72,41 @@ class LoginOrRegisterPage extends StatelessWidget {
                           AppStrings.fromTheLatest,
                           style: getRegularStyle(
                               fontSize: FontSize.s14,
-                              color: ColorManager.black,
+                              color: ColorManager.secondary,
                               font: FontConstants.poppins),
                         ),
                       ],
                     ),
                   ),
-                  space(h: AppSize.s100),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      RoundIconTextButton(
-                        bgColor: ColorManager.black,
-                        textColor: ColorManager.rose,
-                        iconColor: ColorManager.black,
-                        text: AppStrings.logIn,
-                        onPressed: () {
-                          goPush(context, Routes.loginPage);
-                        },
-                        iconData: Iconsax.key,
-                      ),
-                      RoundIconTextButton(
-                        iconAlignment: IconAlignment.end,
-                        bgColor: ColorManager.black,
-                        textColor: ColorManager.rose,
-                        iconColor: ColorManager.black,
-                        text: AppStrings.register,
-                        onPressed: () {
-                          goPush(context, Routes.signUpPage);
-                        },
-                        iconData: Iconsax.user,
-                      ),
-                    ],
+                  space(h: AppSize.s190),
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        RoundIconTextButton(
+                          bgColor: ColorManager.secondaryDark,
+                          textColor: ColorManager.white,
+                          iconColor: ColorManager.secondaryDark,
+                          text: AppStrings.logIn,
+                          onPressed: () {
+                            goPush(context, Routes.loginPage);
+                          },
+                          iconData: Iconsax.key,
+                        ),
+                        RoundIconTextButton(
+                          iconAlignment: IconAlignment.end,
+                          bgColor: ColorManager.secondaryDark,
+                          textColor: ColorManager.white,
+                          iconColor: ColorManager.secondaryDark,
+                          text: AppStrings.register,
+                          onPressed: () {
+                            goPush(context, Routes.signUpPage);
+                          },
+                          iconData: Iconsax.user,
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

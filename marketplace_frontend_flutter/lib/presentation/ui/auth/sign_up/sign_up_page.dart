@@ -55,7 +55,7 @@ class SignUpPage extends StatelessWidget {
           child: Form(
             key: formKey,
             child: ColoredBox(
-              color: ColorManager.black,
+              color: ColorManager.primary,
               child: SizedBox(
                 height: deviceHeight(context),
                 width: deviceWidth(context),
@@ -63,13 +63,13 @@ class SignUpPage extends StatelessWidget {
                     child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    space(h: AppSize.s80),
+                    space(h: AppSize.s50),
                     Center(
                         child: Text(
                       AppStrings.letsGetStarted,
                       textAlign: TextAlign.center,
                       style: getBoldStyle(
-                          color: ColorManager.lime,
+                          color: ColorManager.black,
                           font: FontConstants.ojuju,
                           fontSize: FontSize.s35),
                     )),
@@ -80,7 +80,7 @@ class SignUpPage extends StatelessWidget {
                         size: 300,
                         styles: BlobStyles(
                             fillType: BlobFillType.fill,
-                            color: Colors.cyan.shade100),
+                            color: ColorManager.secondary),
                         loop: true,
                         child: Transform.scale(
                           scale: .6,
@@ -90,238 +90,229 @@ class SignUpPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Center(
-                        child: Text(
-                      AppStrings.pleaseSignUpHere,
-                      style: getRegularStyle(
-                          color: ColorManager.white,
-                          font: FontConstants.poppins,
-                          fontSize: FontSize.s16),
-                    )),
+                   
                     space(h: AppSize.s20),
                     BlocBuilder<SignUpBloc, SignUpState>(
                         builder: (context, state) {
-                      return ClipRRect(
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(AppSize.s20),
-                            topRight: Radius.circular(AppSize.s20)),
-                        child: ColoredBox(
-                          color: ColorManager.lime,
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: AppPadding.p20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                space(h: AppSize.s40),
-                                Text(
-                                  AppStrings.fullName,
-                                  style: getSemiBoldStyle(
-                                      color: ColorManager.black,
-                                      font: FontConstants.ojuju,
-                                      fontSize: FontSize.s16),
-                                ),
-                                space(h: AppSize.s10),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: TextFormField(
-                                      validator: (value) {
-                                        return nameValidator(value);
-                                      },
-                                      onChanged: (value) => context
-                                          .read<SignUpBloc>()
-                                          .add(SignUpFullNameChangedEvent(
-                                              value)),
-                                      controller: fullNameController,
-                                      autofillHints: const [AutofillHints.name],
-                                      inputFormatters: [
-                                        LengthLimitingTextInputFormatter(
-                                            Constant.nameLength),
-                                      ],
-                                      decoration: InputDecoration(
-                                        prefixIcon: const Icon(Iconsax.user),
-                                        border: noOutlineInput,
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                vertical: AppPadding.p14),
-                                        focusedBorder: noOutlineInput,
-                                        enabledBorder: noOutlineInput,
-                                        errorBorder: noOutlineInput,
-                                        disabledBorder: noOutlineInput,
-                                        focusedErrorBorder: noOutlineInput,
-                                        filled: true,
-                                        fillColor: Colors.lime.withOpacity(.8),
-                                      )),
-                                ),
-                                space(h: AppSize.s20),
-                                Text(
-                                  AppStrings.emailAddress,
-                                  style: getSemiBoldStyle(
-                                      color: ColorManager.black,
-                                      font: FontConstants.ojuju,
-                                      fontSize: FontSize.s16),
-                                ),
-                                space(h: AppSize.s10),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: TextFormField(
-                                      validator: (value) {
-                                        return emailNameValidator(value);
-                                      },
-                                      onChanged: (value) => context
-                                          .read<SignUpBloc>()
-                                          .add(EmailChangedEvent(value)),
-                                      controller: emailController,
-                                      autofillHints: const [
-                                        AutofillHints.email
-                                      ],
-                                      inputFormatters: [
-                                        LengthLimitingTextInputFormatter(
-                                            Constant.emailNameLength),
-                                      ],
-                                      decoration: InputDecoration(
-                                        prefixIcon: const Icon(Iconsax.sms),
-                                        border: noOutlineInput,
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                vertical: AppPadding.p14),
-                                        focusedBorder: noOutlineInput,
-                                        enabledBorder: noOutlineInput,
-                                        errorBorder: noOutlineInput,
-                                        disabledBorder: noOutlineInput,
-                                        focusedErrorBorder: noOutlineInput,
-                                        filled: true,
-                                        fillColor: Colors.lime.withOpacity(.8),
-                                      )),
-                                ),
-                                //
-                                // password
-                                space(h: AppSize.s20),
-                                Text(
-                                  AppStrings.password,
-                                  style: getSemiBoldStyle(
-                                      color: ColorManager.black,
-                                      font: FontConstants.ojuju,
-                                      fontSize: FontSize.s16),
-                                ),
-                                space(h: AppSize.s10),
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(10),
-                                  child: TextFormField(
-                                      onChanged: (value) => context
-                                          .read<SignUpBloc>()
-                                          .add(SignUpPasswordChangedEvent(
-                                              value)),
-                                      obscureText:
-                                          state is SignUpTogglePasswordState
-                                              ? state.isPasswordVisible
-                                              : false,
-                                      validator: (value) {
-                                        return passwordValidator(value);
-                                      },
-                                      controller: passwordController,
-                                      autofillHints: const [
-                                        AutofillHints.newPassword
-                                      ],
-                                      inputFormatters: [
-                                        LengthLimitingTextInputFormatter(
-                                            Constant.passwordLength),
-                                      ],
-                                      decoration: InputDecoration(
-                                        prefixIcon: const Icon(
-                                          Iconsax.lock,
-                                        ),
-                                        suffix: GestureDetector(
-                                          onTap: () {
-                                            context.read<SignUpBloc>().add(
-                                                SignUpPasswordVisibilityEvent(
-                                                    isPasswordVisible: state
-                                                        is! SignUpTogglePasswordState));
-                                          },
-                                          child: Padding(
-                                            padding: const EdgeInsets.only(
-                                                right: 10.0),
-                                            child: Icon(
-                                              (state is SignUpTogglePasswordState &&
-                                                      state.isPasswordVisible)
-                                                  ? Iconsax.eye
-                                                  : Iconsax.eye_slash,
-                                            ),
+                      return ColoredBox(
+                        color: ColorManager.primaryDark,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: AppPadding.p20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              space(h: AppSize.s40),
+                              Text(
+                                AppStrings.fullName,
+                                style: getSemiBoldStyle(
+                                    color: ColorManager.white,
+                                    font: FontConstants.ojuju,
+                                    fontSize: FontSize.s16),
+                              ),
+                              space(h: AppSize.s10),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: TextFormField(
+                                    validator: (value) {
+                                      return nameValidator(value);
+                                    },
+                                    onChanged: (value) => context
+                                        .read<SignUpBloc>()
+                                        .add(SignUpFullNameChangedEvent(value)),
+                                    controller: fullNameController,
+                                    autofillHints: const [AutofillHints.name],
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(
+                                          Constant.nameLength),
+                                    ],
+                                    decoration: InputDecoration(
+                                      prefixIcon: const Icon(Iconsax.user),
+                                      border: noOutlineInput,
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: AppPadding.p14),
+                                      focusedBorder: noOutlineInput,
+                                      enabledBorder: noOutlineInput,
+                                      errorBorder: noOutlineInput,
+                                      disabledBorder: noOutlineInput,
+                                      focusedErrorBorder: noOutlineInput,
+                                      filled: true,
+                                      fillColor:
+                                          ColorManager.primary.withOpacity(.9),
+                                    )),
+                              ),
+                              space(h: AppSize.s20),
+                              Text(
+                                AppStrings.emailAddress,
+                                style: getSemiBoldStyle(
+                                    color: ColorManager.white,
+                                    font: FontConstants.ojuju,
+                                    fontSize: FontSize.s16),
+                              ),
+                              space(h: AppSize.s10),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: TextFormField(
+                                    validator: (value) {
+                                      return emailNameValidator(value);
+                                    },
+                                    onChanged: (value) => context
+                                        .read<SignUpBloc>()
+                                        .add(EmailChangedEvent(value)),
+                                    controller: emailController,
+                                    autofillHints: const [AutofillHints.email],
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(
+                                          Constant.emailNameLength),
+                                    ],
+                                    decoration: InputDecoration(
+                                      prefixIcon: const Icon(Iconsax.sms),
+                                      border: noOutlineInput,
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: AppPadding.p14),
+                                      focusedBorder: noOutlineInput,
+                                      enabledBorder: noOutlineInput,
+                                      errorBorder: noOutlineInput,
+                                      disabledBorder: noOutlineInput,
+                                      focusedErrorBorder: noOutlineInput,
+                                      filled: true,
+                                      fillColor:
+                                          ColorManager.primary.withOpacity(.9),
+                                    )),
+                              ),
+                              //
+                              // password
+                              space(h: AppSize.s20),
+                              Text(
+                                AppStrings.password,
+                                style: getSemiBoldStyle(
+                                    color: ColorManager.white,
+                                    font: FontConstants.ojuju,
+                                    fontSize: FontSize.s16),
+                              ),
+                              space(h: AppSize.s10),
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(10),
+                                child: TextFormField(
+                                    onChanged: (value) => context
+                                        .read<SignUpBloc>()
+                                        .add(SignUpPasswordChangedEvent(value)),
+                                    obscureText:
+                                        state is SignUpTogglePasswordState
+                                            ? state.isPasswordVisible
+                                            : false,
+                                    validator: (value) {
+                                      return passwordValidator(value);
+                                    },
+                                    controller: passwordController,
+                                    autofillHints: const [
+                                      AutofillHints.newPassword
+                                    ],
+                                    inputFormatters: [
+                                      LengthLimitingTextInputFormatter(
+                                          Constant.passwordLength),
+                                    ],
+                                    decoration: InputDecoration(
+                                      prefixIcon: const Icon(
+                                        Iconsax.lock,
+                                      ),
+                                      suffix: GestureDetector(
+                                        onTap: () {
+                                          context.read<SignUpBloc>().add(
+                                              SignUpPasswordVisibilityEvent(
+                                                  isPasswordVisible: state
+                                                      is! SignUpTogglePasswordState));
+                                        },
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              right: 10.0),
+                                          child: Icon(
+                                            (state is SignUpTogglePasswordState &&
+                                                    state.isPasswordVisible)
+                                                ? Iconsax.eye
+                                                : Iconsax.eye_slash,
                                           ),
                                         ),
-                                        contentPadding:
-                                            const EdgeInsets.symmetric(
-                                                vertical: AppPadding.p14),
-                                        border: noOutlineInput,
-                                        focusedBorder: noOutlineInput,
-                                        enabledBorder: noOutlineInput,
-                                        errorBorder: noOutlineInput,
-                                        disabledBorder: noOutlineInput,
-                                        focusedErrorBorder: noOutlineInput,
-                                        filled: true,
-                                        fillColor: Colors.lime.withOpacity(.8),
-                                      )),
-                                ),
-                                space(h: AppSize.s40),
-                                SizedBox(
-                                  height: AppSize.s50,
-                                  child: BlocBuilder<SignUpBloc, SignUpState>(
-                                    builder: (context, state) {
-                                      if (state is SignUpLoadingState) {
-                                        return const ButtonLoadingWidget();
-                                      }
-
-                                      return ElevatedButton(
-                                          style: ElevatedButton.styleFrom(
-                                              elevation: 0,
-                                              backgroundColor:
-                                                  Colors.green.shade100),
-                                          onPressed: () {
-                                            if (formKey.currentState
-                                                    ?.validate() ??
-                                                false) {
-                                              context
-                                                  .read<SignUpBloc>()
-                                                  .add(SignUpSubmittedEvent(
-                                                      params: SignupParamsModel(
-                                                    fullName:
-                                                        fullNameController.text,
-                                                    email: emailController.text,
-                                                    password:
-                                                        passwordController.text,
-                                                  )));
-                                            }
-                                          },
-                                          child: Text(
-                                            AppStrings.signUp,
-                                            style: getSemiBoldStyle(
-                                                color: ColorManager.white),
-                                          ));
-                                    },
-                                  ),
-                                ),
-                                space(h: AppSize.s20),
-                                GestureDetector(
-                                  onTap: () => goto(context, Routes.loginPage),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text(
-                                          AppStrings.alreadyHaveAnAccount),
-                                      space(w: AppSize.s4),
-                                      Text(
-                                        AppStrings.logIn,
-                                        style: getSemiBoldStyle(
-                                            fontSize: FontSize.s14,
-                                            color: ColorManager.black),
                                       ),
-                                    ],
-                                  ),
-                                ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: AppPadding.p14),
+                                      border: noOutlineInput,
+                                      focusedBorder: noOutlineInput,
+                                      enabledBorder: noOutlineInput,
+                                      errorBorder: noOutlineInput,
+                                      disabledBorder: noOutlineInput,
+                                      focusedErrorBorder: noOutlineInput,
+                                      filled: true,
+                                      fillColor:
+                                          ColorManager.primary.withOpacity(.9),
+                                    )),
+                              ),
+                              space(h: AppSize.s40),
+                              SizedBox(
+                                height: AppSize.s50,
+                                child: BlocBuilder<SignUpBloc, SignUpState>(
+                                  builder: (context, state) {
+                                    if (state is SignUpLoadingState) {
+                                      return const ButtonLoadingWidget();
+                                    }
 
-                                space(h: AppSize.s40),
-                              ],
-                            ),
+                                    return ElevatedButton(
+                                        style: ElevatedButton.styleFrom(
+                                            elevation: 0,
+                                            backgroundColor:
+                                                ColorManager.primary),
+                                        onPressed: () {
+                                          if (formKey.currentState
+                                                  ?.validate() ??
+                                              false) {
+                                            context
+                                                .read<SignUpBloc>()
+                                                .add(SignUpSubmittedEvent(
+                                                    params: SignupParamsModel(
+                                                  fullName:
+                                                      fullNameController.text,
+                                                  email: emailController.text,
+                                                  password:
+                                                      passwordController.text,
+                                                )));
+                                          }
+                                        },
+                                        child: Text(
+                                          AppStrings.signUp,
+                                          style: getSemiBoldStyle(
+                                              color: ColorManager.black),
+                                        ));
+                                  },
+                                ),
+                              ),
+                              space(h: AppSize.s20),
+                              GestureDetector(
+                                onTap: () => goto(context, Routes.loginPage),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      AppStrings.alreadyHaveAnAccount,
+                                      style: getRegularStyle(
+                                          color: ColorManager.primary,
+                                          fontSize: FontSize.s14),
+                                    ),
+                                    space(w: AppSize.s4),
+                                    Text(
+                                      AppStrings.logIn,
+                                      style: getSemiBoldStyle(
+                                          fontSize: FontSize.s14,
+                                          color: ColorManager.primary),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              space(h: AppSize.s40),
+                            ],
                           ),
                         ),
                       );
@@ -346,8 +337,8 @@ class ButtonLoadingWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
-            elevation: 0, backgroundColor: ColorManager.color2),
+            elevation: 0, backgroundColor: ColorManager.secondary),
         onPressed: null,
-        child: const LoadingWidget());
+        child: Transform.scale(scale: .7, child: const LoadingWidget()));
   }
 }

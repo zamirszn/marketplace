@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 from django.conf import settings
 from cloudinary.models import CloudinaryField
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Category(models.Model):
@@ -34,21 +35,46 @@ class Review(models.Model):
         null=True,
         default="",
     )
-    name = models.CharField(max_length=200, null=True, default="")
+
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        null=True,
+    )
+
     date_created = models.DateTimeField(
         blank=True,
         null=True,
         auto_now_add=True,
     )
-    description = models.TextField(blank=False, null=True)
+    description = models.TextField(
+        blank=False,
+        null=True,
+    )
+    rating = models.PositiveBigIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+        null=True,
+        blank=True,
+        default=0,
+    )
+
+    class Meta:
+        unique_together = ("product", "owner")
 
     def __str__(self):
-        return self.description
+        return f"Review by {self.owner.email} for {self.product.name} - {self.rating} stars"
 
 
 class Cart(models.Model):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="carts",
+        blank=True,
+        null=True,
+    )
 
     # def __str__(self):
     #     return self.id
@@ -75,9 +101,14 @@ class Product(models.Model):
     flash_sales = models.BooleanField(default=False)
 
     @property
+    def average_rating(self):
+        ratings = self.reviews.aggregate(models.Avg("rating"))["rating__avg"]
+        return ratings if ratings is not None else 0
+
+    @property
     def price(self):
         if self.discount:
-            new_price = self.old_price - ((30 / 100) * self.old_price)
+            new_price = self.old_price - ((20 / 100) * self.old_price)
         else:
             new_price = self.old_price
         return new_price
@@ -90,6 +121,7 @@ class Product(models.Model):
 
 
 class ProductImage(models.Model):
+
     image = CloudinaryField(
         "product_images",
         blank=True,
@@ -169,11 +201,11 @@ class Profile(models.Model):
     bio = models.TextField()
     picture = models.ImageField(blank=True, null=True)
 
-    # picture = CloudinaryField(
-    #     "profile_images",
-    #     blank=True,
-    #     null=True,
-    # )
+    picture = CloudinaryField(
+        "profile_images",
+        blank=True,
+        null=True,
+    )
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
     )

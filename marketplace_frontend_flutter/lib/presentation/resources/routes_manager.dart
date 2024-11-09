@@ -1,8 +1,15 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:marketplace/core/constants/constant.dart';
+import 'package:marketplace/data/source/secure_storage_data_source.dart';
+import 'package:marketplace/data/source/shared_pref_service_impl.dart';
+import 'package:marketplace/presentation/service_locator.dart';
 import 'package:marketplace/presentation/ui/auth/account_verification/account_verification.dart';
+import 'package:marketplace/presentation/ui/auth/splash_page.dart';
 import 'package:marketplace/presentation/ui/bottom_nav/bottom_nav.dart';
+import 'package:marketplace/presentation/ui/order/order_page.dart';
 import 'package:marketplace/presentation/widgets/error_404_page.dart';
 import 'package:marketplace/presentation/ui/auth/login_or_register_page.dart';
 import 'package:marketplace/presentation/ui/auth/login/login_page.dart';
@@ -12,12 +19,17 @@ import 'package:marketplace/presentation/ui/onboarding/onboarding_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   //TODO: add onboarding and auth check
-  initialLocation: Routes.bottomNav,
+  initialLocation: Routes.splashPage,
   debugLogDiagnostics: kDebugMode,
   routes: [
     GoRoute(
+      path: Routes.splashPage,
+      builder: (context, state) => const SplashPage(),
+    ),
+    GoRoute(
       path: Routes.onboardingPage,
       builder: (context, state) => const LiquidSwipeOnboarding(),
+      
     ),
     GoRoute(
       path: Routes.loginOrRegisterPage,
@@ -40,6 +52,10 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const BottomNav(),
     ),
     GoRoute(
+      path: Routes.orderPage,
+      builder: (context, state) => const OrderPage(),
+    ),
+    GoRoute(
       pageBuilder: (BuildContext context, GoRouterState state) {
         return CustomTransitionPage<void>(
           child: const ItemDetailsPage(),
@@ -58,11 +74,14 @@ final GoRouter appRouter = GoRouter(
     ),
   ],
   errorBuilder: (context, state) => const Error404Page(),
+
 );
 
 class Routes {
   static const String onboardingPage = "/onboardingPage";
   static const String loginPage = "/loginPage";
+  static const String splashPage = "/splashPage";
+  static const String orderPage = "/orderPage";
   static const String signUpPage = "/signUpPage";
   static const String bottomNav = "/bottomNav";
   static const String itemDetailsPage = "/itemDetailsPage";

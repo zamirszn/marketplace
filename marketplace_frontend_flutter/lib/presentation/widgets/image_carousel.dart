@@ -174,7 +174,7 @@ class _CoverFlowPositionedItem extends StatelessWidget {
         width: _calculateItemWidth,
         height: size.height,
         child: ColoredBox(
-          color: ColorManager.color6,
+          color: ColorManager.secondary,
           child: Image.asset(
             imagePath,
             fit: BoxFit.cover,

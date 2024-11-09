@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/app/functions.dart';
-import 'package:marketplace/core/usecase/usecase.dart';
 import 'package:marketplace/data/models/signup_params_model.dart';
 import 'package:marketplace/domain/usecases/auth_usecase.dart';
 import 'package:marketplace/presentation/service_locator.dart';

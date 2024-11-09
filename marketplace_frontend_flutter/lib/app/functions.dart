@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:marketplace/data/models/product_model.dart';
+import 'package:marketplace/domain/entities/product_entity.dart';
 import 'package:marketplace/presentation/resources/asset_manager.dart';
 import 'package:marketplace/presentation/resources/string_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
@@ -20,22 +21,9 @@ class FadeRoute<T> extends MaterialPageRoute<T> {
   }
 }
 
-final testProductModel = ProductModel(
-    image: "image",
-    title: "Product Name " * 2,
-    description: "Long ispum de something dummy text",
-    rating: 5,
-    price: 50,
-    discountPrice: 38,
-    inventory: 4);
 
-// TODO: remove
-List<String> testImages = [
-  ImageAsset.cart,
-  ImageAsset.cart2,
-  ImageAsset.megaphone,
-  ImageAsset.paperbag,
-];
+
+
 
 bool validateUsername(String username) {
   return username.isNotEmpty && username.contains('@');

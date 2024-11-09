@@ -1,25 +1,98 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/app/functions.dart';
+import 'package:marketplace/data/models/product_query_params_model.dart';
+import 'package:marketplace/domain/entities/product_entity.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
+import 'package:marketplace/presentation/ui/home/bloc/product_bloc.dart';
+import 'package:marketplace/presentation/ui/home/home_page.dart';
+import 'package:marketplace/presentation/ui/home/new_product_widget.dart';
 import 'package:marketplace/presentation/ui/home/product_widget.dart';
 
-class ProductGridView extends StatelessWidget {
+class ProductGridView extends StatefulWidget {
   const ProductGridView({super.key});
 
   @override
+  State<ProductGridView> createState() => _ProductGridViewState();
+}
+
+class _ProductGridViewState extends State<ProductGridView> {
+  final _scrollController = ScrollController();
+  late ProductBloc _productBloc;
+
+  @override
+  void initState() {
+    _scrollController.addListener(_onScroll);
+    super.initState();
+  }
+
+  void _onScroll() {
+    print("listening");
+    if (_isBottom)
+      _productBloc
+          .add(GetAllProductsEvent(params: ProductQueryParamsModel(page: 1)));
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    return currentScroll >= (maxScroll * 0.9);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return SliverGrid.builder(
-      itemCount: testImages.length,
-      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 250,
-          mainAxisExtent: 250,
-          crossAxisSpacing: AppSize.s10,
-          mainAxisSpacing: AppSize.s10),
-      itemBuilder: (context, index) {
-        return ProductWidget(
-          product: testProductModel,
-        );
-      },
+    return BlocProvider(
+      create: (context) => ProductBloc()
+        ..add(GetAllProductsEvent(params: ProductQueryParamsModel(page: 1))),
+      child: BlocBuilder<ProductBloc, ProductState>(
+        builder: (context, state) {
+          if (state is AllProductFailure || state is AllProductLoading) {
+            return SliverGrid.builder(
+              
+              itemCount: 4,
+              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 250,
+                  mainAxisExtent: 250,
+                  crossAxisSpacing: AppSize.s10,
+                  mainAxisSpacing: AppSize.s10),
+              itemBuilder: (context, index) {
+                return ProductWidgetSkeleton();
+              },
+            );
+          }
+
+          if (state is AllProductSuccess) {
+            return SliverToBoxAdapter(
+              child: GridView.builder(
+                shrinkWrap: true,
+                controller: _scrollController,
+                itemCount: state.products.length,
+                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                    maxCrossAxisExtent: 250,
+                    mainAxisExtent: 280,
+                    crossAxisSpacing: AppSize.s10,
+                    mainAxisSpacing: AppSize.s10),
+                itemBuilder: (context, index) {
+                  ProductModelEntity products = state.products[index];
+              
+                  return ProductWidget(
+                    product: products,
+                  );
+                },
+              ),
+            );
+          }
+
+          return sliverSpace();
+        },
+      ),
     );
   }
 }

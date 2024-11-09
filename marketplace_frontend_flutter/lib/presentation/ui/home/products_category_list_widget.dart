@@ -7,7 +7,7 @@ import 'package:marketplace/domain/entities/product_category_entity.dart';
 import 'package:marketplace/presentation/resources/font_manager.dart';
 import 'package:marketplace/presentation/resources/styles_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
-import 'package:marketplace/presentation/ui/home/bloc/home_page_bloc.dart';
+import 'package:marketplace/presentation/ui/home/bloc/product_bloc.dart';
 import 'package:marketplace/presentation/widgets/loading_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -21,12 +21,12 @@ class ProductsCategoriesListWidget extends StatelessWidget {
     return SliverToBoxAdapter(
       child: SizedBox(
         height: AppSize.s36,
-        child: BlocProvider<HomePageBloc>(
-          create: (context) => HomePageBloc()..add(GetProductCategoryEvent()),
-          child: BlocBuilder<HomePageBloc, HomePageState>(
+        child: BlocProvider<ProductBloc>(
+          create: (context) => ProductBloc()..add(GetProductCategoryEvent()),
+          child: BlocBuilder<ProductBloc, ProductState>(
             builder: (context, state) {
-              if (state is HomePageCategoryLoading ||
-                  state is HomePageCategoryFailure) {
+              if (state is ProductCategoryLoading ||
+                  state is ProductCategoryFailure) {
                 return ListView.builder(
                   physics: BouncingScrollPhysics(),
                   itemCount: 10,
@@ -37,7 +37,7 @@ class ProductsCategoriesListWidget extends StatelessWidget {
                           right: AppPadding.p5, left: AppPadding.p5),
                       child: Skeletonizer(
                         effect: PulseEffect(
-                            from: ColorManager.color1.withOpacity(.1),
+                            from: ColorManager.secondary.withOpacity(.1),
                             duration: Duration(seconds: 5),
                             to: ColorManager.black.withOpacity(.01)),
                         child: Text(
@@ -50,7 +50,7 @@ class ProductsCategoriesListWidget extends StatelessWidget {
                 );
               }
 
-              if (state is HomePageCategorySuccess) {
+              if (state is ProductCategorySuccess) {
                 return ListView.builder(
                   physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
@@ -73,7 +73,7 @@ class ProductsCategoriesListWidget extends StatelessWidget {
                           //         : ColorManager.color2.withOpacity(.3)
                           //     : null,
 
-                          color: ColorManager.color2.withOpacity(.3),
+                          color: ColorManager.secondary.withOpacity(.3),
                           shape: const StadiumBorder(),
                         ),
                         child: Text(

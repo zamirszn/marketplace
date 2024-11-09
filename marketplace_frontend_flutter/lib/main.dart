@@ -9,9 +9,17 @@ void main() {
   runApp(const MarketPlaceApp());
 }
 
-class MarketPlaceApp extends StatelessWidget {
+class MarketPlaceApp extends StatefulWidget {
   const MarketPlaceApp({super.key});
 
+  @override
+  State<MarketPlaceApp> createState() => _MarketPlaceAppState();
+}
+
+class _MarketPlaceAppState extends State<MarketPlaceApp> {
+
+
+  
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(

@@ -18,12 +18,13 @@ class AppTheme {
           TargetPlatform.windows: FadeInPageTransition(),
         },
       ),
+     
       
-      scaffoldBackgroundColor: ColorManager.color5.withOpacity(.99),
+      scaffoldBackgroundColor: ColorManager.primaryLight,
       popupMenuTheme: const PopupMenuThemeData(surfaceTintColor: Colors.white),
-      colorScheme: ColorScheme.fromSeed(seedColor: ColorManager.color1),
+      colorScheme: ColorScheme.fromSeed(seedColor: ColorManager.secondary),
       radioTheme: RadioThemeData(
-          fillColor: WidgetStateProperty.all(ColorManager.color1)),
+          fillColor: WidgetStateProperty.all(ColorManager.secondary)),
       inputDecorationTheme: InputDecorationTheme(
         // contentPadding: const EdgeInsets.all(AppPadding.p8),
         hintStyle: getRegularStyle(
@@ -36,11 +37,11 @@ class AppTheme {
 //         // error style
         errorStyle: getRegularStyle(color: ColorManager.red),
 
-        outlineBorder: BorderSide(color: ColorManager.color1),
+        outlineBorder: BorderSide(color: ColorManager.secondary),
 
         border: OutlineInputBorder(
             borderSide:
-                BorderSide(color: ColorManager.color6, width: AppSize.s1),
+                BorderSide(color: ColorManager.secondary, width: AppSize.s1),
             borderRadius: const BorderRadius.all(Radius.circular(AppSize.s14))),
 
 //         // enabled border
@@ -64,11 +65,11 @@ class AppTheme {
         // focused error border
         focusedErrorBorder: OutlineInputBorder(
             borderSide:
-                BorderSide(color: ColorManager.color1, width: AppSize.s1),
+                BorderSide(color: ColorManager.secondary, width: AppSize.s1),
             borderRadius: const BorderRadius.all(Radius.circular(AppSize.s14))),
       ),
       // main colors of the app
-      primaryColor: ColorManager.color1,
+      primaryColor: ColorManager.secondary,
       // primaryColorLight: ColorManager.primaryOpacity70,
       // primaryColorDark: ColorManager.darkPrimary,
       // disabledColor: ColorManager.grey1,
@@ -78,13 +79,13 @@ class AppTheme {
       // card view theme
       fontFamily: FontConstants.poppins,
       cardTheme: CardTheme(
-          color: ColorManager.color1,
+          color: ColorManager.secondary,
           // shadowColor: ColorManager.grey,
           elevation: AppSize.s4),
       // App bar theme
       appBarTheme: AppBarTheme(
         centerTitle: true,
-        color: ColorManager.color1,
+        color: ColorManager.secondary,
         elevation: AppSize.s4,
 
         // shadowColor: ColorManager.primaryOpacity70,
@@ -98,7 +99,7 @@ class AppTheme {
       buttonTheme: ButtonThemeData(
         shape: const StadiumBorder(),
         // disabledColor: ColorManager.grey1,
-        buttonColor: ColorManager.color1,
+        buttonColor: ColorManager.secondary,
         // splashColor: ColorManager.primaryOpacity70,
       ));
 

@@ -10,6 +10,7 @@ abstract class AuthServiceDataSource {
   Future<Either> signup(SignupParamsModel signUpParam);
   Future<Either> login(LoginParamsModel logInParam);
   Future<Either> getUser();
+  Future<Either> refresh(String token);
 }
 
 class AuthServiceImpl extends AuthServiceDataSource {
@@ -39,5 +40,17 @@ class AuthServiceImpl extends AuthServiceDataSource {
   Future<Either> getUser() {
     // TODO: implement getUser
     throw UnimplementedError();
+  }
+  
+  @override
+  Future<Either> refresh(String token) async {
+    try {
+      final response = await sl<DioClient>().post(ApiUrls.refreshToken, data: {
+        "refresh": token,
+      });
+      return Right(response);
+    } catch (e) {
+      return Left(e);
+    }
   }
 }

@@ -19,7 +19,7 @@ class ItemDetailsPage extends StatelessWidget {
         body: Container(
           height: deviceHeight(context),
           width: deviceWidth(context),
-          color: ColorManager.color3,
+          color: ColorManager.secondary,
         ));
   }
 }

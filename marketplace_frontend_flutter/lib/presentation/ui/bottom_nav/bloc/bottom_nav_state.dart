@@ -1,10 +1,15 @@
 part of 'bottom_nav_bloc.dart';
 
+
+
 @immutable
-sealed class BottomNavState {
+sealed class BottomNavState extends Equatable {
   final int selectedIndex;
 
   const BottomNavState(this.selectedIndex);
+
+  @override
+  List<Object?> get props => [selectedIndex];
 }
 
 final class BottomNavInitial extends BottomNavState {
@@ -12,5 +17,5 @@ final class BottomNavInitial extends BottomNavState {
 }
 
 final class BottomNavChangedState extends BottomNavState {
-  const BottomNavChangedState(super.newIndex);
+  const BottomNavChangedState(super.selectedIndex);
 }

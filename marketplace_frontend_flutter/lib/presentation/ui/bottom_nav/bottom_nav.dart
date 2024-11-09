@@ -47,7 +47,8 @@ class BottomNav extends StatelessWidget {
                         .read<BottomNavBloc>()
                         .add(BottomNavChangedEvent(index: index));
                   },
-                  backgroundColor: ColorManager.color4,
+                  backgroundColor: ColorManager.primary,
+                  
                   destinations: [
                     const NavigationDestination(
                       label: "Catalog",
@@ -57,14 +58,16 @@ class BottomNav extends StatelessWidget {
                       label: "Cart",
                       icon: Badge(
                           label: const Text("3"),
-                          backgroundColor: ColorManager.color1,
+                          backgroundColor: ColorManager.secondaryDark,
                           textColor: ColorManager.white,
                           textStyle: getRegularStyle(font: FontConstants.ojuju),
-                          child: const Icon(Iconsax.shopping_bag)),
+                          child: const Icon(Iconsax.shopping_cart)),
                     ),
-                    const NavigationDestination(
+                    NavigationDestination(
                       label: "Favorite",
-                      icon: Icon(Iconsax.heart),
+                      icon: Icon(
+                        Iconsax.heart,
+                      ),
                     ),
                     const NavigationDestination(
                       label: "Profile",

@@ -23,7 +23,7 @@ class LiquidSwipeHandle extends StatelessWidget {
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
-          color: ColorManager.black,
+          color: ColorManager.white,
         ),
       ),
       height: diameter,
@@ -35,7 +35,7 @@ class LiquidSwipeHandle extends StatelessWidget {
           customBorder: const StadiumBorder(),
           child: Icon(
             Icons.chevron_right,
-            color: ColorManager.black,
+            color: ColorManager.white,
           ),
         ),
       ),

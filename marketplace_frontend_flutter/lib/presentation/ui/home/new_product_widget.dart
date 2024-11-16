@@ -9,6 +9,7 @@ import 'package:marketplace/core/constants/api_urls.dart';
 import 'package:marketplace/data/models/product_model.dart';
 import 'package:marketplace/domain/entities/product_entity.dart';
 import 'package:marketplace/presentation/resources/font_manager.dart';
+import 'package:marketplace/presentation/resources/routes_manager.dart';
 import 'package:marketplace/presentation/resources/styles_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
 import 'package:marketplace/presentation/ui/auth/login/login_page.dart';
@@ -18,7 +19,7 @@ import 'package:marketplace/presentation/ui/home/product_widget.dart';
 import 'package:marketplace/presentation/widgets/3d_flip_widget.dart';
 import 'package:marketplace/presentation/widgets/favourite_button.dart';
 import 'package:marketplace/presentation/widgets/interactive_3d_effect.dart';
-import 'package:marketplace/presentation/ui/home/item_details_page.dart';
+import 'package:marketplace/presentation/ui/home/product_details_page.dart';
 import 'package:marketplace/presentation/widgets/loading_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -31,85 +32,101 @@ class NewProductWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Interactive3DEffect(
-      child: Container(
-        width: AppSize.s200,
-        decoration: BoxDecoration(
-            color: Colors.grey.shade300,
-            borderRadius: BorderRadius.circular(AppSize.s20)),
-        padding: EdgeInsets.symmetric(
-            vertical: AppPadding.p12, horizontal: AppPadding.p12),
-        child: Stack(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return GestureDetector(
+      onTap: () {
+        goPush(
+          context,
+          Routes.productDetailsPage,
+          extra: {'product': product, 'heroTag': '${product.id}_new'},
+        );
+      },
+      child: Hero(
+        tag: '${product.id}_new',
+        child: Interactive3DEffect(
+          child: Container(
+            width: AppSize.s200,
+            decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(AppSize.s20)),
+            padding: EdgeInsets.symmetric(
+                vertical: AppPadding.p12, horizontal: AppPadding.p12),
+            child: Stack(
               children: [
-                Center(
-                  child: RoundCorner(
-                    child: CachedNetworkImage(
-                      imageUrl: product.images.isNotEmpty
-                          ? product.images.first.image!
-                          : "",
-                      height: 120,
-                      width: 200,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => SizedBox(
-                        child: Container(
-                          color: ColorManager.white,
-                          height: 100,
-                          width: 100,
+                Material(
+                  color: Colors.transparent,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: RoundCorner(
+                          child: CachedNetworkImage(
+                            imageUrl: product.images.isNotEmpty
+                                ? product.images.first.image!
+                                : "",
+                            height: AppSize.s120,
+                            width: AppSize.s200,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => SizedBox(
+                              child: Container(
+                                color: ColorManager.white,
+                                height: AppSize.s100,
+                                width: AppSize.s100,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Skeletonizer(
+                                child: Container(
+                              color: ColorManager.white,
+                              height: AppSize.s100,
+                              width: AppSize.s100,
+                            )),
+                          ),
                         ),
                       ),
-                      errorWidget: (context, url, error) => Skeletonizer(
-                          child: Container(
-                        color: ColorManager.white,
-                        height: 100,
-                        width: 100,
-                      )),
-                    ),
+                      space(h: AppSize.s10),
+                      Text(
+                        product.name ?? "",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "\$${product.price}",
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                                fontSize: FontSize.s18,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: FontConstants.ojuju),
+                          ),
+                          if (product.discount == true)
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: AppPadding.p10),
+                              child: Text(
+                                "\$${product.oldPrice}",
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    decoration: product.discount != null &&
+                                            product.discount == true
+                                        ? TextDecoration.lineThrough
+                                        : null,
+                                    fontSize: FontSize.s14,
+                                    fontFamily: FontConstants.ojuju),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
-                space(h: AppSize.s10),
-                Text(
-                  product.name ?? "",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Row(
-                  children: [
-                    Text(
-                      "\$${product.price}",
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                          fontSize: FontSize.s18,
-                          fontWeight: FontWeight.bold,
-                          fontFamily: FontConstants.ojuju),
-                    ),
-                    if (product.discount == true)
-                      Padding(
-                        padding: const EdgeInsets.only(left: AppPadding.p10),
-                        child: Text(
-                          "\$${product.oldPrice}",
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              decoration: product.discount != null &&
-                                      product.discount == true
-                                  ? TextDecoration.lineThrough
-                                  : null,
-                              fontSize: FontSize.s14,
-                              fontFamily: FontConstants.ojuju),
-                        ),
-                      ),
-                  ],
+                Positioned(
+                  bottom: 0,
+                  right: 2,
+                  child: RoundCorner(child: AddToCartWidget(product: product)),
                 ),
               ],
             ),
-            Positioned(
-              bottom: 0,
-              right: 2,
-              child: RoundCorner(child: AddToCartWidget(product: product)),
-            ),
-          ],
+          ),
         ),
       ),
     );
@@ -186,109 +203,3 @@ class ProductWidgetSkeleton extends StatelessWidget {
 
 
 
-
-
-
-// class NewProductWidget extends StatefulWidget {
-//   const NewProductWidget({
-//     super.key,
-//     required this.productImagePath,
-//   });
-
-//   final String productImagePath;
-
-//   @override
-//   State<NewProductWidget> createState() => _NewProductWidgetState();
-// }
-
-// class _NewProductWidgetState extends State<NewProductWidget>
-//     with TickerProviderStateMixin {
-//   AnimationController? itemAnimationController;
-
-//   @override
-//   void initState() {
-//     // initAnimation();
-
-//     super.initState();
-//   }
-
-//   // void initAnimation() {
-//   //   itemAnimationController = AnimationController(
-//   //     vsync: this,
-//   //     duration: const Duration(seconds: 2),
-//   //   );
-
-//   //   itemAnimationController?.addStatusListener((status) {
-//   //     if (status == AnimationStatus.completed) {
-//   //       gotoNextDetailsPage().then((_) => itemAnimationController?.reset());
-//   //     }
-//   //   });
-//   // }
-
-//   // Future gotoNextDetailsPage() async {
-//   //   Navigator.of(context).push(FadeRoute(
-//   //     builder: (context) => const ItemDetailsPage(),
-//   //   ));
-//   // }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return ColoredBox(
-//       color: Colors.red,
-//       child: Interactive3DEffect(
-//         child: GestureDetector(
-//           onTap: () {
-//             // goPush(
-//             //   context,
-//             //   Routes.itemDetailsPage,
-//             // );
-//           },
-//           child: Flip3DPage(
-//             nextPage: ClipRRect(
-//               borderRadius: BorderRadius.circular(AppSize.s10),
-//               child: SizedBox(
-//                 width: deviceWidth(context),
-//                 height: deviceHeight(context),
-//               ),
-//             ),
-//             currentPage: SizedBox(
-//               height: deviceHeight(context),
-//               width: deviceWidth(context) / 2,
-//               child: Padding(
-//                 padding: const EdgeInsets.all(AppSize.s10),
-//                 child: Column(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   crossAxisAlignment: CrossAxisAlignment.start,
-//                   children: [
-//                     Text(
-//                       "Product",
-//                       overflow: TextOverflow.ellipsis,
-//                       style: getMediumStyle(
-//                         color: ColorManager.white,
-//                         fontSize: FontSize.s17,
-//                       ),
-//                     ),
-//                     Row(
-//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                       children: [
-//                         Text(
-//                           "\$20.99",
-//                           overflow: TextOverflow.ellipsis,
-//                           style: getSemiBoldStyle(
-//                             color: ColorManager.white,
-//                             fontSize: FontSize.s17,
-//                           ),
-//                         ),
-//                         const FavouriteButton(),
-//                       ],
-//                     )
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

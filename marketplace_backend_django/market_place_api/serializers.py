@@ -2,6 +2,9 @@ from datetime import datetime
 from rest_framework import serializers
 from django.db import transaction
 from market_place_api.models import *
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -30,7 +33,9 @@ class ProductSerializer(serializers.ModelSerializer):
         write_only=True,
     )
 
-    average_rating = serializers.FloatField(read_only=True)
+    average_rating = serializers.FloatField(
+        read_only=True,
+    )
 
     class Meta:
         model = Product
@@ -57,7 +62,14 @@ class ProductSerializer(serializers.ModelSerializer):
         return product
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "full_name"]
+
+
 class ReviewSerializer(serializers.ModelSerializer):
+    owner = UserSerializer(read_only=True)
 
     class Meta:
         model = Review

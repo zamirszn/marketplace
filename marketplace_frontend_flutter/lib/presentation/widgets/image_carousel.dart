@@ -1,7 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
+import 'package:marketplace/app/extensions.dart';
 import 'package:marketplace/app/functions.dart';
+import 'package:marketplace/data/models/product_model.dart';
 import 'package:marketplace/presentation/resources/asset_manager.dart';
 import 'package:marketplace/core/config/theme/color_manager.dart';
+import 'package:marketplace/presentation/resources/routes_manager.dart';
+import 'package:marketplace/presentation/resources/values_manager.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 enum CoverFlowStyle {
   none,
@@ -17,10 +24,8 @@ enum CoverFlowStyle {
 final _coverFlowStyle = ValueNotifier<CoverFlowStyle>(CoverFlowStyle.both);
 
 class CoverFlowCarouselPage extends StatelessWidget {
-  const CoverFlowCarouselPage({super.key});
-
-  static PageRoute route() =>
-      MaterialPageRoute(builder: (context) => const CoverFlowCarouselPage());
+  const CoverFlowCarouselPage({super.key, required this.productImages});
+  final List<ProductImage> productImages;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +36,10 @@ class CoverFlowCarouselPage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              CoverFlowCarouselView(style: value),
+              CoverFlowCarouselView(
+                style: value,
+                productImages: productImages,
+              ),
             ],
           ),
         );
@@ -44,48 +52,64 @@ class CoverFlowCarouselView extends StatefulWidget {
   const CoverFlowCarouselView({
     super.key,
     this.style = CoverFlowStyle.none,
+    required this.productImages,
   });
 
   final CoverFlowStyle style;
+  final List<ProductImage> productImages;
 
   @override
   State<CoverFlowCarouselView> createState() => _CoverFlowCarouselViewState();
 }
 
 class _CoverFlowCarouselViewState extends State<CoverFlowCarouselView> {
-  late PageController _pageController;
+  PageController? _pageController;
   final _maxHeight = 250.0;
   final _minItemWidth = 40.0;
+  final _spacing = 5.0;
   double _currentPageIndex = 0;
-  final _spacing = 10.0;
-  final _images = [
-    ImageAsset.atm,
-    ImageAsset.cart,
-    ImageAsset.cart2,
-    ImageAsset.coin,
-    ImageAsset.megaphone,
-    ImageAsset.paperbag,
-  ];
 
   @override
   void initState() {
     _pageController = PageController(
       initialPage: _currentPageIndex.toInt(),
     );
-    _pageController.addListener(_pageControllerListener);
+    _pageController?.addListener(_pageControllerListener);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _animateToLastAndBack();
+    });
+
     super.initState();
   }
 
+  Future<void> _animateToLastAndBack() async {
+    // Animate from the first to the last page
+    if (_pageController?.hasClients == true) {
+      await _pageController?.animateToPage(
+        widget.productImages.length - 1,
+        duration: const Duration(milliseconds: 1300),
+        curve: Curves.linear,
+      );
+      try {
+        await _pageController?.animateToPage(
+          0,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.linear,
+        );
+      } catch (e) {}
+    }
+  }
+
   void _pageControllerListener() {
-    setState(() {
-      _currentPageIndex = _pageController.page ?? 0;
-    });
+    _currentPageIndex = _pageController?.page ?? 0;
+
+    setState(() {});
   }
 
   @override
   void dispose() {
-    _pageController.removeListener(_pageControllerListener);
-    _pageController.dispose();
+    _pageController?.removeListener(_pageControllerListener);
+    _pageController?.dispose();
     super.dispose();
   }
 
@@ -99,10 +123,10 @@ class _CoverFlowCarouselViewState extends State<CoverFlowCarouselView> {
         children: [
           Positioned.fill(
             child: Stack(
-              children: _images.asMap().entries.map((item) {
+              children: widget.productImages.asMap().entries.map((item) {
                 final currentIndex = _currentPageIndex - item.key;
                 return _CoverFlowPositionedItem(
-                  imagePath: item.value,
+                  imagePath: item.value.image ?? "",
                   index: currentIndex,
                   absIndex: currentIndex.abs(),
                   size: Size(screenWidth, _maxHeight),
@@ -114,12 +138,16 @@ class _CoverFlowCarouselViewState extends State<CoverFlowCarouselView> {
               }).toList(),
             ),
           ),
-          Positioned.fill(
-            child: PageView.builder(
-              controller: _pageController,
-              itemBuilder: (context, index) => const SizedBox.expand(),
-              itemCount: _images.length,
-            ),
+          PageView.builder(
+            hitTestBehavior: HitTestBehavior.translucent,
+            scrollDirection: Axis.horizontal,
+            controller: _pageController,
+            itemBuilder: (context, index) => GestureDetector(
+                onTap: () {
+                  print("hit from builder");
+                },
+                child: const SizedBox.shrink()),
+            itemCount: widget.productImages.length,
           ),
         ],
       ),
@@ -175,9 +203,26 @@ class _CoverFlowPositionedItem extends StatelessWidget {
         height: size.height,
         child: ColoredBox(
           color: ColorManager.secondary,
-          child: Image.asset(
-            imagePath,
-            fit: BoxFit.cover,
+          child: GestureDetector(
+            onTap: () {
+              goPush(context, Routes.productImagePage, extra: imagePath);
+            },
+            child: CachedNetworkImage(
+              imageUrl: imagePath,
+              height: AppSize.s120,
+              fit: BoxFit.cover,
+              placeholder: (context, url) => Container(
+                color: ColorManager.white,
+                height: AppSize.s100,
+                width: AppSize.s100,
+              ),
+              errorWidget: (context, url, error) => Skeletonizer(
+                  child: Container(
+                color: ColorManager.white,
+                height: AppSize.s100,
+                width: AppSize.s100,
+              )),
+            ),
           ),
         ),
       ),
@@ -197,14 +242,12 @@ class _CoverFlowPositionedItem extends StatelessWidget {
       child: child,
     );
 
-    child = Padding(
+    return Padding(
       padding: EdgeInsets.only(left: spacing / 2),
-      child: child,
-    );
-
-    return Transform.translate(
-      offset: Offset(_getItemPosition, 0),
-      child: child,
+      child: Transform.translate(
+        offset: Offset(_getItemPosition, 0),
+        child: child,
+      ),
     );
   }
 

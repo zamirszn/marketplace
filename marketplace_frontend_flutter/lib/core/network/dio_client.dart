@@ -21,7 +21,7 @@ class DioClient {
             contentType: applicationJson,
           },
           validateStatus: (status) =>
-              status != null && status >= 200 && status < 300,
+              status != null && status >= 200 && status < 400,
           responseType: ResponseType.json,
           sendTimeout: timeOut,
           receiveTimeout: timeOut,
@@ -45,6 +45,10 @@ class DioClient {
   void clearAuthToken() {
     _authToken = null;
     _dio.options.headers.remove(authorization);
+  }
+
+  Future<Response> fetch(RequestOptions options) async {
+    return await _dio.fetch(options);
   }
 
   Future<Response> get(
@@ -78,11 +82,9 @@ class DioClient {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
-
       final Response response = await _dio.post(
         url,
         data: data,
-        
         queryParameters: queryParameters,
         options: _getOptions(options),
         onSendProgress: onSendProgress,

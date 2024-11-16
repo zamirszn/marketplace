@@ -35,7 +35,7 @@ class SharePrefImpl extends SharedPrefDataSource {
   @override
   Future<Either<Exception, bool?>> readBool(String key) async {
     try {
-      final response = await _sharedPref?.getBool(key);
+      final response = _sharedPref?.getBool(key);
       return Right(response);
     } catch (e) {
       return Left(Exception(e.toString()));

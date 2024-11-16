@@ -51,12 +51,17 @@ class Review(models.Model):
         blank=False,
         null=True,
     )
-    rating = models.PositiveBigIntegerField(
+    rating = models.FloatField(
         validators=[MinValueValidator(1), MaxValueValidator(5)],
         null=True,
         blank=True,
         default=0,
     )
+
+    def save(self, **args):
+        if self.rating is not None:
+            self.rating = round(self.rating, 1)
+            super().save(**args)
 
     class Meta:
         unique_together = ("product", "owner")
@@ -102,7 +107,7 @@ class Product(models.Model):
 
     @property
     def average_rating(self):
-        ratings = self.reviews.aggregate(models.Avg("rating"))["rating__avg"]
+        ratings = round(self.reviews.aggregate(models.Avg("rating"))["rating__avg"], 1)
         return ratings if ratings is not None else 0
 
     @property
@@ -122,6 +127,11 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
 
+    # image = models.ImageField(
+    #     "product_images",
+    #     blank=True,
+    #     null=True,
+    # )
     image = CloudinaryField(
         "product_images",
         blank=True,

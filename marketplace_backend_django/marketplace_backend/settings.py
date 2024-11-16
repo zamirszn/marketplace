@@ -17,6 +17,7 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 import os
+import dj_database_url
 from django.core.management.utils import get_random_secret_key
 from django.urls import reverse_lazy
 import environ
@@ -69,7 +70,7 @@ DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL")
 # Application definition
 
 INSTALLED_APPS = [
-    # "unfold",  # before django.contrib.admin
+    "unfold",  # before django.contrib.admin
     "unfold.contrib.filters",  # optional, if special filters are needed
     "unfold.contrib.forms",  # optional, if special form elements are needed
     "unfold.contrib.inlines",  # optional, if special inlines are needed
@@ -130,12 +131,12 @@ WSGI_APPLICATION = "marketplace_backend.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
 
 # if DEBUG:
 #     DATABASES = {
@@ -154,11 +155,12 @@ DATABASES = {
 #     }
 
 # else:
-#     DATABASES = {
-#         "default": env.db(
-#             "DATABASE_URL", default="postgres://postgres:postgres@localhost:5432/blog"
-#         )
-#     }
+DATABASES = {
+    # "default": env.db(
+    #     "DATABASE_URL", default="postgres://postgres:postgres@localhost:5432/market_db"
+    # )
+    "default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
+}
 
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -230,8 +232,8 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("JWT",),
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
-    # "REFRESH_TOKEN_LIFETIME": timedelta(days=5),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=2),
+    # "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
 }
 
 DJOSER = {

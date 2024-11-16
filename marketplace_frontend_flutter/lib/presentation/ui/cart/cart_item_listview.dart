@@ -14,44 +14,40 @@ class CartItemListview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<ProductBloc>(
-      create: (context) => ProductBloc()..add(CreateorGetCartEvent()),
-      child: BlocBuilder<ProductBloc, ProductState>(
-        builder: (context, state) {
-          if (state is CreateorGetCartLoading) {
-            return Center(
-              child: LoadingWidget(),
-            );
-          } else if (state is CreateorGetCartFailure) {
-            return Center(
-              child: RetryButton(
-                message: state.message,
-                retry: () {
-                  context.read<ProductBloc>().add(CreateorGetCartEvent());
-                },
-              ),
-            );
-          } else if (state is CreateorGetCartSuccess) {
-            return ListView.builder(
-              physics: BouncingScrollPhysics(),
-              itemCount: state.cart.items?.length,
-              shrinkWrap: true,
-              padding: EdgeInsets.all(0),
-              scrollDirection: Axis.vertical,
-              itemBuilder: (context, index) {
-
-                ProductModelEntity? cartItems =
-                    state.cart.items?[index].product!.toEntity();
-
-                return CartItemWidget(
-                  product: cartItems!,
-                );
+    return BlocBuilder<ProductBloc, ProductState>(
+      builder: (context, state) {
+        if (state is CreateorGetCartLoading) {
+          return Center(
+            child: FlutterLogo(),
+          );
+        } else if (state is CreateorGetCartFailure) {
+          return Center(
+            child: RetryButton(
+              message: state.message,
+              retry: () {
+                context.read<ProductBloc>().add(CreateorGetCartEvent());
               },
-            );
-          }
-          return SizedBox();
-        },
-      ),
+            ),
+          );
+        } else if (state is CreateorGetCartSuccess) {
+          return ListView.builder(
+            physics: BouncingScrollPhysics(),
+            itemCount: state.cart.items?.length,
+            shrinkWrap: true,
+            padding: EdgeInsets.all(0),
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              ProductModelEntity? cartItems =
+                  state.cart.items?[index].product!.toEntity();
+
+              return CartItemWidget(
+                product: cartItems!,
+              );
+            },
+          );
+        }
+        return SizedBox();
+      },
     );
   }
 }

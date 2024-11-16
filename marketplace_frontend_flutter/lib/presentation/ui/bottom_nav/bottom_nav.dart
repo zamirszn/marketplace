@@ -9,6 +9,7 @@ import 'package:marketplace/presentation/resources/values_manager.dart';
 import 'package:marketplace/presentation/ui/bottom_nav/bloc/bottom_nav_bloc.dart';
 import 'package:marketplace/presentation/ui/cart/cart_page.dart';
 import 'package:marketplace/presentation/ui/favorite/favorite_page.dart';
+import 'package:marketplace/presentation/ui/home/bloc/product_bloc.dart';
 import 'package:marketplace/presentation/ui/home/home_page.dart';
 
 class BottomNav extends StatelessWidget {
@@ -16,8 +17,15 @@ class BottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => BottomNavBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<BottomNavBloc>(
+          create: (context) => BottomNavBloc(),
+        ),
+        BlocProvider<ProductBloc>(
+          create: (context) => ProductBloc()..add(CreateorGetCartEvent()),
+        ),
+      ],
       child:
           BlocBuilder<BottomNavBloc, BottomNavState>(builder: (context, state) {
         return Scaffold(

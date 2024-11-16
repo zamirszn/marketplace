@@ -35,6 +35,7 @@ class LoginOrRegisterPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  space(h: AppSize.s100),
                   Center(
                     child: Blob.animatedFromID(
                       id: Constant.blob,
@@ -78,7 +79,7 @@ class LoginOrRegisterPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  space(h: AppSize.s190),
+                  space(h: AppSize.s90),
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Row(

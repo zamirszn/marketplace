@@ -90,7 +90,6 @@ class SignUpPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                   
                     space(h: AppSize.s20),
                     BlocBuilder<SignUpBloc, SignUpState>(
                         builder: (context, state) {
@@ -131,7 +130,8 @@ class SignUpPage extends StatelessWidget {
                                       border: noOutlineInput,
                                       contentPadding:
                                           const EdgeInsets.symmetric(
-                                              vertical: AppPadding.p14),
+                                              vertical: AppPadding.p14,
+                                              horizontal: AppPadding.p5),
                                       focusedBorder: noOutlineInput,
                                       enabledBorder: noOutlineInput,
                                       errorBorder: noOutlineInput,
@@ -171,7 +171,8 @@ class SignUpPage extends StatelessWidget {
                                       border: noOutlineInput,
                                       contentPadding:
                                           const EdgeInsets.symmetric(
-                                              vertical: AppPadding.p14),
+                                              vertical: AppPadding.p14,
+                                              horizontal: AppPadding.p5),
                                       focusedBorder: noOutlineInput,
                                       enabledBorder: noOutlineInput,
                                       errorBorder: noOutlineInput,
@@ -238,7 +239,8 @@ class SignUpPage extends StatelessWidget {
                                       ),
                                       contentPadding:
                                           const EdgeInsets.symmetric(
-                                              vertical: AppPadding.p14),
+                                              vertical: AppPadding.p14,
+                                              horizontal: AppPadding.p5),
                                       border: noOutlineInput,
                                       focusedBorder: noOutlineInput,
                                       enabledBorder: noOutlineInput,

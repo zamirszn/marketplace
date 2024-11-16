@@ -12,7 +12,7 @@ class ProductModelEntity {
   final String? slug;
   final int? inventory;
   final num? averageRating;
-  final List<Image> images;
+  final List<ProductImage> images;
 
   ProductModelEntity({
     this.id,

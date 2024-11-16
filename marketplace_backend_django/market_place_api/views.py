@@ -353,72 +353,72 @@ def dashboard_callback(request, context):
                     "link": "#",
                 },
             ],
-            "kpi": [
-                {
-                    "title": "Product A Performance",
-                    "metric": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
-                    "footer": mark_safe(
-                        f'<strong class="text-green-700 font-semibold dark:text-green-400">+{intcomma(f"{random.uniform(1, 9):.02f}")}%</strong>&nbsp;progress from last week'
-                    ),
-                    "chart": json.dumps(
-                        {
-                            "labels": [WEEKDAYS[day % 7] for day in range(1, 28)],
-                            "datasets": [{"data": average, "borderColor": "#9333ea"}],
-                        }
-                    ),
-                },
-                {
-                    "title": "Product B Performance",
-                    "metric": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
-                    "footer": mark_safe(
-                        f'<strong class="text-green-700 font-semibold dark:text-green-400">+{intcomma(f"{random.uniform(1, 9):.02f}")}%</strong>&nbsp;progress from last week'
-                    ),
-                },
-                {
-                    "title": "Product C Performance",
-                    "metric": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
-                    "footer": mark_safe(
-                        f'<strong class="text-green-700 font-semibold dark:text-green-400">+{intcomma(f"{random.uniform(1, 9):.02f}")}%</strong>&nbsp;progress from last week'
-                    ),
-                },
-            ],
-            "progress": [
-                {
-                    "title": "🦆 Social marketing e-book",
-                    "description": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
-                    "value": random.randint(10, 90),
-                },
-                {
-                    "title": "🦍 Freelancing tasks",
-                    "description": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
-                    "value": random.randint(10, 90),
-                },
-                {
-                    "title": "🐋 Development coaching",
-                    "description": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
-                    "value": random.randint(10, 90),
-                },
-                {
-                    "title": "🦑 Product consulting",
-                    "description": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
-                    "value": random.randint(10, 90),
-                },
-                {
-                    "title": "🐨 Other income",
-                    "description": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
-                    "value": random.randint(10, 90),
-                },
-                {
-                    "title": "🐶 Course sales",
-                    "description": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
-                    "value": random.randint(10, 90),
-                },
-                {
-                    "title": "🐻‍❄️ Ads revenue",
-                    "description": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
-                    "value": random.randint(10, 90),
-                },
-            ],
+            # "kpi": [
+            #     {
+            #         "title": "Product A Performance",
+            #         # "metric": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
+            #         "footer": mark_safe(
+            #             f'<strong class="text-green-700 font-semibold dark:text-green-400">+{intcomma(f"{random.uniform(1, 9):.02f}")}%</strong>&nbsp;progress from last week'
+            #         ),
+            #         "chart": json.dumps(
+            #             {
+            #                 "labels": [WEEKDAYS[day % 7] for day in range(1, 28)],
+            #                 "datasets": [{"data": average, "borderColor": "#9333ea"}],
+            #             }
+            #         ),
+            #     },
+            #     {
+            #         "title": "Product B Performance",
+            #         "metric": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
+            #         "footer": mark_safe(
+            #             f'<strong class="text-green-700 font-semibold dark:text-green-400">+{intcomma(f"{random.uniform(1, 9):.02f}")}%</strong>&nbsp;progress from last week'
+            #         ),
+            #     },
+            #     {
+            #         "title": "Product C Performance",
+            #         "metric": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
+            #         "footer": mark_safe(
+            #             f'<strong class="text-green-700 font-semibold dark:text-green-400">+{intcomma(f"{random.uniform(1, 9):.02f}")}%</strong>&nbsp;progress from last week'
+            #         ),
+            #     },
+            # ],
+            # "progress": [
+            #     {
+            #         "title": "🦆 Social marketing e-book",
+            #         "description": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
+            #         "value": random.randint(10, 90),
+            #     },
+            #     {
+            #         "title": "🦍 Freelancing tasks",
+            #         "description": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
+            #         "value": random.randint(10, 90),
+            #     },
+            #     {
+            #         "title": "🐋 Development coaching",
+            #         "description": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
+            #         "value": random.randint(10, 90),
+            #     },
+            #     {
+            #         "title": "🦑 Product consulting",
+            #         "description": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
+            #         "value": random.randint(10, 90),
+            #     },
+            #     {
+            #         "title": "🐨 Other income",
+            #         "description": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
+            #         "value": random.randint(10, 90),
+            #     },
+            #     {
+            #         "title": "🐶 Course sales",
+            #         "description": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
+            #         "value": random.randint(10, 90),
+            #     },
+            #     {
+            #         "title": "🐻‍❄️ Ads revenue",
+            #         "description": f"${intcomma(f"{random.uniform(1000, 9999):.02f}")}",
+            #         "value": random.randint(10, 90),
+            #     },
+            # ],
             "chart": json.dumps(
                 {
                     "labels": [WEEKDAYS[day % 7] for day in range(1, 28)],

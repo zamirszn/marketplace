@@ -7,9 +7,12 @@ import 'package:marketplace/domain/usecases/auth_usecase.dart';
 import 'package:marketplace/presentation/service_locator.dart';
 
 class LoggerInterceptor extends Interceptor {
-  Logger logger = Logger(
+  final Logger logger = Logger(
     printer: PrettyPrinter(methodCount: 0, colors: true, printEmojis: true),
   );
+
+  bool _isRefreshing = false; // Flag to track if refresh is in progress
+  List<Function> _pendingRequests = []; // Queue to hold pending requests
 
   @override
   Future<void> onError(
@@ -19,6 +22,14 @@ class LoggerInterceptor extends Interceptor {
 
     // Check if the error status is 401 (Unauthorized)
     if (err.response?.statusCode == 401) {
+      _pendingRequests.add(() => _retryRequest(err, handler));
+
+      if (_isRefreshing) {
+        return;
+      }
+
+      _isRefreshing = true;
+
       logger.w("Access token expired. Attempting to refresh...");
 
       final refreshTokenResult =
@@ -31,35 +42,30 @@ class LoggerInterceptor extends Interceptor {
           handler.next(err); // Pass the error along if refresh token is missing
         },
         (refreshToken) async {
-          // Call the use case to refresh the access token
-          final refreshResult =
+          final refreshResultRequest =
               await sl<RefreshTokenUsecase>().call(params: refreshToken);
 
-          return refreshResult.fold(
+          // Call the use case to refresh the access token
+
+          refreshResultRequest.fold(
             (refreshError) {
               logger.e("Token refresh failed: $refreshError");
+              _isRefreshing = false; // Reset the flag
               handler.next(err); // Pass the original error if refresh fails
             },
             (data) async {
               final String newAccessToken = data[Constant.accessToken];
-              // Save the new access token in secure storage
 
+              // Save the new access token in secure storage
               await sl<SecureStorageDataSource>()
                   .write(Constant.accessToken, newAccessToken);
               logger
                   .i("Token refresh successful. Retrying original request...");
 
-              // Retry the original request with the new access token
-              final retryOptions = err.requestOptions;
-              retryOptions.headers[authorization] = 'JWT $newAccessToken';
-
-              try {
-                final response = await Dio().fetch(retryOptions);
-                handler.resolve(response); // Return successful response
-              } catch (retryError) {
-                handler.reject(retryError
-                    as DioException); // Handle retry error if it occurs
-              }
+              // Retry all pending requests with the new access token
+              _retryPendingRequests();
+              _isRefreshing = false; // Reset the flag
+              _pendingRequests.clear(); // Clear the queue
             },
           );
         },
@@ -72,6 +78,36 @@ class LoggerInterceptor extends Interceptor {
     }
   }
 
+  // Helper function to retry a single request
+  Future<void> _retryRequest(
+      DioException err, ErrorInterceptorHandler handler) async {
+    final dio = sl<DioClient>();
+    final retryOptions = err.requestOptions;
+    final newAccessTokenFromStorage = await sl<SecureStorageDataSource>()
+        .read(Constant.accessToken); // Read the new token from storage
+
+    newAccessTokenFromStorage.fold((error) {
+      handler.next(err);
+    }, (token) async {
+      retryOptions.headers[authorization] = 'JWT $token';
+
+      try {
+        final response = await dio.fetch(retryOptions);
+        handler.resolve(response); // Return successful response
+      } catch (retryError) {
+        handler.reject(
+            retryError as DioException); // Handle retry error if it occurs
+      }
+    });
+  }
+
+  // Helper function to retry all pending requests with the new access token
+  void _retryPendingRequests() {
+    _pendingRequests.forEach((callback) {
+      callback();
+    });
+  }
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final requestPath = "${options.baseUrl}${options.path}";
@@ -81,12 +117,12 @@ class LoggerInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    logger.d(
-      'STATUSCODE: ${response.statusCode} \n '
-      'STATUSMESSAGE: ${response.statusMessage} \n'
-      'HEADERS: ${response.headers} \n'
-      'Data: ${response.data}',
-    );
+    // logger.d(
+    //   'STATUSCODE: ${response.statusCode} \n '
+    //   'STATUSMESSAGE: ${response.statusMessage} \n'
+    //   'HEADERS: ${response.headers} \n'
+    //   'Data: ${response.data}',
+    // );
     handler.next(response);
   }
 }

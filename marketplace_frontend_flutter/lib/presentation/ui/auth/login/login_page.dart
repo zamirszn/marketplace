@@ -24,8 +24,7 @@ import 'package:marketplace/presentation/widgets/snackbar.dart';
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
   // TODO: remove filled data
-  final emailController =
-      TextEditingController(
+  final emailController = TextEditingController(
       text: kDebugMode ? "testmail1731058460607234@gmail.com" : null);
   final passwordController =
       TextEditingController(text: kDebugMode ? "StrongPassword52#" : null);
@@ -85,7 +84,6 @@ class LoginPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          
                           space(h: AppSize.s20),
                           BlocBuilder<LoginBloc, LoginState>(
                             builder: (context, state) {
@@ -132,7 +130,9 @@ class LoginPage extends StatelessWidget {
                                               border: noOutlineInput,
                                               contentPadding:
                                                   const EdgeInsets.symmetric(
-                                                      vertical: AppPadding.p14),
+                                                      vertical: AppPadding.p14,
+                                                      horizontal:
+                                                          AppPadding.p5),
                                               focusedBorder: noOutlineInput,
                                               enabledBorder: noOutlineInput,
                                               errorBorder: noOutlineInput,
@@ -140,8 +140,7 @@ class LoginPage extends StatelessWidget {
                                               focusedErrorBorder:
                                                   noOutlineInput,
                                               filled: true,
-                                              fillColor:
-                                                  ColorManager.primary
+                                              fillColor: ColorManager.primary
                                                   .withOpacity(.9),
                                             )),
                                       ),
@@ -200,7 +199,9 @@ class LoginPage extends StatelessWidget {
                                               ),
                                               contentPadding:
                                                   const EdgeInsets.symmetric(
-                                                      vertical: AppPadding.p14),
+                                                      vertical: AppPadding.p14,
+                                                      horizontal:
+                                                          AppPadding.p5),
                                               border: noOutlineInput,
                                               focusedBorder: noOutlineInput,
                                               enabledBorder: noOutlineInput,
@@ -209,8 +210,7 @@ class LoginPage extends StatelessWidget {
                                               focusedErrorBorder:
                                                   noOutlineInput,
                                               filled: true,
-                                              fillColor:
-                                                  ColorManager.primary
+                                              fillColor: ColorManager.primary
                                                   .withOpacity(.9),
                                             )),
                                       ),

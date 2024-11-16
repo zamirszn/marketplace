@@ -122,8 +122,11 @@ class ReviewAdmin(admin.ModelAdmin):
         "date_created",
     ]
     list_display = [
+        "id",
         "product",
+        "description",
         "date_created",
+        "rating",
     ]
 
     list_per_page = 100

@@ -41,7 +41,7 @@ class AuthServiceImpl extends AuthServiceDataSource {
     // TODO: implement getUser
     throw UnimplementedError();
   }
-  
+
   @override
   Future<Either> refresh(String token) async {
     try {

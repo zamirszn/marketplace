@@ -10,15 +10,18 @@ class GoBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RoundCorner(
-      child: InkWell(
-          borderRadius: BorderRadius.circular(10),
-          onTap: () => goPopRoute(context),
-          child: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: color ?? ColorManager.black,
-            size: AppSize.s20,
-          )),
+    return Material(
+      color: Colors.transparent,
+      child: RoundCorner(
+        child: InkWell(
+            borderRadius: BorderRadius.circular(10),
+            onTap: () => goPopRoute(context),
+            child: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: color ?? ColorManager.black,
+              size: AppSize.s20,
+            )),
+      ),
     );
   }
 }

@@ -10,6 +10,7 @@ import 'package:marketplace/presentation/service_locator.dart';
 import 'package:marketplace/presentation/ui/onboarding/liquid_card_swipe.dart';
 import 'package:marketplace/presentation/ui/onboarding/liquid_swipe_view.dart';
 import 'package:marketplace/presentation/widgets/move_bounce_animation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LiquidSwipeOnboarding extends StatefulWidget {
   const LiquidSwipeOnboarding({super.key});
@@ -28,8 +29,6 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
     resetAnimation();
     super.initState();
   }
-
-  
 
   resetAnimation() async {
     Future.delayed(const Duration(milliseconds: 50)).then(

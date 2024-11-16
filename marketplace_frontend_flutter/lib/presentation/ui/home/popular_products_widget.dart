@@ -8,6 +8,7 @@ import 'package:marketplace/core/constants/api_urls.dart';
 import 'package:marketplace/data/models/product_model.dart';
 import 'package:marketplace/domain/entities/product_entity.dart';
 import 'package:marketplace/presentation/resources/font_manager.dart';
+import 'package:marketplace/presentation/resources/routes_manager.dart';
 import 'package:marketplace/presentation/resources/styles_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
 import 'package:marketplace/presentation/widgets/interactive_3d_effect.dart';
@@ -22,98 +23,110 @@ class PopularProductsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Interactive3DEffect(
-      child: Container(
-        width: AppSize.s250,
-        decoration: BoxDecoration(
-            color: Colors.grey.shade300,
-            borderRadius: BorderRadius.circular(AppSize.s20)),
-        padding: EdgeInsets.symmetric(
-            vertical: AppPadding.p12, horizontal: AppPadding.p12),
-        child: Stack(
-          children: [
-            Row(
+    return GestureDetector(
+      onTap: () {
+        goPush(
+          context,
+          Routes.productDetailsPage,
+          extra: {'product': product, 'heroTag': '${product.id}_popular'},
+        );
+      },
+      child: Hero(
+        tag: '${product.id}_popular',
+        child: Interactive3DEffect(
+          child: Container(
+            width: AppSize.s250,
+            decoration: BoxDecoration(
+                color: Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(AppSize.s20)),
+            padding: EdgeInsets.symmetric(
+                vertical: AppPadding.p12, horizontal: AppPadding.p12),
+            child: Stack(
               children: [
-                RoundCorner(
-                  child: CachedNetworkImage(
-                    imageUrl: product.images.isNotEmpty
-                        ?
-
-                       product.images.first.image!
-                        : "",
-                    height: 100,
-                    width: 50,
-                    fit: BoxFit.cover,
-                    placeholder: (context, url) => Container(
-                      color: ColorManager.white,
-                      height: 100,
-                      width: 50,
-                    ),
-                    errorWidget: (context, url, error) => Skeletonizer(
-                        child: Container(
-                      color: ColorManager.white,
-                      height: 100,
-                      width: 50,
-                    )),
-                  ),
-                ),
-                space(w: AppSize.s10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                Row(
                   children: [
-                    SizedBox(
-                      width: AppSize.s140,
-                      child: Text(
-                        product.name ?? "",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
+                    RoundCorner(
+                      child: CachedNetworkImage(
+                        imageUrl: product.images.isNotEmpty
+                            ? product.images.first.image!
+                            : "",
+                        height: AppSize.s100,
+                        width: AppSize.s50,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Container(
+                          color: ColorManager.white,
+                          height: AppSize.s100,
+                          width: AppSize.s50,
+                        ),
+                        errorWidget: (context, url, error) => Skeletonizer(
+                            child: Container(
+                          color: ColorManager.white,
+                          height: AppSize.s100,
+                          width: AppSize.s50,
+                        )),
                       ),
                     ),
-                    Row(
-                      children: [
-                    
-                        Text(
-                          "\$${product.price}",
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: FontSize.s18,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: FontConstants.ojuju),
-                        ),
-                        if (product.discount == true)
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: AppPadding.p5),
+                    space(w: AppSize.s10),
+                    Material(
+                      color: Colors.transparent,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          SizedBox(
+                            width: AppSize.s140,
                             child: Text(
-                              "\$${product.oldPrice}",
+                              product.name ?? "",
+                              maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                  decoration: product.discount != null &&
-                                          product.discount == true
-                                      ? TextDecoration.lineThrough
-                                      : null,
-                                  fontSize: FontSize.s12,
-                                  fontFamily: FontConstants.ojuju),
                             ),
                           ),
-                      ],
-                    ),
+                          Row(
+                            children: [
+                              Text(
+                                "\$${product.price}",
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: FontSize.s18,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: FontConstants.ojuju),
+                              ),
+                              if (product.discount == true)
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: AppPadding.p5),
+                                  child: Text(
+                                    "\$${product.oldPrice}",
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        decoration: product.discount != null &&
+                                                product.discount == true
+                                            ? TextDecoration.lineThrough
+                                            : null,
+                                        fontSize: FontSize.s12,
+                                        fontFamily: FontConstants.ojuju),
+                                  ),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
                   ],
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 2,
+                  child: IconButton(
+                      splashColor: Colors.transparent,
+                      hoverColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onPressed: () {},
+                      icon: const Icon(Iconsax.heart)),
                 )
               ],
             ),
-            Positioned(
-              bottom: 0,
-              right: 2,
-              child: IconButton(
-                  splashColor: Colors.transparent,
-                  hoverColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onPressed: () {},
-                  icon: const Icon(Iconsax.heart)),
-            )
-          ],
+          ),
         ),
       ),
     );
@@ -141,8 +154,8 @@ class PopularProductsWidgetSkeleton extends StatelessWidget {
               RoundCorner(
                 child: Container(
                   color: ColorManager.white,
-                  height: 100,
-                  width: 50,
+                  height: AppSize.s100,
+                  width: AppSize.s50,
                 ),
               ),
               space(w: AppSize.s10),

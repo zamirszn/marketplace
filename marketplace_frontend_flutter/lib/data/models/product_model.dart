@@ -1,9 +1,7 @@
-// To parse this JSON data, do
-//
-//     final productModel = productModelFromJson(jsonString);
 
 import 'dart:convert';
 
+import 'package:marketplace/core/constants/api_urls.dart';
 import 'package:marketplace/data/models/product_category_model.dart';
 import 'package:marketplace/domain/entities/product_entity.dart';
 
@@ -25,7 +23,7 @@ class ProductModel {
   final int? inventory;
   final num? averageRating;
 
-  final List<Image> images;
+  final List<ProductImage> images;
 
   ProductModel({
     this.id,
@@ -52,7 +50,7 @@ class ProductModel {
     String? slug,
     int? inventory,
     num? averageRating,
-    List<Image>? images,
+    List<ProductImage>? images,
   }) => 
       ProductModel(
         id: id ?? this.id,
@@ -81,7 +79,8 @@ class ProductModel {
         slug: json["slug"],
         inventory: json["inventory"],
         averageRating: json["average_rating"],
-        images: List<Image>.from(json["images"].map((x) => Image.fromJson(x))),
+        images: List<ProductImage>.from(
+            json["images"].map((x) => ProductImage.fromJson(x))),
       );
 
   Map<String, dynamic> toMap() => {
@@ -99,31 +98,32 @@ class ProductModel {
       };
 }
 
-class Image {
+class ProductImage {
   final int? id;
   final String? image;
   final String? product;
 
-  Image({
+  ProductImage({
     this.id,
     this.image,
     this.product,
   });
 
-  Image copyWith({
+  ProductImage copyWith({
     int? id,
     String? image,
     String? product,
   }) =>
-      Image(
+      ProductImage(
         id: id ?? this.id,
         image: image ?? this.image,
         product: product ?? this.product,
       );
 
-  factory Image.fromJson(Map<String, dynamic> json) => Image(
+  factory ProductImage.fromJson(Map<String, dynamic> json) => ProductImage(
         id: json["id"],
-        image: json["image"],
+        // TODO: remove before release only for testing purposes
+        image: ApiUrls.baseUrl + json["image"],
         product: json["product"],
       );
 

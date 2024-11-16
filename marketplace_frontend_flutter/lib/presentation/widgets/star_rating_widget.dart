@@ -4,7 +4,10 @@ import 'package:marketplace/core/config/theme/color_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
 
 class StarRating extends StatelessWidget {
-  const StarRating({super.key, required this.rating});
+  const StarRating({
+    super.key,
+    required this.rating,
+  });
   final num rating;
 
   @override
@@ -20,20 +23,20 @@ class StarRating extends StatelessWidget {
       } else if (i < rating && rating - i >= .5) {
         stars.add(Icon(
           Iconsax.star_11,
-          size: AppSize.s16,
+          size: AppSize.s12,
           color: ColorManager.secondary,
         ));
       } else {
-        stars.add(Icon(
-          Iconsax.star,
-          size: AppSize.s12,
-          color: Colors.black,
+        stars.add(Padding(
+          padding: const EdgeInsets.only(),
+          child: Icon(
+            Iconsax.star,
+            size: AppSize.s12,
+            color: ColorManager.black,
+          ),
         ));
       }
     }
-    return Padding(
-      padding: const EdgeInsets.all(AppPadding.p5),
-      child: Row(children: stars),
-    );
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: stars);
   }
 }

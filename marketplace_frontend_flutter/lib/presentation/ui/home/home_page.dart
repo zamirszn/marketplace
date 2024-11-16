@@ -49,158 +49,153 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () async {},
-        child: BlocProvider<ProductBloc>(
-          create: (context) => ProductBloc()..add(CreateorGetCartEvent()),
-          child: BlocConsumer<ProductBloc, ProductState>(
-            listener: (context, state) {
-              print("state is $state");
-              // TODO: implement listener
-              if (state is AddToCartSuccess) {
-                showMessage(context, "Added to cart");
-              }
-            },
-            builder: (context, state) {
-              print("state build is $state");
+        onRefresh: () async {
+          context.read<ProductBloc>()..add(CreateorGetCartEvent());
+        },
+        child: BlocBuilder<ProductBloc, ProductState>(
+          builder: (context, state) {
+            if (state is CreateorGetCartLoading) {
+              return Center(
+                child: LoadingWidget(),
+              );
+            } else if (state is CreateorGetCartFailure) {
+              return Center(
+                  child: RetryButton(
+                message: state.message,
+                retry: () {
+                  context.read<ProductBloc>().add(CreateorGetCartEvent());
+                },
+              ));
+            } else if (state is CreateorGetCartSuccess) {
+              return CustomScrollView(
+                slivers: [
+                  SliverPadding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: AppPadding.p7),
+                    sliver: SliverToBoxAdapter(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          AppStrings.discoverOurNewItems,
+                          style: getSemiBoldStyle(
+                            font: FontConstants.ojuju,
+                            fontSize: AppSize.s24,
+                          ),
+                        ),
+                        space(h: AppSize.s24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                decoration: InputDecoration(
+                                    hintText: AppStrings.search,
+                                    prefixIcon: Icon(
+                                      Iconsax.search_normal_1,
+                                      size: AppSize.s20,
+                                    )),
+                              ),
+                            ),
+                            space(w: AppSize.s20),
+                            RoundCorner(
+                              child: IconButton(
+                                  splashColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                  onPressed: () {},
+                                  icon: const Icon(Iconsax.setting_4)),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
+                  ),
 
-              if (state is CreateorGetCartLoading) {
-                return Center(
-                  child: LoadingWidget(),
-                );
-              }
-              if (state is CreateorGetCartFailure) {
-                return Center(
-                    child: RetryButton(
-                  message: state.message,
-                  retry: () {
-                    context.read<ProductBloc>().add(CreateorGetCartEvent());
-                  },
-                ));
-              } else {
-                return CustomScrollView(
-                  slivers: [
-                    SliverPadding(
+                  sliverSpace(h: AppSize.s20),
+                  // product categories
+                  const ProductsCategoriesListWidget(),
+                  sliverSpace(h: AppSize.s10),
+                  // new products
+                  const SliverToBoxAdapter(
+                    child: SizedBox(height: 280, child: NewProductsListView()),
+                  ),
+                  sliverSpace(h: AppSize.s20),
+                  SliverPadding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: AppPadding.p7),
+                    sliver: SliverToBoxAdapter(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          AppStrings.popularProducts,
+                          overflow: TextOverflow.ellipsis,
+                          style: getSemiBoldStyle(
+                            font: FontConstants.ojuju,
+                            fontSize: AppSize.s24,
+                          ),
+                        ),
+                      ],
+                    )),
+                  ),
+                  sliverSpace(h: AppSize.s10),
+                  // popular products
+                  const SliverToBoxAdapter(
+                    child: SizedBox(
+                        height: AppSize.s100, child: PopularProductsListView()),
+                  ),
+                  sliverSpace(h: AppSize.s20),
+                  SliverPadding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: AppPadding.p7),
+                    sliver: SliverToBoxAdapter(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          AppStrings.discoverProducts,
+                          overflow: TextOverflow.ellipsis,
+                          style: getSemiBoldStyle(
+                            font: FontConstants.ojuju,
+                            fontSize: AppSize.s24,
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              AppStrings.viewAll,
+                              overflow: TextOverflow.ellipsis,
+                              style: getLightStyle(
+                                font: FontConstants.poppins,
+                                fontSize: AppSize.s14,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
+                  ),
+                  sliverSpace(h: AppSize.s20),
+                  // discover products
+                  SliverPadding(
                       padding:
                           const EdgeInsets.symmetric(horizontal: AppPadding.p7),
-                      sliver: SliverToBoxAdapter(
-                          child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            AppStrings.discoverOurNewItems,
-                            style: getSemiBoldStyle(
-                              font: FontConstants.ojuju,
-                              fontSize: AppSize.s24,
-                            ),
-                          ),
-                          space(h: AppSize.s24),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                      hintText: AppStrings.search,
-                                      prefixIcon: Icon(
-                                        Iconsax.search_normal_1,
-                                        size: AppSize.s20,
-                                      )),
-                                ),
-                              ),
-                              space(w: AppSize.s20),
-                              RoundCorner(
-                                child: IconButton(
-                                    splashColor: Colors.transparent,
-                                    hoverColor: Colors.transparent,
-                                    highlightColor: Colors.transparent,
-                                    onPressed: () {},
-                                    icon: const Icon(Iconsax.setting_4)),
-                              ),
-                            ],
-                          ),
-                        ],
-                      )),
-                    ),
-          
-                    sliverSpace(h: AppSize.s20),
-                    // product categories
-                    const ProductsCategoriesListWidget(),
-                    sliverSpace(h: AppSize.s10),
-                    // new products
-                    const SliverToBoxAdapter(
-                      child:
-                          SizedBox(height: 280, child: NewProductsListView()),
-                    ),
-                    sliverSpace(h: AppSize.s20),
-                    SliverPadding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: AppPadding.p7),
-                      sliver: SliverToBoxAdapter(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            AppStrings.popularProducts,
-                            overflow: TextOverflow.ellipsis,
-                            style: getSemiBoldStyle(
-                              font: FontConstants.ojuju,
-                              fontSize: AppSize.s24,
-                            ),
-                          ),
-                        ],
-                      )),
-                    ),
-                    sliverSpace(h: AppSize.s10),
-                    // popular products
-                    const SliverToBoxAdapter(
-                      child: SizedBox(
-                          height: AppSize.s100,
-                          child: PopularProductsListView()),
-                    ),
-                    sliverSpace(h: AppSize.s20),
-                    SliverPadding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: AppPadding.p7),
-                      sliver: SliverToBoxAdapter(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            AppStrings.discoverProducts,
-                            overflow: TextOverflow.ellipsis,
-                            style: getSemiBoldStyle(
-                              font: FontConstants.ojuju,
-                              fontSize: AppSize.s24,
-                            ),
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                AppStrings.viewAll,
-                                overflow: TextOverflow.ellipsis,
-                                style: getLightStyle(
-                                  font: FontConstants.poppins,
-                                  fontSize: AppSize.s14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      )),
-                    ),
-                    sliverSpace(h: AppSize.s20),
-                    // discover products
-                    SliverPadding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: AppPadding.p7),
-                        sliver: ProductGridView()),
-                    sliverSpace(h: AppSize.s50),
-                  ],
-                );
-              }
-            },
-          ),
+                      sliver: ProductGridView()),
+                  sliverSpace(h: AppSize.s50),
+                ],
+              );
+            } else {
+              return Center(
+                  child: RetryButton(
+                message: AppStrings.somethingWentWrong,
+                retry: () {
+                  context.read<ProductBloc>().add(CreateorGetCartEvent());
+                },
+              ));
+            }
+          },
         ),
       ),
     );

@@ -5,16 +5,19 @@ import 'package:go_router/go_router.dart';
 import 'package:marketplace/core/constants/constant.dart';
 import 'package:marketplace/data/source/secure_storage_data_source.dart';
 import 'package:marketplace/data/source/shared_pref_service_impl.dart';
+import 'package:marketplace/domain/entities/product_entity.dart';
 import 'package:marketplace/presentation/service_locator.dart';
 import 'package:marketplace/presentation/ui/auth/account_verification/account_verification.dart';
 import 'package:marketplace/presentation/ui/auth/splash_page.dart';
 import 'package:marketplace/presentation/ui/bottom_nav/bottom_nav.dart';
+import 'package:marketplace/presentation/ui/home/product_image_page.dart';
 import 'package:marketplace/presentation/ui/order/order_page.dart';
+import 'package:marketplace/presentation/ui/review/review_page.dart';
 import 'package:marketplace/presentation/widgets/error_404_page.dart';
 import 'package:marketplace/presentation/ui/auth/login_or_register_page.dart';
 import 'package:marketplace/presentation/ui/auth/login/login_page.dart';
 import 'package:marketplace/presentation/ui/auth/sign_up/sign_up_page.dart';
-import 'package:marketplace/presentation/ui/home/item_details_page.dart';
+import 'package:marketplace/presentation/ui/home/product_details_page.dart';
 import 'package:marketplace/presentation/ui/onboarding/onboarding_screen.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -56,21 +59,40 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const OrderPage(),
     ),
     GoRoute(
-      pageBuilder: (BuildContext context, GoRouterState state) {
-        return CustomTransitionPage<void>(
-          child: const ItemDetailsPage(),
-          opaque: false,
-          transitionDuration: const Duration(seconds: 2),
-          reverseTransitionDuration: const Duration(milliseconds: 800),
-          transitionsBuilder: (BuildContext context,
-              Animation<double> animation,
-              Animation<double> secondaryAnimation,
-              Widget child) {
-            return ScaleTransition(scale: animation, child: child);
-          },
+      builder: (context, state) {
+        final Map<String, dynamic> extraData =
+            state.extra as Map<String, dynamic>;
+        final ProductModelEntity product = extraData['product'];
+        final String heroTag = extraData['heroTag'];
+
+        return ProductDetailsPage(
+          product: product,
+          heroTag: heroTag,
         );
       },
-      path: Routes.itemDetailsPage,
+      path: Routes.productDetailsPage,
+    ),
+    GoRoute(
+      builder: (context, state) {
+        final String image = state.extra as String;
+
+        return ProductImagePage(
+          imagePath: image,
+        );
+      },
+     
+      path: Routes.productImagePage,
+    ),
+    GoRoute(
+      builder: (context, state) {
+        final ProductModelEntity product = state.extra as ProductModelEntity;
+
+        return ReviewPage(
+          product: product,
+        );
+      },
+     
+      path: Routes.productReviewPage,
     ),
   ],
   errorBuilder: (context, state) => const Error404Page(),
@@ -84,7 +106,9 @@ class Routes {
   static const String orderPage = "/orderPage";
   static const String signUpPage = "/signUpPage";
   static const String bottomNav = "/bottomNav";
-  static const String itemDetailsPage = "/itemDetailsPage";
+  static const String productDetailsPage = "/productDetailsPage";
+  static const String productReviewPage = "/productReviewPage";
+  static const String productImagePage = "/productImagePage";
   static const String loginOrRegisterPage = "/loginOrRegisterPage";
   static const String accountVerificationPage = "/accountVerificationPage";
 }

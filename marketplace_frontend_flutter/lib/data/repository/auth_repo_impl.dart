@@ -41,7 +41,7 @@ class AuthRepositoryImpl extends AuthRepository {
 
       
 
-
+       
       return const Right(null);
     });
   }
@@ -71,6 +71,7 @@ class AuthRepositoryImpl extends AuthRepository {
       sl<DioClient>().setAuthToken(response.data[Constant.accessToken]);
       await sl<SecureStorageDataSource>()
           .write(Constant.accessToken, response.data[Constant.accessToken]);
+    
 
       return Right(response.data);
     });

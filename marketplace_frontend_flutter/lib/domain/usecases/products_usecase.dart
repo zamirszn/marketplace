@@ -3,6 +3,7 @@ import 'package:marketplace/core/usecase/usecase.dart';
 import 'package:marketplace/data/models/add_to_cart_params_model.dart';
 import 'package:marketplace/data/models/product_query_params_model.dart';
 import 'package:marketplace/domain/repository/products_repo.dart';
+import 'package:marketplace/domain/repository/review_repo.dart';
 import 'package:marketplace/presentation/service_locator.dart';
 
 class GetProductCategoryUsecase implements Usecase<Either, dynamic> {
@@ -51,5 +52,12 @@ class GetCartIdUseCase implements Usecase<String?, dynamic> {
   @override
   Future<String?> call({params}) async {
     return sl<ProductsRepository>().getCartId();
+  }
+}
+
+class GetReviewsUseCase implements Usecase<Either, dynamic> {
+  @override
+  Future<Either> call({params}) async {
+    return sl<ReviewRepository>().getProductReviews(params!);
   }
 }

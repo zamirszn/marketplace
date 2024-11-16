@@ -9,6 +9,7 @@ void showMessage(
     content: Text(message),
     backgroundColor: ColorManager.secondary,
     behavior: SnackBarBehavior.floating,
+    dismissDirection: DismissDirection.horizontal,
     margin: const EdgeInsets.only(
         top: 20,
         left: 20,
@@ -27,6 +28,8 @@ void showErrorMessage(
     content: Text(message),
     backgroundColor: ColorManager.red,
     behavior: SnackBarBehavior.floating,
+    dismissDirection: DismissDirection.horizontal,
+
     margin: const EdgeInsets.only(
         top: 20,
         left: 20,

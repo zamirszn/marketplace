@@ -1,6 +1,10 @@
 class AppStrings {
   static const String noRouteFound = "no_route_found";
   static const String back = "Back";
+  static const String product = "Product";
+  static const String reviews = "Reviews";
+  static const String addedToCart = "added to cart";
+  static const String addToCart = "Add to cart";
   static const String somethingWentWrong =
       "Something went wrong, please try again";
   static const String retry = "Retry";

@@ -3,6 +3,7 @@ class ApiUrls {
   static const String auth = "auth";
   static const String api = "api";
   static const String products = "products";
+  static const String reviews = "reviews";
   static const String cart = "cart";
   static const String items = "items";
   static const String register = "$auth/signup/";

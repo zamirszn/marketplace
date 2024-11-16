@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:marketplace/data/models/product_model.dart';
 import 'package:marketplace/domain/entities/product_entity.dart';
 import 'package:marketplace/presentation/resources/asset_manager.dart';
 import 'package:marketplace/presentation/resources/string_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
+
+
+
+
+String formatDateDDMMMYYY(DateTime date) {
+  final DateFormat formatter = DateFormat('dd MMM yyyy');
+  return formatter.format(date);
+}
+
+
 
 class FadeRoute<T> extends MaterialPageRoute<T> {
   FadeRoute({

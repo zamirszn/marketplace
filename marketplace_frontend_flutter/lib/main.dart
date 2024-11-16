@@ -5,6 +5,8 @@ import 'package:marketplace/core/config/theme/theme_manager.dart';
 import 'package:marketplace/presentation/service_locator.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   setupServiceLocator();
   runApp(const MarketPlaceApp());
 }
@@ -17,9 +19,6 @@ class MarketPlaceApp extends StatefulWidget {
 }
 
 class _MarketPlaceAppState extends State<MarketPlaceApp> {
-
-
-  
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(

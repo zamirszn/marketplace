@@ -2,11 +2,14 @@ import 'package:get_it/get_it.dart';
 import 'package:marketplace/core/network/dio_client.dart';
 import 'package:marketplace/data/repository/auth_repo_impl.dart';
 import 'package:marketplace/data/repository/product_repo_impl.dart';
+import 'package:marketplace/data/repository/review_review_impl.dart';
+import 'package:marketplace/data/source/review_service_data_source.dart';
 import 'package:marketplace/data/source/shared_pref_service_impl.dart';
 import 'package:marketplace/data/source/auth_service_data_source.dart';
 import 'package:marketplace/data/source/products_service_data_source.dart';
 import 'package:marketplace/domain/repository/auth_repo.dart';
 import 'package:marketplace/domain/repository/products_repo.dart';
+import 'package:marketplace/domain/repository/review_repo.dart';
 import 'package:marketplace/domain/repository/secure_storage_repo.dart';
 import 'package:marketplace/domain/usecases/auth_usecase.dart';
 import 'package:marketplace/domain/usecases/products_usecase.dart';
@@ -23,15 +26,19 @@ void setupServiceLocator() async {
   sl.registerSingleton<SecureStorageDataSource>(SecureServiceImpl());
   sl.registerSingleton<SharedPrefDataSource>(SharePrefImpl());
   sl.registerSingleton<ProductsServiceDataSource>(ProductServiceImpl());
+  sl.registerSingleton<ReviewServiceDataSource>(ReviewServiceImpl());
 
   // repo
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());
   sl.registerSingleton<ProductsRepository>(ProductRepositoryImpl());
+  sl.registerSingleton<ReviewRepository>(ReviewRepositoryImpl());
 
-  // usecases
+  // auth usecases
   sl.registerSingleton<SignupUseCase>(SignupUseCase());
   sl.registerSingleton<LogInUseCase>(LogInUseCase());
   sl.registerSingleton<UserUsecase>(UserUsecase());
+  
+  //product usecases
   sl.registerSingleton<GetProductCategoryUsecase>(GetProductCategoryUsecase());
   sl.registerSingleton<GetNewProductsUseCase>(GetNewProductsUseCase());
   sl.registerSingleton<GetPopularProductUseCase>(GetPopularProductUseCase());
@@ -41,9 +48,6 @@ void setupServiceLocator() async {
   sl.registerSingleton<GetCartIdUseCase>(GetCartIdUseCase());
   sl.registerSingleton<RefreshTokenUsecase>(RefreshTokenUsecase());
 
-  final sharedPref = SharePrefImpl();
-  await sharedPref.init();
-
-  final secureStorage = SecureServiceImpl();
-  await secureStorage.init();
+  // review usecase
+  sl.registerSingleton<GetReviewsUseCase>(GetReviewsUseCase());
 }

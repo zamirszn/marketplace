@@ -7,6 +7,7 @@ import 'package:marketplace/data/source/shared_pref_service_impl.dart';
 import 'package:marketplace/presentation/resources/routes_manager.dart';
 import 'package:marketplace/presentation/service_locator.dart';
 import 'package:marketplace/presentation/widgets/loading_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -23,6 +24,12 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void checkAccessToken() async {
+    final sharedPref = SharePrefImpl();
+    await sharedPref.init();
+
+    final secureStorage = SecureServiceImpl();
+    await secureStorage.init();
+
     final result = await sl<SecureStorageDataSource>().read(
       Constant.accessToken,
     );
@@ -39,6 +46,7 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void checkHasDoneOnboarding() async {
+   
     final result =
         await sl<SharedPrefDataSource>().readBool(Constant.doneOnboarding);
     result.fold((error) {}, (data) {

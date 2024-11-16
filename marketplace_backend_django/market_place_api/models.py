@@ -105,10 +105,9 @@ class Product(models.Model):
     inventory = models.IntegerField(default=1)
     flash_sales = models.BooleanField(default=False)
 
-    @property
     def average_rating(self):
-        ratings = round(self.reviews.aggregate(models.Avg("rating"))["rating__avg"], 1)
-        return ratings if ratings is not None else 0
+        avg_rating = self.reviews.aggregate(models.Avg("rating"))["rating__avg"]
+        return round(avg_rating, 1) if avg_rating is not None else 0
 
     @property
     def price(self):

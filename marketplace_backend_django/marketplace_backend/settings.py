@@ -46,10 +46,8 @@ DEBUG = env.bool("DEBUG", default=False)
 SECRET_KEY = env.str("SECRET_KEY", default=get_random_secret_key())
 
 
-if not DEBUG:
-    ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
-else:
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
+
 
 print(ALLOWED_HOSTS)
 # SECURITY WARNING: don't run with debug turned on in production!

@@ -51,7 +51,7 @@ if not DEBUG:
 else:
     ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
-
+print(ALLOWED_HOSTS)
 # SECURITY WARNING: don't run with debug turned on in production!
 
 

@@ -13,3 +13,5 @@ if __name__ == "__main__":
     print("Your new secret key is:", generate_secret_key())
 
 ```
+
+NOTE: secure endpoint with auth

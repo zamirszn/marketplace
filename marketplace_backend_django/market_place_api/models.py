@@ -51,7 +51,9 @@ class Review(models.Model):
         blank=False,
         null=True,
     )
-    rating = models.FloatField(
+    rating = models.DecimalField(
+        decimal_places=1,
+        max_digits=2,
         validators=[MinValueValidator(1), MaxValueValidator(5)],
         null=True,
         blank=True,
@@ -63,8 +65,9 @@ class Review(models.Model):
             self.rating = round(self.rating, 1)
             super().save(**args)
 
-    class Meta:
-        unique_together = ("product", "owner")
+    # TODO: revert this
+    # class Meta:
+    #     unique_together = ("product", "owner")
 
     def __str__(self):
         return f"Review by {self.owner.email} for {self.product.name} - {self.rating} stars"
@@ -109,6 +112,10 @@ class Product(models.Model):
         avg_rating = self.reviews.aggregate(models.Avg("rating"))["rating__avg"]
         return round(avg_rating, 1) if avg_rating is not None else 0
 
+    def reviews_length(self):
+        count = self.reviews.count()
+        return count
+
     @property
     def price(self):
         if self.discount:
@@ -126,16 +133,16 @@ class Product(models.Model):
 
 class ProductImage(models.Model):
 
-    # image = models.ImageField(
-    #     "product_images",
-    #     blank=True,
-    #     null=True,
-    # )
-    image = CloudinaryField(
+    image = models.ImageField(
         "product_images",
         blank=True,
         null=True,
     )
+    # image = CloudinaryField(
+    #     "product_images",
+    #     blank=True,
+    #     null=True,
+    # )
     product = models.ForeignKey(
         Product, on_delete=models.CASCADE, related_name="images"
     )

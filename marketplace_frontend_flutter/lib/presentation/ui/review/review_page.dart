@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:marketplace/app/extensions.dart';
 import 'package:marketplace/app/functions.dart';
 import 'package:marketplace/core/config/theme/color_manager.dart';
@@ -13,16 +14,61 @@ import 'package:marketplace/presentation/resources/styles_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
 import 'package:marketplace/presentation/ui/review/bloc/review_bloc.dart';
 import 'package:marketplace/presentation/widgets/back_button.dart';
+import 'package:marketplace/presentation/widgets/empty_widget.dart';
+import 'package:marketplace/presentation/widgets/loading_widget.dart';
 import 'package:marketplace/presentation/widgets/retry_button.dart';
 import 'package:marketplace/presentation/widgets/star_rating_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class ReviewPage extends StatelessWidget {
+class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key, required this.product});
   final ProductModelEntity product;
 
   @override
+  State<ReviewPage> createState() => _ReviewPageState();
+}
+
+class _ReviewPageState extends State<ReviewPage> {
+  final _scrollController = ScrollController();
+
+  @override
+  void initState() {
+    _scrollController.addListener(_onScroll);
+    super.initState();
+  }
+
+  void _onScroll() {
+    if (_isBottom) {
+      context.read<ReviewBloc>().add(GetProductReviewEvent(
+            params: ReviewParamModel(productId: widget.product.id!),
+          ));
+    }
+  }
+
+  bool get _isBottom {
+    if (!_scrollController.hasClients) return false;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.offset;
+    return currentScroll >= (maxScroll * 0.9);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final List<String> sortOptions = [
+      'Newest',
+      'Oldest',
+      "5 stars",
+      "4 stars",
+      "3 stars",
+      "2 stars",
+      "1 star",
+    ];
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -32,131 +78,308 @@ class ReviewPage extends StatelessWidget {
             child: GoBackButton(),
           ),
           title: Text(
-            "Reviews",
+            AppStrings.reviews,
             style: getRegularStyle(
                 font: FontConstants.ojuju, fontSize: FontSize.s20),
           ),
         ),
-        body: BlocProvider<ReviewBloc>(
-          create: (context) => ReviewBloc()
-            ..add(GetProductReviewEvent(
-              params: ReviewParamModel(productId: product.id!),
-            )),
-          child: Builder(builder: (context) {
-            return RefreshIndicator(
-              onRefresh: () async {
-                context.read<ReviewBloc>()
-                  ..add(GetProductReviewEvent(
-                    params: ReviewParamModel(productId: product.id!),
-                  ));
-              },
-              child: CustomScrollView(
-                slivers: [
-                  sliverSpace(h: AppSize.s10),
-                  SliverPadding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: AppPadding.p12, vertical: AppPadding.p10),
-                    sliver: SliverToBoxAdapter(
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(AppSize.s20),
-                          child: ColoredBox(
-                              color: ColorManager.primary,
-                              child: BlocBuilder<ReviewBloc, ReviewState>(
-                                builder: (context, state) {
-                                  if (state is GetReviewSuccessState) {
-                                    return Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: AppPadding.p10,
-                                          horizontal: AppPadding.p10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: AppPadding.p5,
-                                                left: AppPadding.p5),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                "${AppStrings.reviews} (${state.reviews.length})",
-                                                style: getMediumStyle(
-                                                    fontSize: FontSize.s14),
-                                              ),
-                                            ),
-                                          ),
-                                          Text(
-                                            product.averageRating?.toString() ??
-                                                "0",
-                                            style: getRegularStyle(
-                                                fontSize: FontSize.s20,
-                                                font: FontConstants.ojuju),
-                                          ),
-                                          space(h: AppSize.s3),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Transform.scale(
-                                                scale: 1.4,
-                                                child: StarRating(
-                                                  rating:
-                                                      product.averageRating ??
-                                                          0,
+        body: RefreshIndicator(
+          onRefresh: () async {
+            context.read<ReviewBloc>()
+              ..add(RefreshProductReviewEvent(
+                params:
+                    ReviewParamModel(productId: widget.product.id!, page: 1),
+              ));
+          },
+          child: CustomScrollView(
+            controller: _scrollController,
+            slivers: [
+              sliverSpace(h: AppSize.s10),
+              // review summary
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppPadding.p12, vertical: AppPadding.p10),
+                sliver: SliverToBoxAdapter(
+                  child: ClipRRect(
+                      borderRadius: BorderRadius.circular(AppSize.s20),
+                      child: ColoredBox(
+                          color: ColorManager.primary,
+                          child: BlocBuilder<ReviewBloc, ReviewState>(
+                            builder: (context, state) {
+                              switch (state.status) {
+                                case ReviewStatus.success:
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: AppPadding.p10,
+                                        horizontal: AppPadding.p10),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  top: AppPadding.p5,
+                                                  left: AppPadding.p5),
+                                              child: Align(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  "${AppStrings.reviews}",
+                                                  style: getMediumStyle(
+                                                      fontSize: FontSize.s14),
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                          space(h: AppSize.s10),
-                                        ],
+                                            ),
+                                            Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.end,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  widget.product.averageRating
+                                                          ?.toString() ??
+                                                      "0",
+                                                  style: getRegularStyle(
+                                                      fontSize: FontSize.s30,
+                                                      font:
+                                                          FontConstants.ojuju),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 4),
+                                                  child: Text(
+                                                    "/5",
+                                                    style: getRegularStyle(
+                                                        fontSize: FontSize.s16,
+                                                        font: FontConstants
+                                                            .ojuju),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            space(h: AppSize.s4),
+                                            Text(
+                                              "${AppStrings.basedOn} ${widget.product.reviewsLength} ${AppStrings.reviews}",
+                                              style: getLightStyle(
+                                                  fontSize: FontSize.s12,
+                                                  color: ColorManager.grey,
+                                                  font: FontConstants.poppins),
+                                            ),
+                                            space(h: AppSize.s12),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: AppPadding.p10),
+                                              child: Transform.scale(
+                                                scale: 1.4,
+                                                child: StarRating(
+                                                  rating: widget.product
+                                                          .averageRating ??
+                                                      0,
+                                                ),
+                                              ),
+                                            ),
+                                            space(h: AppSize.s10),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            // ratingbar
+                                            RatingBar(
+                                              ratingText: 5,
+                                            ),
+                                            RatingBar(
+                                              ratingText: 4,
+                                            ),
+                                            RatingBar(
+                                              ratingText: 3,
+                                            ),
+                                            RatingBar(
+                                              ratingText: 2,
+                                            ),
+                                            RatingBar(
+                                              ratingText: 1,
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  );
+
+                                default:
+                                  return SizedBox();
+                              }
+                            },
+                          ))),
+                ),
+              ),
+
+              // add a review
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  child: BlocBuilder<ReviewBloc, ReviewState>(
+                    builder: (context, state) {
+                      switch (state.status) {
+                        case ReviewStatus.success:
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: AppPadding.p10,
+                                vertical: AppSize.s6),
+                            child: InkWell(
+                                splashColor: Colors.transparent,
+                                hoverColor: Colors.transparent,
+                                onTap: () {
+                                  goPush(context, Routes.addReviewPage,
+                                      extra: widget.product);
+                                },
+                                child: AddReviewWidget()),
+                          );
+                        default:
+                          return SizedBox();
+                      }
+                    },
+                  ),
+                ),
+              ),
+              sliverSpace(h: AppSize.s10),
+              // review sort
+              SliverPadding(
+                  padding: EdgeInsets.symmetric(
+                    vertical: AppPadding.p5,
+                    horizontal: AppPadding.p12,
+                  ),
+                  sliver: SliverToBoxAdapter(
+                    child: BlocBuilder<ReviewBloc, ReviewState>(
+                      builder: (context, state) {
+                        switch (state.status) {
+                          case ReviewStatus.success:
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  AppStrings.reviews,
+                                  style: getMediumStyle(fontSize: FontSize.s14),
+                                ),
+                                Expanded(child: SizedBox()),
+                                InkWell(
+                                  splashColor: Colors.transparent,
+                                  hoverColor: Colors.transparent,
+                                  onTap: () {
+                                    showBottomSheet(
+                                        context: context,
+                                        // isDismissible: true,
+                                        showDragHandle: true,
+                                        enableDrag: true,
+
+                                        // isScrollControlled: true,
+
+                                        builder: (context) =>
+                                            ReviewSortBottomSheet(
+                                                sortOptions: sortOptions,
+                                                product: widget.product));
+                                  },
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.sort_rounded,
+                                        size: AppSize.s18,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: AppPadding.p10,
+                                            vertical: AppPadding.p5),
+                                        child: Text(
+                                          state.selectedOption ?? "Oldest",
+                                          style: getLightStyle(
+                                              fontSize: FontSize.s14),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.keyboard_arrow_down_rounded,
+                                        size: AppSize.s20,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              ],
+                            );
+
+                          default:
+                            return SizedBox();
+                        }
+                      },
+                    ),
+                  )),
+              // review list
+              SliverPadding(
+                  padding: EdgeInsets.symmetric(vertical: AppPadding.p10),
+                  sliver: SliverToBoxAdapter(
+                    child: Container(
+                      width: deviceWidth(context),
+                      margin: EdgeInsets.symmetric(horizontal: AppMargin.m12),
+                      decoration: BoxDecoration(
+                        color: ColorManager.primary,
+                        borderRadius: BorderRadius.circular(AppSize.s20),
+                      ),
+                      child: BlocBuilder<ReviewBloc, ReviewState>(
+                        builder: (context, state) {
+                          switch (state.status) {
+                            case ReviewStatus.initial:
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                physics: BouncingScrollPhysics(),
+                                padding: EdgeInsets.all(0),
+                                scrollDirection: Axis.vertical,
+                                itemCount: 4,
+                                itemBuilder: (context, index) {
+                                  return ReviewWidgetSkeleton();
+                                },
+                              );
+
+                            case ReviewStatus.failure:
+                              if (state.errorMessage != null) {}
+                              return ReviewErrorWidget(
+                                productId: widget.product.id!,
+                                message: state.errorMessage,
+                              );
+
+                            case ReviewStatus.success:
+                              if (state.reviews.isEmpty) {
+                                return SizedBox(
+                                    height: deviceHeight(context) / 4,
+                                    child: Center(
+                                        child: EmptyWidget(
+                                      message: AppStrings.noReviews,
+                                      icon: Icon(
+                                        Iconsax.star,
+                                      ),
+                                    )));
+                              }
+
+                              return ListView.builder(
+                                shrinkWrap: true,
+                                physics: BouncingScrollPhysics(),
+                                padding: EdgeInsets.all(0),
+                                scrollDirection: Axis.vertical,
+                                itemCount: state.hasReachedMax
+                                    ? state.reviews.length
+                                    : state.reviews.length + 1,
+                                itemBuilder: (context, index) {
+                                  if (index >= state.reviews.length) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: AppPadding.p20),
+                                      child: Center(
+                                        child: Transform.scale(
+                                            scale: .7, child: LoadingWidget()),
                                       ),
                                     );
                                   } else {
-                                    return SizedBox();
-                                  }
-                                },
-                              ))),
-                    ),
-                  ),
-                  sliverSpace(h: AppSize.s2),
-                  SliverPadding(
-                      padding: EdgeInsets.symmetric(vertical: AppPadding.p10),
-                      sliver: SliverToBoxAdapter(
-                        child: Container(
-                          width: deviceWidth(context),
-                          margin:
-                              EdgeInsets.symmetric(horizontal: AppMargin.m12),
-                          decoration: BoxDecoration(
-                            color: ColorManager.primary,
-                            borderRadius: BorderRadius.circular(AppSize.s20),
-                          ),
-                          child: BlocBuilder<ReviewBloc, ReviewState>(
-                            builder: (context, state) {
-                              if (state is GetReviewLoadingState) {
-                                return ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: BouncingScrollPhysics(),
-                                  padding: EdgeInsets.all(0),
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: 4,
-                                  itemBuilder: (context, index) {
-                                    return ReviewWidgetSkeleton();
-                                  },
-                                );
-                              } else if (state is GetReviewFailureState) {
-                                return ReviewErrorWidget(
-                                  productId: product.id!,
-                                  message: state.message,
-                                );
-                              } else if (state is GetReviewSuccessState) {
-                                return ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: BouncingScrollPhysics(),
-                                  padding: EdgeInsets.all(0),
-                                  scrollDirection: Axis.vertical,
-                                  itemCount: state.reviews.length,
-                                  itemBuilder: (context, index) {
-                                    ReviewModelEntity review =
+                                    ReviewModelEntity productReview =
                                         state.reviews[index];
 
                                     return Column(
@@ -177,20 +400,24 @@ class ReviewPage extends StatelessWidget {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      review.owner?.fullName ??
+                                                      productReview.owner
+                                                              ?.fullName ??
                                                           "",
                                                       style: getMediumStyle(
                                                           fontSize:
                                                               FontSize.s14),
                                                     ),
                                                     Text(
-                                                      review.description ?? "",
+                                                      productReview
+                                                              .description ??
+                                                          "",
                                                       style: getRegularStyle(),
                                                     ),
                                                     space(h: AppSize.s8),
                                                     Text(
                                                       "Posted ${formatDateDDMMMYYY(
-                                                        review.dateCreated ??
+                                                        productReview
+                                                                .dateCreated ??
                                                             DateTime.now(),
                                                       )}",
                                                       style: getLightStyle(
@@ -212,7 +439,8 @@ class ReviewPage extends StatelessWidget {
                                                     CrossAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                    review.rating?.toString() ??
+                                                    productReview.rating
+                                                            ?.toString() ??
                                                         "0",
                                                     style: getRegularStyle(
                                                         fontSize: FontSize.s20,
@@ -221,7 +449,9 @@ class ReviewPage extends StatelessWidget {
                                                   ),
                                                   space(h: AppSize.s10),
                                                   StarRating(
-                                                    rating: review.rating ?? 0,
+                                                    rating:
+                                                        productReview.rating ??
+                                                            0,
                                                   ),
                                                 ],
                                               ),
@@ -241,23 +471,197 @@ class ReviewPage extends StatelessWidget {
                                           space(h: AppSize.s10)
                                       ],
                                     );
-                                  },
-                                );
-                              } else {
-                                return ReviewErrorWidget(
-                                  productId: product.id!,
-                                  message: null,
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                      ))
+                                  }
+                                },
+                              );
+
+                            default:
+                              return ReviewErrorWidget(
+                                productId: widget.product.id!,
+                                message: null,
+                              );
+                          }
+                        },
+                      ),
+                    ),
+                  ))
+            ],
+          ),
+        ));
+  }
+}
+
+class ReviewSortBottomSheet extends StatelessWidget {
+  const ReviewSortBottomSheet({
+    super.key,
+    required this.sortOptions,
+    required this.product,
+  });
+
+  final List<String> sortOptions;
+  final ProductModelEntity product;
+
+  @override
+  Widget build(BuildContext context) {
+    final reviewBloc = context.read<ReviewBloc>();
+    return BlocBuilder<ReviewBloc, ReviewState>(
+      builder: (context, state) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppPadding.p20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GoBackButton(
+                    padding: EdgeInsets.all(AppPadding.p8),
+                  ),
+                  Center(
+                    child: Text('Sort',
+                        textAlign: TextAlign.center,
+                        style: getMediumStyle(
+                            font: FontConstants.ojuju, fontSize: FontSize.s20)),
+                  ),
+                  space(w: AppSize.s36)
                 ],
               ),
-            );
-          }),
-        ));
+              space(h: AppSize.s20),
+              ...sortOptions.map((option) => RadioListTile<String>(
+                    contentPadding: EdgeInsets.only(left: AppPadding.p2),
+                    activeColor: ColorManager.secondary,
+                    title: Text(
+                      option,
+                      style: getRegularStyle(fontSize: FontSize.s14),
+                    ),
+                    value: option,
+                    selected: option == reviewBloc.state.selectedOption,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(AppSize.s10)),
+                    groupValue: reviewBloc.state.selectedOption,
+                    onChanged: (value) {
+                      if (value != null) {
+                        reviewBloc
+                          ..add(ReviewSelectSortEvent(selectedOption: value));
+                      }
+                    },
+                  )),
+              space(h: AppSize.s40),
+              SizedBox(
+                height: AppSize.s50,
+                width: double.infinity,
+                child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(AppSize.s20)),
+                      shadowColor: Colors.transparent,
+                      foregroundColor: ColorManager.black,
+                      backgroundColor: ColorManager.primaryDark,
+                    ),
+                    onPressed: () {
+                      reviewBloc.add(ShowLoadingReviewEvent());
+
+                      final rating = sortReviewsByStar(state.selectedOption);
+                      final ordering = sortReviewByDate(state.selectedOption);
+
+                      ReviewParamModel params = ReviewParamModel(
+                          rating: rating,
+                          page: 1,
+                          ordering: ordering,
+                          productId: product.id!);
+
+                      reviewBloc.add(GetProductReviewEvent(params: params));
+                      goPopRoute(context);
+                    },
+                    child: Text(
+                      AppStrings.done,
+                      style: getRegularStyle(
+                          font: FontConstants.ojuju, fontSize: FontSize.s18),
+                    )),
+              ),
+              space(h: AppSize.s10),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+class RatingBar extends StatelessWidget {
+  const RatingBar({
+    super.key,
+    required this.ratingText,
+  });
+  final int ratingText;
+
+  @override
+  Widget build(BuildContext context) {
+    final reviewBloc = context.read<ReviewBloc>();
+
+    final percentage =
+        calculateRatingPercentage(reviewBloc.state.reviews, ratingText);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        SizedBox(
+          width: 45,
+          child: Text(
+            "$ratingText star",
+            textAlign: TextAlign.end,
+            style: getLightStyle(fontSize: FontSize.s14),
+          ),
+        ),
+        space(w: AppSize.s8),
+        Stack(
+          children: [
+            // bottom
+            Container(
+              decoration: BoxDecoration(
+                color: ColorManager.primaryDark,
+                borderRadius: BorderRadius.circular(AppSize.s10),
+              ),
+              height: AppSize.s8,
+              width: deviceWidth(context) * .2,
+            ),
+            // top
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(AppSize.s10),
+                color: ColorManager.secondary,
+              ),
+              height: AppSize.s8,
+              width: deviceWidth(context) * .2 * percentage / 100,
+            ),
+          ],
+        )
+      ],
+    );
+  }
+}
+
+class AddReviewWidget extends StatelessWidget {
+  const AddReviewWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(AppSize.s10),
+      child: ColoredBox(
+        color: ColorManager.primary,
+        child: Column(
+          children: [
+            ListTile(
+              minTileHeight: AppSize.s70,
+              leading: Icon(Iconsax.message_edit),
+              title: Text("Add review"),
+              trailing: Icon(Iconsax.arrow_right),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
 
@@ -276,14 +680,20 @@ class ReviewErrorWidget extends StatelessWidget {
     return SizedBox(
       height: deviceHeight(context) / 3,
       child: Center(
-        child: RetryButton(
-          message: message,
-          retry: () {
-            context.read<ReviewBloc>()
-              ..add(GetProductReviewEvent(
-                params: ReviewParamModel(productId: productId),
-              ));
-          },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: RetryButton(
+            message: message,
+            retry: () {
+              context.read<ReviewBloc>()
+                ..add(RefreshProductReviewEvent(
+                  params: ReviewParamModel(
+                    productId: productId,
+                    page: 1,
+                  ),
+                ));
+            },
+          ),
         ),
       ),
     );

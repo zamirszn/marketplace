@@ -14,8 +14,9 @@ class ReviewServiceImpl extends ReviewServiceDataSource {
   Future<Either> getProductReviews(ReviewParamModel reviewParamModel) async {
     try {
       Response response = await sl<DioClient>().get(
-        "${ApiUrls.api}/${ApiUrls.products}/${reviewParamModel.productId}/${ApiUrls.reviews}/",
-      );
+          "${ApiUrls.api}/${ApiUrls.products}/${reviewParamModel.productId}/${ApiUrls.reviews}/",
+          queryParameters: reviewParamModel.toMap());
+      print(response.realUri);
       return Right(response);
     } catch (e) {
       return Left(e);

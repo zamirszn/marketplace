@@ -167,16 +167,20 @@ class AddToCartWidget extends StatelessWidget {
         child: BlocBuilder<ProductBloc, ProductState>(
           builder: (context, state) {
             if (state is AddToCartLoading) {
-              return Transform.scale(scale: .5, child: LoadingWidget());
+              return Transform.scale(scale: .8, child: LoadingWidget());
             } else {
               return IconButton(
                   splashColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onPressed: () {
-                    context.read<ProductBloc>().add(AddToCartEvent(
-                        params: AddToCartParamsModel(
-                            productId: product.id!, quantity: 1)));
+                    if (product.inventory != null && product.inventory! > 0) {
+                      context.read<ProductBloc>().add(AddToCartEvent(
+                          params: AddToCartParamsModel(
+                              productId: product.id!, quantity: 1)));
+                    } else {
+                      showErrorMessage(context, AppStrings.outOfStock);
+                    }
                   },
                   icon: const Icon(Iconsax.shopping_bag));
             }

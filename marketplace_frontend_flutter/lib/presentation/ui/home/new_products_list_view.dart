@@ -4,9 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/app/extensions.dart';
 import 'package:marketplace/app/functions.dart';
 import 'package:marketplace/domain/entities/product_entity.dart';
+import 'package:marketplace/presentation/resources/string_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
 import 'package:marketplace/presentation/ui/home/bloc/product_bloc.dart';
 import 'package:marketplace/presentation/ui/home/new_product_widget.dart';
+import 'package:marketplace/presentation/widgets/empty_widget.dart';
+import 'package:marketplace/presentation/widgets/retry_button.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class NewProductsListView extends StatelessWidget {
@@ -18,7 +21,7 @@ class NewProductsListView extends StatelessWidget {
       create: (context) => ProductBloc()..add(GetNewProductsEvent()),
       child: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
-          if (state is NewProductLoading || state is NewProductFailure) {
+          if (state is NewProductLoading) {
             return ListView.builder(
                 physics: BouncingScrollPhysics(),
                 itemCount: 5,
@@ -28,9 +31,23 @@ class NewProductsListView extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: ProductWidgetSkeleton());
                 });
-          }
-
-          if (state is NewProductSuccess) {
+          } 
+          
+          else if (state is NewProductEmpty) {
+            return Center(
+                child: EmptyWidget(
+              message: AppStrings.noPopularProducts,
+            ));
+          } else if (state is NewProductFailure) {
+            return Center(
+              child: RetryButton(
+                message: state.message,
+                retry: () {
+                  context.read<ProductBloc>()..add(GetNewProductsEvent());
+                },
+              ),
+            );
+          } else if (state is NewProductSuccess) {
             return ListView.builder(
                 physics: BouncingScrollPhysics(),
                 itemCount: state.newProducts.length,

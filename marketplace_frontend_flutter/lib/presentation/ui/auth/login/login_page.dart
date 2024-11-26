@@ -25,7 +25,7 @@ class LoginPage extends StatelessWidget {
   LoginPage({super.key});
   // TODO: remove filled data
   final emailController = TextEditingController(
-      text: kDebugMode ? "testmail1731058460607234@gmail.com" : null);
+      text: kDebugMode ? "Mubaraklawal52@gmail.com" : null);
   final passwordController =
       TextEditingController(text: kDebugMode ? "StrongPassword52#" : null);
   final formKey = GlobalKey<FormState>();
@@ -238,7 +238,9 @@ class LoginPage extends StatelessWidget {
                                                             params: LoginParamsModel(
                                                                 email:
                                                                     emailController
-                                                                        .text,
+                                                                        .text
+                                                                        .toLowerCase(),
+                                                                    // emails are case sensitive
                                                                 password:
                                                                     passwordController
                                                                         .text)));

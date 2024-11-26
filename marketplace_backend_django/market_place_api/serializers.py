@@ -36,6 +36,9 @@ class ProductSerializer(serializers.ModelSerializer):
     average_rating = serializers.FloatField(
         read_only=True,
     )
+    reviews_length = serializers.IntegerField(
+        read_only=True,
+    )
 
     class Meta:
         model = Product
@@ -52,6 +55,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "images",
             "uploaded_images",
             "average_rating",
+            "reviews_length",
         ]
 
     def create(self, validated_data):

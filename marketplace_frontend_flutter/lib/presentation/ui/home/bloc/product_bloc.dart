@@ -50,6 +50,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   _onGetAllProducts(
       GetAllProductsEvent event, Emitter<ProductState> emit) async {
+        
     if (!_hasReachedMax(state)) {
       try {
         if (state is ProductInitial || state is AllProductLoading) {
@@ -59,7 +60,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
               await sl<GetAllProductUseCase>().call(params: event.params);
 
           response.fold((error) {
-            emit(AllProductFailure());
+            emit(AllProductFailure(message: error.toString()));
           }, (data) {
             List<ProductModelEntity> products = List.from(data["results"])
                 .map((e) => ProductModel.fromMap(e).toEntity())
@@ -72,7 +73,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           Either response =
               await sl<GetAllProductUseCase>().call(params: event.params);
           response.fold((error) {
-            emit(AllProductFailure());
+            emit(AllProductFailure(message: error.toString()));
           }, (data) {
             List<ProductModelEntity> products = List.from(data)
                 .map((e) => ProductModel.fromMap(e).toEntity())
@@ -87,7 +88,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           });
         }
       } catch (e) {
-        emit(AllProductFailure());
+        emit(AllProductFailure(message: e.toString()));
       }
     }
   }
@@ -100,11 +101,16 @@ _onGetNewProducts(GetNewProductsEvent event, Emitter<ProductState> emit) async {
   emit(NewProductLoading());
   Either response = await sl<GetNewProductsUseCase>().call();
   response.fold((error) {
-    emit(NewProductFailure());
+    emit(NewProductFailure(message: error.toString()));
   }, (data) {
     List<ProductModelEntity> newProducts =
         List.from(data).map((e) => ProductModel.fromMap(e).toEntity()).toList();
+    if (newProducts.isEmpty) {
+      emit(NewProductEmpty());
+    } else {
     emit(NewProductSuccess(newProducts: newProducts));
+
+    }
   });
 }
 
@@ -127,11 +133,14 @@ _onGetPopularProducts(
   emit(PopularProductLoading());
   Either response = await sl<GetPopularProductUseCase>().call();
   response.fold(((error) {
-    emit(PopularProductFailure());
+    emit(PopularProductFailure(message: error.toString()));
   }), (data) {
     List<ProductModelEntity> popualarProducts =
         List.from(data).map((e) => ProductModel.fromMap(e).toEntity()).toList();
-
-    emit(PopularProductSuccess(popularProducts: popualarProducts));
+    if (popualarProducts.isEmpty) {
+      emit(PopularProductEmpty());
+    } else {
+      emit(PopularProductSuccess(popularProducts: popualarProducts));
+    }
   });
 }

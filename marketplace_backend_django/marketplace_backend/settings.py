@@ -49,10 +49,6 @@ SECRET_KEY = env.str("SECRET_KEY", default=get_random_secret_key())
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["127.0.0.1", "localhost"])
 
 
-print(ALLOWED_HOSTS)
-# SECURITY WARNING: don't run with debug turned on in production!
-
-
 EMAIL_BACKEND = env.str("EMAIL_BACKEND")
 EMAIL_HOST = env.str("EMAIL_HOST")
 EMAIL_PORT = env("EMAIL_PORT")
@@ -68,7 +64,7 @@ DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL")
 # Application definition
 
 INSTALLED_APPS = [
-    "unfold",  # before django.contrib.admin
+    # "unfold",  # before django.contrib.admin
     "unfold.contrib.filters",  # optional, if special filters are needed
     "unfold.contrib.forms",  # optional, if special form elements are needed
     "unfold.contrib.inlines",  # optional, if special inlines are needed
@@ -129,36 +125,16 @@ WSGI_APPLICATION = "marketplace_backend.wsgi.application"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
-# if DEBUG:
-#     DATABASES = {
-#         "default": {
-#             "ENGINE": "django.db.backends.postgresql",  # The database engine to use (PostgreSQL in this case)
-#             "NAME": env("DB_NAME"),  # The name of your database
-#             "USER": env("DB_USER"),  # Your database username
-#             "PASSWORD": env("DB_PASSWORD"),  # Your database password
-#             "HOST": env(
-#                 "DB_HOST"
-#             ),  # The host where your database is located, 'localhost' means it's on your local machine
-#             "PORT": env(
-#                 "DB_PORT"
-#             ),  # The port PostgreSQL is listening on, default is 5432
-#         }
-#     }
-
-# else:
 DATABASES = {
-    # "default": env.db(
-    #     "DATABASE_URL", default="postgres://postgres:postgres@localhost:5432/market_db"
-    # )
-    "default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
 }
+
+# DATABASES = {
+#     "default": dj_database_url.parse(os.environ.get("DATABASE_URL"))
+# }
 
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -230,7 +206,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("JWT",),
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=2),
+    # "ACCESS_TOKEN_LIFETIME": timedelta(days=2),
     # "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
 }
 

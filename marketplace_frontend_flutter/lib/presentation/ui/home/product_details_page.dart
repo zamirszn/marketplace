@@ -26,6 +26,7 @@ class ProductDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: ColorManager.white,
+        extendBodyBehindAppBar: true,
         body: Hero(
           tag: heroTag ?? "0",
           child: SizedBox(
@@ -39,7 +40,7 @@ class ProductDetailsPage extends StatelessWidget {
                   child: Column(
                     children: [
                       Container(
-                        height: AppSize.s70,
+                        height: AppSize.s100,
                         width: deviceWidth(context),
                         decoration: BoxDecoration(
                             color: ColorManager.primary,
@@ -47,9 +48,10 @@ class ProductDetailsPage extends StatelessWidget {
                               bottomLeft: Radius.circular(AppSize.s20),
                               bottomRight: Radius.circular(AppSize.s20),
                             )),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppPadding.p12,
-                        ),
+                        padding: const EdgeInsets.only(
+                            right: AppPadding.p12,
+                            left: AppPadding.p12,
+                            top: 10),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -137,20 +139,56 @@ class ProductDetailsPage extends StatelessWidget {
                                   ),
                                   space(h: AppSize.s28),
                                   Text(
+                                    AppStrings.productInfo,
+                                    style:
+                                        getRegularStyle(fontSize: FontSize.s16),
+                                  ),
+                                  space(h: AppSize.s4),
+                                  Text(
                                     product.description ?? "",
                                     style:
                                         getLightStyle(fontSize: FontSize.s14),
                                   ),
                                   space(h: AppSize.s20),
-                                  RoundCorner(
-                                    child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          product.category?.title ?? "",
-                                          style: getRegularStyle(
-                                              fontSize: 10,
-                                              font: FontConstants.poppins),
-                                        )),
+                                  Wrap(
+                                    children: [
+                                      if (product.inventory != null)
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              AppSize.s10),
+                                          child: ColoredBox(
+                                            color: product.inventory != null &&
+                                                    product.inventory! >= 1
+                                                ? ColorManager.green
+                                                : ColorManager.red,
+                                            child: Padding(
+                                                padding: EdgeInsets.all(8.0),
+                                                child: Text(
+                                                  "${product.inventory} available in stock",
+                                                  style: getRegularStyle(
+                                                      color: ColorManager.white,
+                                                      fontSize: FontSize.s12,
+                                                      font: FontConstants
+                                                          .poppins),
+                                                )),
+                                          ),
+                                        ),
+                                      space(w: AppSize.s10),
+                                      if (product.category?.title != null &&
+                                          product.category!.title.isNotEmpty)
+                                        RoundCorner(
+                                          child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Text(
+                                                product.category?.title ?? "",
+                                                style: getRegularStyle(
+                                                    fontSize: FontSize.s12,
+                                                    font:
+                                                        FontConstants.poppins),
+                                              )),
+                                        ),
+                                    ],
                                   ),
                                   space(h: AppSize.s10),
                                 ],
@@ -184,23 +222,43 @@ class ProductDetailsPage extends StatelessWidget {
                                             style: getMediumStyle(
                                                 fontSize: FontSize.s14),
                                           ),
-                                          IconButton(
-                                              onPressed: () {
-                                                goPush(context,
-                                                    Routes.productReviewPage,
-                                                    extra: product.id);
-                                              },
-                                              icon: Icon(Iconsax.arrow_right))
+                                          Icon(Iconsax.arrow_right)
                                         ],
                                       ),
-                                      Text(
-                                        product.averageRating?.toString() ??
-                                            "0",
-                                        style: getRegularStyle(
-                                            fontSize: FontSize.s20,
-                                            font: FontConstants.ojuju),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            product.averageRating?.toString() ??
+                                                "0",
+                                            style: getRegularStyle(
+                                                fontSize: FontSize.s30,
+                                                font: FontConstants.ojuju),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(
+                                                bottom: 4),
+                                            child: Text(
+                                              "/5",
+                                              style: getRegularStyle(
+                                                  fontSize: FontSize.s16,
+                                                  font: FontConstants.ojuju),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                      space(h: AppSize.s10),
+                                      space(h: AppSize.s4),
+                                      Text(
+                                        "${AppStrings.basedOn} ${product.reviewsLength} ${AppStrings.reviews}",
+                                        style: getLightStyle(
+                                            fontSize: FontSize.s14,
+                                            color: ColorManager.grey,
+                                            font: FontConstants.poppins),
+                                      ),
+                                      space(h: AppSize.s12),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
@@ -213,15 +271,14 @@ class ProductDetailsPage extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                      space(h: AppSize.s6),
+                                      space(h: AppSize.s8),
                                     ],
                                   ),
                                 ))),
                       ),
                       space(h: AppSize.s3),
-                      Align(
-                        alignment: Alignment.bottomCenter,
-                        child: SizedBox(
+                      if (product.inventory != null && product.inventory! > 0)
+                        SizedBox(
                           height: AppSize.s70,
                           width: double.infinity,
                           child: ElevatedButton(
@@ -234,15 +291,22 @@ class ProductDetailsPage extends StatelessWidget {
                                 foregroundColor: ColorManager.black,
                                 backgroundColor: ColorManager.primaryDark,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  isDismissible: true,
+                                  showDragHandle: true,
+                                  enableDrag: true,
+                                  builder: (context) => AddtoCartBottomSheet(),
+                                );
+                              },
                               child: Text(
                                 AppStrings.addToCart,
                                 style: getRegularStyle(
                                     font: FontConstants.ojuju,
                                     fontSize: FontSize.s18),
                               )),
-                        ),
-                      )
+                        )
                     ],
                   ),
                 ),
@@ -250,5 +314,14 @@ class ProductDetailsPage extends StatelessWidget {
             ),
           ),
         ));
+  }
+}
+
+class AddtoCartBottomSheet extends StatelessWidget {
+  const AddtoCartBottomSheet({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }

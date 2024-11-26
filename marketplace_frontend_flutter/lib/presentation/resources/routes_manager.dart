@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:marketplace/core/constants/constant.dart';
+import 'package:marketplace/data/models/review_param_model.dart';
 import 'package:marketplace/data/source/secure_storage_data_source.dart';
 import 'package:marketplace/data/source/shared_pref_service_impl.dart';
 import 'package:marketplace/domain/entities/product_entity.dart';
@@ -12,6 +14,8 @@ import 'package:marketplace/presentation/ui/auth/splash_page.dart';
 import 'package:marketplace/presentation/ui/bottom_nav/bottom_nav.dart';
 import 'package:marketplace/presentation/ui/home/product_image_page.dart';
 import 'package:marketplace/presentation/ui/order/order_page.dart';
+import 'package:marketplace/presentation/ui/review/add_review_page.dart';
+import 'package:marketplace/presentation/ui/review/bloc/review_bloc.dart';
 import 'package:marketplace/presentation/ui/review/review_page.dart';
 import 'package:marketplace/presentation/widgets/error_404_page.dart';
 import 'package:marketplace/presentation/ui/auth/login_or_register_page.dart';
@@ -32,7 +36,6 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: Routes.onboardingPage,
       builder: (context, state) => const LiquidSwipeOnboarding(),
-      
     ),
     GoRoute(
       path: Routes.loginOrRegisterPage,
@@ -59,6 +62,14 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const OrderPage(),
     ),
     GoRoute(
+      path: Routes.addReviewPage,
+      builder: (context, state) {
+        final ProductModelEntity product = state.extra as ProductModelEntity;
+
+        return AddReviewPage(product: product);
+      },
+    ),
+    GoRoute(
       builder: (context, state) {
         final Map<String, dynamic> extraData =
             state.extra as Map<String, dynamic>;
@@ -80,27 +91,30 @@ final GoRouter appRouter = GoRouter(
           imagePath: image,
         );
       },
-     
       path: Routes.productImagePage,
     ),
     GoRoute(
       builder: (context, state) {
         final ProductModelEntity product = state.extra as ProductModelEntity;
 
-        return ReviewPage(
-          product: product,
-        );
+        return BlocProvider<ReviewBloc>(
+            create: (context) => ReviewBloc()
+              ..add(GetProductReviewEvent(
+                params: ReviewParamModel(productId: product.id!),
+              )),
+            child: ReviewPage(
+              product: product,
+            ));
       },
-     
       path: Routes.productReviewPage,
     ),
   ],
   errorBuilder: (context, state) => const Error404Page(),
-
 );
 
 class Routes {
   static const String onboardingPage = "/onboardingPage";
+  static const String addReviewPage = "/addReviewPage";
   static const String loginPage = "/loginPage";
   static const String splashPage = "/splashPage";
   static const String orderPage = "/orderPage";

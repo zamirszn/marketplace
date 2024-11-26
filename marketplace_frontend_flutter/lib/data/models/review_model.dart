@@ -39,7 +39,7 @@ class ReviewModel {
             : DateTime.parse(json["date_created"]),
         description: json["description"],
         owner: json["owner"] == null ? null : Owner.fromMap(json["owner"]),
-        rating: json["rating"]?.toDouble(),
+        rating: double.tryParse(json["rating"]),
       );
 
   Map<String, dynamic> toMap() => {

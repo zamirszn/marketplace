@@ -22,6 +22,7 @@ class ProductModel {
   final String? slug;
   final int? inventory;
   final num? averageRating;
+  final num? reviewsLength;
 
   final List<ProductImage> images;
 
@@ -36,6 +37,7 @@ class ProductModel {
     this.slug,
     this.inventory,
     this.averageRating,
+    this.reviewsLength,
     required this.images,
   });
 
@@ -50,6 +52,7 @@ class ProductModel {
     String? slug,
     int? inventory,
     num? averageRating,
+    num? reviewsLength,
     List<ProductImage>? images,
   }) => 
       ProductModel(
@@ -63,6 +66,7 @@ class ProductModel {
         slug: slug ?? this.slug,
         inventory: inventory ?? this.inventory,
         averageRating: averageRating ?? this.averageRating,
+        reviewsLength: reviewsLength ?? this.reviewsLength,
         images: images ?? this.images,
       );
 
@@ -79,6 +83,7 @@ class ProductModel {
         slug: json["slug"],
         inventory: json["inventory"],
         averageRating: json["average_rating"],
+        reviewsLength: json["reviews_length"],
         images: List<ProductImage>.from(
             json["images"].map((x) => ProductImage.fromJson(x))),
       );
@@ -94,6 +99,7 @@ class ProductModel {
         "slug": slug,
         "inventory": inventory,
         "average_rating": averageRating,
+        "reviews_length": reviewsLength,
         "images": List<dynamic>.from(images.map((x) => x.toJson())),
       };
 }
@@ -123,7 +129,8 @@ class ProductImage {
   factory ProductImage.fromJson(Map<String, dynamic> json) => ProductImage(
         id: json["id"],
         // TODO: remove before release only for testing purposes
-        image: ApiUrls.baseUrl + json["image"],
+        image: json["image"],
+        // image: ApiUrls.baseUrl + json["image"],
         product: json["product"],
       );
 
@@ -147,6 +154,7 @@ extension ProductModelXModel on ProductModel {
         oldPrice: oldPrice,
         price: price,
         averageRating: averageRating,
+        reviewsLength: reviewsLength,
         slug: slug);
   }
 }

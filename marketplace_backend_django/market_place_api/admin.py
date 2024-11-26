@@ -116,10 +116,12 @@ class ReviewAdmin(admin.ModelAdmin):
 
     list_filter = [
         "date_created",
+        "rating",
     ]
     search_fields = [
         "id",
         "date_created",
+        "description",
     ]
     list_display = [
         "id",

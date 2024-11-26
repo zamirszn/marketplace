@@ -75,10 +75,8 @@ class CategoryViewSet(ModelViewSet):
 class ReviewViewSet(ModelViewSet):
     serializer_class = ReviewSerializer
     filterset_class = ReviewFilter
-    filter_backends = [OrderingFilter]
-    ordering_fields = [
-        "date_created",
-    ]
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+    ordering_fields = ["date_created", "rating"]
 
     def get_permissions(self):
         return [IsAuthenticated()]

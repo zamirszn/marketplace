@@ -85,7 +85,7 @@ class AppTheme {
       // App bar theme
       appBarTheme: AppBarTheme(
         centerTitle: true,
-        color: ColorManager.secondary,
+        color: ColorManager.primary,
         elevation: AppSize.s4,
 
         // shadowColor: ColorManager.primaryOpacity70,

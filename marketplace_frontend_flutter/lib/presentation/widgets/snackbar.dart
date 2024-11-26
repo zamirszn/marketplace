@@ -7,7 +7,7 @@ void showMessage(
 ) {
   final snackBar = SnackBar(
     content: Text(message),
-    backgroundColor: ColorManager.secondary,
+    backgroundColor: ColorManager.secondaryDark,
     behavior: SnackBarBehavior.floating,
     dismissDirection: DismissDirection.horizontal,
     margin: const EdgeInsets.only(

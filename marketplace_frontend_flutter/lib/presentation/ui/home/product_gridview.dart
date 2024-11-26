@@ -3,11 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:marketplace/app/functions.dart';
 import 'package:marketplace/data/models/product_query_params_model.dart';
 import 'package:marketplace/domain/entities/product_entity.dart';
+import 'package:marketplace/presentation/resources/string_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
 import 'package:marketplace/presentation/ui/home/bloc/product_bloc.dart';
 import 'package:marketplace/presentation/ui/home/home_page.dart';
 import 'package:marketplace/presentation/ui/home/new_product_widget.dart';
 import 'package:marketplace/presentation/ui/home/product_widget.dart';
+import 'package:marketplace/presentation/widgets/empty_widget.dart';
+import 'package:marketplace/presentation/widgets/retry_button.dart';
 
 class ProductGridView extends StatefulWidget {
   const ProductGridView({super.key});
@@ -53,7 +56,7 @@ class _ProductGridViewState extends State<ProductGridView> {
         ..add(GetAllProductsEvent(params: ProductQueryParamsModel(page: 1))),
       child: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
-          if (state is AllProductFailure || state is AllProductLoading) {
+          if (state is AllProductLoading) {
             return SliverGrid.builder(
               
               itemCount: 4,
@@ -68,7 +71,27 @@ class _ProductGridViewState extends State<ProductGridView> {
             );
           }
 
-          if (state is AllProductSuccess) {
+           else if (state is AllProductEmpty) {
+            return SliverToBoxAdapter(
+              child: Center(
+                  child: EmptyWidget(
+                message: AppStrings.noProducts,
+              )),
+            );
+          } else if (state is AllProductFailure) {
+            return SliverToBoxAdapter(
+              child: Center(
+                child: RetryButton(
+                  message: state.message,
+                  retry: () {
+                    context.read<ProductBloc>()
+                      ..add(GetAllProductsEvent(
+                          params: ProductQueryParamsModel(page: 1)));
+                  },
+                ),
+              ),
+            );
+          } else if (state is AllProductSuccess) {
             return SliverToBoxAdapter(
               child: GridView.builder(
                 shrinkWrap: true,

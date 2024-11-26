@@ -35,6 +35,8 @@ final class ProductCategoryUpdate extends ProductState {
 // New Product States
 final class NewProductLoading extends ProductState {}
 
+final class NewProductEmpty extends ProductState {}
+
 final class NewProductSuccess extends ProductState {
   final List<ProductModelEntity> newProducts;
 
@@ -44,12 +46,27 @@ final class NewProductSuccess extends ProductState {
   List<Object?> get props => [newProducts];
 }
 
-final class NewProductFailure extends ProductState {}
+final class NewProductFailure extends ProductState {
+  final String message;
+
+  NewProductFailure({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}
 
 // Popular Product States
 final class PopularProductLoading extends ProductState {}
 
-final class PopularProductFailure extends ProductState {}
+final class PopularProductFailure extends ProductState {
+  final String message;
+
+  PopularProductFailure({required this.message});
+  @override
+  List<Object?> get props => [message];
+}
+
+final class PopularProductEmpty extends ProductState {}
 
 final class PopularProductSuccess extends ProductState {
   final List<ProductModelEntity> popularProducts;
@@ -64,7 +81,15 @@ final class PopularProductSuccess extends ProductState {
 
 final class AllProductLoading extends ProductState {}
 
-final class AllProductFailure extends ProductState {}
+final class AllProductFailure extends ProductState {
+  final String message;
+
+  AllProductFailure({required this.message});
+  @override
+  List<Object?> get props => [message];
+}
+
+final class AllProductEmpty extends ProductState {}
 
 final class AllProductSuccess extends ProductState {
   final List<ProductModelEntity> products;

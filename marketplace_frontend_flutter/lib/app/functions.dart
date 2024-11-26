@@ -2,20 +2,55 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:marketplace/data/models/product_model.dart';
+import 'package:marketplace/data/models/review_model.dart';
 import 'package:marketplace/domain/entities/product_entity.dart';
+import 'package:marketplace/domain/entities/review_entity.dart';
 import 'package:marketplace/presentation/resources/asset_manager.dart';
 import 'package:marketplace/presentation/resources/string_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
 
+int calculateRatingPercentage(List<ReviewModelEntity> reviews, num rating) {
+  if (reviews.isEmpty) return 0;
+  int countMatch =
+      reviews.where((review) => review.rating?.floor() == rating).length;
 
+  return ((countMatch / reviews.length) * 100).round();
+}
 
+String? sortReviewByDate(String? selectedOption) {
+  switch (selectedOption) {
+    case 'Newest':
+      return "-date_created";
+    case "Oldest":
+      return "date_created";
+
+    default:
+      return null;
+  }
+}
+
+num? sortReviewsByStar(String? selectedOption) {
+  switch (selectedOption) {
+    case '5 stars':
+      return 5.0;
+    case "4 stars":
+      return 4.0;
+    case "3 stars":
+      return 3.0;
+    case "2 stars":
+      return 2.0;
+    case "1 star":
+      return 1.0;
+
+    default:
+      return null;
+  }
+}
 
 String formatDateDDMMMYYY(DateTime date) {
   final DateFormat formatter = DateFormat('dd MMM yyyy');
   return formatter.format(date);
 }
-
-
 
 class FadeRoute<T> extends MaterialPageRoute<T> {
   FadeRoute({
@@ -31,10 +66,6 @@ class FadeRoute<T> extends MaterialPageRoute<T> {
     return FadeTransition(opacity: animation, child: child);
   }
 }
-
-
-
-
 
 bool validateUsername(String username) {
   return username.isNotEmpty && username.contains('@');

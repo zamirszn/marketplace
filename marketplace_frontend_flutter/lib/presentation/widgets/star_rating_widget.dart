@@ -28,11 +28,11 @@ class StarRating extends StatelessWidget {
         ));
       } else {
         stars.add(Padding(
-          padding: const EdgeInsets.only(),
+          padding: const EdgeInsets.only(left: 1, top: .5),
           child: Icon(
             Iconsax.star,
             size: AppSize.s12,
-            color: ColorManager.black,
+            color: ColorManager.black.withOpacity(.7),
           ),
         ));
       }

@@ -1,13 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:marketplace/app/extensions.dart';
 import 'package:marketplace/app/functions.dart';
 import 'package:marketplace/core/config/theme/color_manager.dart';
 import 'package:marketplace/domain/entities/product_entity.dart';
 import 'package:marketplace/presentation/resources/font_manager.dart';
+import 'package:marketplace/presentation/resources/string_manager.dart';
 import 'package:marketplace/presentation/resources/values_manager.dart';
 import 'package:marketplace/presentation/ui/home/bloc/product_bloc.dart';
 import 'package:marketplace/presentation/ui/home/popular_products_widget.dart';
+import 'package:marketplace/presentation/widgets/empty_widget.dart';
 
 class PopularProductsListView extends StatelessWidget {
   const PopularProductsListView({
@@ -33,9 +36,12 @@ class PopularProductsListView extends StatelessWidget {
                     child: PopularProductsWidgetSkeleton());
               },
             );
-          }
-
-          if (state is PopularProductSuccess) {
+          } else if (state is PopularProductEmpty) {
+            return Center(
+                child: EmptyWidget(
+              message: AppStrings.noPopularProducts,
+            ));
+          } else if (state is PopularProductSuccess) {
             return ListView.builder(
               physics: BouncingScrollPhysics(),
               itemCount: state.popularProducts.length,
@@ -52,9 +58,9 @@ class PopularProductsListView extends StatelessWidget {
                     ));
               },
             );
+          } else {
+            return SizedBox();
           }
-
-          return SizedBox();
         },
       ),
     );

@@ -2,13 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:marketplace/core/constants/api_urls.dart';
 import 'package:marketplace/core/network/interceptor.dart';
+import 'package:marketplace/presentation/resources/string_manager.dart';
 
 const String applicationJson = "application/json";
 const String contentType = "content-type";
 const String accept = "accept";
 const String authorization = "Authorization";
 const String defaultLanguage = "language";
-Duration timeOut = const Duration(minutes: 1);
+Duration timeOut = const Duration(seconds: 30);
 
 class DioClient {
   late final Dio _dio;
@@ -209,6 +210,16 @@ class DioClient {
     if (e.response != null && e.response?.data != null) {
       return _formatErrorMessages(e.response!);
     }
+
+    if (e.type == DioExceptionType.connectionError) {
+      return AppStrings.connectionError;
+    } else if (e.type == DioExceptionType.connectionTimeout ||
+        e.type == DioExceptionType.sendTimeout ||
+        e.type == DioExceptionType.receiveTimeout) {
+      return AppStrings.connectionTimedOut;
+    } 
+    
+
     return e.message;
   }
 }

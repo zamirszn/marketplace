@@ -1,6 +1,22 @@
 class AppStrings {
   static const String noRouteFound = "no_route_found";
   static const String back = "Back";
+  static const String leaveARating = "Leave a rating";
+  static const String leaveAYourReview = "Leave your review here ";
+  static const String submitReview = "Submit Review";
+  static const String yourReview = "Your Review";
+  static const String productInfo = "Product info";
+  static const String outOfStock = "Product out of stock";
+  static const String addReview = "Add Review";
+  static const String basedOn = "Based on";
+  static const String noReviews = "There are no review yet";
+  static const String noPopularProducts = "No Popular products";
+  static const String noProducts = "No products";
+  static const String noNewProducts = "No New products";
+  static const String emptyMessage = "Looks like there is nothing here";
+  static const String connectionError =
+      "Couldn't establish a connection, please check your internet and try again";
+  static const String connectionTimedOut = "Connection timed out, try again";
   static const String product = "Product";
   static const String reviews = "Reviews";
   static const String addedToCart = "added to cart";

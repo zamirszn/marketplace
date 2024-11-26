@@ -22,6 +22,11 @@ class LoggerInterceptor extends Interceptor {
 
     // Check if the error status is 401 (Unauthorized)
     if (err.response?.statusCode == 401) {
+      // if the refresh token is invalid or expired
+      if (err.response?.data["code"] == "token_not_valid") {
+        handler.next(err);
+        return;
+      }
       _pendingRequests.add(() => _retryRequest(err, handler));
 
       if (_isRefreshing) {
@@ -36,38 +41,44 @@ class LoggerInterceptor extends Interceptor {
           await sl<SecureStorageDataSource>().read(Constant.refreshToken);
 
       // Check if refresh token retrieval was successful
+
       return refreshTokenResult.fold(
         (error) {
           logger.e("Failed to retrieve refresh token: $error");
           handler.next(err); // Pass the error along if refresh token is missing
         },
         (refreshToken) async {
-          final refreshResultRequest =
-              await sl<RefreshTokenUsecase>().call(params: refreshToken);
+          print("got saved token : $refreshToken");
+          if (refreshToken != null) {
+            final refreshResultRequest =
+                await sl<RefreshTokenUsecase>().call(params: refreshToken);
 
-          // Call the use case to refresh the access token
+            // Call the use case to refresh the access token
 
-          refreshResultRequest.fold(
-            (refreshError) {
-              logger.e("Token refresh failed: $refreshError");
-              _isRefreshing = false; // Reset the flag
-              handler.next(err); // Pass the original error if refresh fails
-            },
-            (data) async {
-              final String newAccessToken = data[Constant.accessToken];
+            return refreshResultRequest.fold(
+              (refreshError) {
+                logger.e("Token refresh failed: $refreshError");
+                _isRefreshing = false; // Reset the flag
+                handler.next(err); // Pass the original error if refresh fails
+              },
+              (data) async {
+                final String newAccessToken = data[Constant.accessToken];
 
-              // Save the new access token in secure storage
-              await sl<SecureStorageDataSource>()
-                  .write(Constant.accessToken, newAccessToken);
-              logger
-                  .i("Token refresh successful. Retrying original request...");
+                // Save the new access token in secure storage
+                await sl<SecureStorageDataSource>()
+                    .write(Constant.accessToken, newAccessToken);
+                logger.i(
+                    "Token refresh successful. Retrying original request...");
 
-              // Retry all pending requests with the new access token
-              _retryPendingRequests();
-              _isRefreshing = false; // Reset the flag
-              _pendingRequests.clear(); // Clear the queue
-            },
-          );
+                // Retry all pending requests with the new access token
+                _retryPendingRequests();
+                _isRefreshing = false; // Reset the flag
+                _pendingRequests.clear(); // Clear the queue
+              },
+            );
+          } else {
+            handler.next(err);
+          }
         },
       );
     } else {

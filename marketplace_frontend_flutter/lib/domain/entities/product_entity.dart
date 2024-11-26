@@ -12,6 +12,7 @@ class ProductModelEntity {
   final String? slug;
   final int? inventory;
   final num? averageRating;
+  final num? reviewsLength;
   final List<ProductImage> images;
 
   ProductModelEntity({
@@ -25,6 +26,7 @@ class ProductModelEntity {
     this.slug,
     this.inventory,
     this.averageRating,
+    this.reviewsLength,
     required this.images,
   });
 }

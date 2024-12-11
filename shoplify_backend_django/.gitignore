@@ -1,0 +1,8 @@
+.env
+staticfiles/
+venv/
+.venv/
+market_venv/
+shoplify_venv/
+Dockerfile
+fly.toml

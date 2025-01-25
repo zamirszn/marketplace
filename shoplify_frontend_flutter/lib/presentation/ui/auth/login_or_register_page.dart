@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:blobs/blobs.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/widgets/back_button.dart';
 import 'package:shoplify/presentation/widgets/move_bounce_animation.dart';
 import 'package:shoplify/presentation/widgets/round_icon_text_button.dart';
 

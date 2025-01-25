@@ -2,6 +2,8 @@ import random
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager, PermissionsMixin
 from django.utils import timezone
+from cloudinary.models import CloudinaryField
+from django.conf import settings
 
 
 class UserManager(BaseUserManager):
@@ -68,3 +70,25 @@ class User(AbstractUser, PermissionsMixin):
     class Meta:
         verbose_name = "User"
         verbose_name_plural = "Users"
+
+
+class Profile(models.Model):
+    name = models.CharField(max_length=225)
+    bio = models.TextField()
+    picture = models.ImageField(blank=True, null=True)
+
+    picture = CloudinaryField(
+        "profile_images",
+        blank=True,
+        null=True,
+    )
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
+    )
+
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        verbose_name = "Profile"
+        verbose_name_plural = "Profiles"

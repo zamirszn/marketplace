@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shoplify/app/extensions.dart';
-import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/domain/entities/product_category_entity.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
-import 'package:shoplify/presentation/widgets/loading_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductsCategoriesListWidget extends StatelessWidget {
@@ -28,7 +25,7 @@ class ProductsCategoriesListWidget extends StatelessWidget {
               if (state is ProductCategoryLoading ||
                   state is ProductCategoryFailure) {
                 return ListView.builder(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   itemCount: 10,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
@@ -38,7 +35,7 @@ class ProductsCategoriesListWidget extends StatelessWidget {
                       child: Skeletonizer(
                         effect: PulseEffect(
                             from: ColorManager.secondary.withOpacity(.1),
-                            duration: Duration(seconds: 5),
+                            duration: const Duration(seconds: 5),
                             to: ColorManager.black.withOpacity(.01)),
                         child: Text(
                           "******",
@@ -92,7 +89,7 @@ class ProductsCategoriesListWidget extends StatelessWidget {
                 );
               }
 
-              return SizedBox();
+              return const SizedBox();
             },
           ),
         ),

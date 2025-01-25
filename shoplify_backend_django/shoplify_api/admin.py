@@ -62,6 +62,14 @@ class CategoryAdmin(ModelAdmin):
     class Meta:
         model = Category
 
+@admin.register(FavoriteProducts)
+class FavoriteProductsAdmin(ModelAdmin):
+
+    list_display= ["owner", "product", "created_at"]
+
+    class Meta:
+        model = FavoriteProducts
+
 
 @admin.register(ProductImage)
 class ProductImageAdmin(ModelAdmin):
@@ -153,20 +161,6 @@ class OrderItemAdmin(ModelAdmin):
     list_per_page = 100
 
 
-@admin.register(Profile)
-class ProfileAdmin(ModelAdmin):
-    class Meta:
-        models = Profile
 
-    search_fields = [
-        "id",
-        "name",
-        "bio",
-    ]
-    list_display = [
-        "id",
-        "name",
-        "bio",
-    ]
 
-    list_per_page = 100
+

@@ -1,9 +1,7 @@
-import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'dart:ui';
 
 import 'package:blobs/blobs.dart';
 import 'package:flutter/services.dart';

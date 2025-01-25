@@ -10,7 +10,6 @@ import 'package:shoplify/presentation/service_locator.dart';
 import 'package:shoplify/presentation/ui/onboarding/liquid_card_swipe.dart';
 import 'package:shoplify/presentation/ui/onboarding/liquid_swipe_view.dart';
 import 'package:shoplify/presentation/widgets/move_bounce_animation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class LiquidSwipeOnboarding extends StatefulWidget {
   const LiquidSwipeOnboarding({super.key});

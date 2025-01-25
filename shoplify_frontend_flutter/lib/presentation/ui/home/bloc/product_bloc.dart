@@ -10,7 +10,6 @@ import 'package:shoplify/domain/entities/product_category_entity.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/domain/usecases/products_usecase.dart';
 import 'package:shoplify/presentation/service_locator.dart';
-import 'package:shoplify/presentation/ui/home/home_page.dart';
 import 'package:meta/meta.dart';
 
 part 'product_event.dart';

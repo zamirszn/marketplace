@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User
+from .models import Profile, User
 
 from django.contrib.auth.models import Group
 
@@ -38,3 +38,21 @@ class UserAdmin(ModelAdmin):
         "email",
         "full_name",
     ]
+
+@admin.register(Profile)
+class ProfileAdmin(ModelAdmin):
+    class Meta:
+        models = Profile
+
+    search_fields = [
+        "id",
+        "name",
+        "bio",
+    ]
+    list_display = [
+        "id",
+        "name",
+        "bio",
+    ]
+
+    list_per_page = 100

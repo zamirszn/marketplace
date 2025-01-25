@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shoplify/core/constants/constant.dart';
 import 'package:shoplify/core/network/dio_client.dart';
@@ -7,7 +6,6 @@ import 'package:shoplify/data/source/shared_pref_service_impl.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 import 'package:shoplify/presentation/widgets/loading_widget.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

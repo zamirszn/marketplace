@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:shoplify/presentation/service_locator.dart';
 import "package:dartz/dartz.dart";
 
 abstract class SecureStorageDataSource {
@@ -21,7 +20,7 @@ class SecureServiceImpl extends SecureStorageDataSource {
   }
 
   Future<void> init() async {
-    _secureStorage = FlutterSecureStorage();
+    _secureStorage = const FlutterSecureStorage();
   }
 
   @override

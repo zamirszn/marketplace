@@ -1,8 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:shoplify/data/models/add_to_cart_params_model.dart';
-import 'package:shoplify/data/models/product_category_model.dart';
 import 'package:shoplify/data/models/product_query_params_model.dart';
 import 'package:shoplify/data/source/products_service_data_source.dart';
 import 'package:shoplify/domain/repository/products_repo.dart';

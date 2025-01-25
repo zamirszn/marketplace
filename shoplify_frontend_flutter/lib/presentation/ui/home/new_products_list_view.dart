@@ -1,16 +1,11 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shoplify/app/extensions.dart';
-import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
-import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
 import 'package:shoplify/presentation/ui/home/new_product_widget.dart';
 import 'package:shoplify/presentation/widgets/empty_widget.dart';
 import 'package:shoplify/presentation/widgets/retry_button.dart';
-import 'package:skeletonizer/skeletonizer.dart';
 
 class NewProductsListView extends StatelessWidget {
   const NewProductsListView({super.key});
@@ -23,16 +18,16 @@ class NewProductsListView extends StatelessWidget {
         builder: (context, state) {
           if (state is NewProductLoading) {
             return ListView.builder(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 itemCount: 5,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
-                  return Padding(
-                      padding: const EdgeInsets.all(8.0),
+                  return const Padding(
+                      padding: EdgeInsets.all(8.0),
                       child: ProductWidgetSkeleton());
                 });
           } else if (state is NewProductEmpty) {
-            return Center(
+            return const Center(
                 child: EmptyWidget(
               message: AppStrings.noPopularProducts,
             ));
@@ -41,13 +36,13 @@ class NewProductsListView extends StatelessWidget {
               child: RetryButton(
                 message: state.message,
                 retry: () {
-                  context.read<ProductBloc>()..add(GetNewProductsEvent());
+                  context.read<ProductBloc>().add(GetNewProductsEvent());
                 },
               ),
             );
           } else if (state is NewProductSuccess) {
             return ListView.builder(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 itemCount: state.newProducts.length,
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
@@ -62,7 +57,7 @@ class NewProductsListView extends StatelessWidget {
                 });
           }
 
-          return SizedBox();
+          return const SizedBox();
         },
       ),
     );

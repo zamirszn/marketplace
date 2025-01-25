@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
@@ -34,11 +33,11 @@ class BottomNav extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 30.0),
               child: IndexedStack(
                 index: state.selectedIndex,
-                children: [
-                  const HomePage(),
+                children: const [
+                  HomePage(),
                   CartPage(),
-                  const FavoritePage(),
-                  const Center(child: Text('Profile')),
+                  FavoritePage(),
+                  Center(child: Text('Profile')),
                 ],
               ),
             ),
@@ -69,7 +68,7 @@ class BottomNav extends StatelessWidget {
                           textStyle: getRegularStyle(font: FontConstants.ojuju),
                           child: const Icon(Iconsax.shopping_cart)),
                     ),
-                    NavigationDestination(
+                    const NavigationDestination(
                       label: "Favorite",
                       icon: Icon(
                         Iconsax.heart,

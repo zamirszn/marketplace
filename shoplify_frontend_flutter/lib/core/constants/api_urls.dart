@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 
 class ApiUrls {
   static const String prodBaseUrl = "https://shoplify-pwmk.onrender.com/";

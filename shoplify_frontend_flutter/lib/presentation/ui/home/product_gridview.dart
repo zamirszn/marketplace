@@ -6,7 +6,6 @@ import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
-import 'package:shoplify/presentation/ui/home/home_page.dart';
 import 'package:shoplify/presentation/ui/home/new_product_widget.dart';
 import 'package:shoplify/presentation/ui/home/product_widget.dart';
 import 'package:shoplify/presentation/widgets/empty_widget.dart';
@@ -31,9 +30,10 @@ class _ProductGridViewState extends State<ProductGridView> {
 
   void _onScroll() {
     print("listening");
-    if (_isBottom)
+    if (_isBottom) {
       _productBloc
           .add(GetAllProductsEvent(params: ProductQueryParamsModel(page: 1)));
+    }
   }
 
   bool get _isBottom {
@@ -59,17 +59,17 @@ class _ProductGridViewState extends State<ProductGridView> {
           if (state is AllProductLoading) {
             return SliverGrid.builder(
               itemCount: 4,
-              gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 250,
                   mainAxisExtent: 250,
                   crossAxisSpacing: AppSize.s10,
                   mainAxisSpacing: AppSize.s10),
               itemBuilder: (context, index) {
-                return ProductWidgetSkeleton();
+                return const ProductWidgetSkeleton();
               },
             );
           } else if (state is AllProductEmpty) {
-            return SliverToBoxAdapter(
+            return const SliverToBoxAdapter(
               child: Center(
                   child: EmptyWidget(
                 message: AppStrings.noProducts,
@@ -82,7 +82,7 @@ class _ProductGridViewState extends State<ProductGridView> {
                   message: state.message,
                   retry: () {
                     context.read<ProductBloc>()
-                      ..add(GetAllProductsEvent(
+                      .add(GetAllProductsEvent(
                           params: ProductQueryParamsModel(page: 1)));
                   },
                 ),
@@ -94,7 +94,7 @@ class _ProductGridViewState extends State<ProductGridView> {
                 shrinkWrap: true,
                 controller: _scrollController,
                 itemCount: state.products.length,
-                gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                     maxCrossAxisExtent: 250,
                     mainAxisExtent: 280,
                     crossAxisSpacing: AppSize.s10,

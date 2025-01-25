@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:dio/dio.dart';
 import 'package:shoplify/core/constants/api_urls.dart';
 import 'package:shoplify/core/network/dio_client.dart';
 import 'package:shoplify/data/models/login_params_model.dart';

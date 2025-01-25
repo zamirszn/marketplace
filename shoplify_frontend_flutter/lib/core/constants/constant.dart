@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
 
 class Constant {
   static const String doneOnboarding = "doneOnboarding";

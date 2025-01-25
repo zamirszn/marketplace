@@ -1,10 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/data/models/product_model.dart';
-import 'package:shoplify/presentation/resources/asset_manager.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';

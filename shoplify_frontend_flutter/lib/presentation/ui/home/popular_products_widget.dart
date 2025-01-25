@@ -4,8 +4,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/core/constants/api_urls.dart';
-import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
@@ -39,7 +37,7 @@ class PopularProductsWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(AppSize.s20)),
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
                 vertical: AppPadding.p12, horizontal: AppPadding.p12),
             child: Stack(
               children: [
@@ -86,7 +84,7 @@ class PopularProductsWidget extends StatelessWidget {
                               Text(
                                 "\$${product.price}",
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: FontSize.s18,
                                     fontWeight: FontWeight.bold,
                                     fontFamily: FontConstants.ojuju),
@@ -147,7 +145,7 @@ class PopularProductsWidgetSkeleton extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.grey.shade300,
               borderRadius: BorderRadius.circular(AppSize.s20)),
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
               vertical: AppPadding.p12, horizontal: AppPadding.p12),
           child: Row(
             children: [

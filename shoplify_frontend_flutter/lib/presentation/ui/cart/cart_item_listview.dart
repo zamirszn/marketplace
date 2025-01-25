@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shoplify/app/extensions.dart';
-import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/ui/cart/cart_item_widget.dart';

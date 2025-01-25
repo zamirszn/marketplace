@@ -4,7 +4,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';

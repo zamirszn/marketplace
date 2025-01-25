@@ -230,7 +230,12 @@ class UpdateOrderSerializer(serializers.ModelSerializer):
         fields = ["order_status"]
 
 
-class ProfileSerializer(serializers.ModelSerializer):
+class FavoriteProductSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
     class Meta:
-        model = Profile
-        fields = ["id", "name", "bio", "picture"]
+        model= FavoriteProducts
+        fields = ["id", "product",  "created_at", "owner"]
+        read_only_fields = ["id", "created_at"]
+
+
+  

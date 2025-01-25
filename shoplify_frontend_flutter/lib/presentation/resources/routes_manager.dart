@@ -1,14 +1,9 @@
-import 'package:dartz/dartz.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shoplify/core/constants/constant.dart';
 import 'package:shoplify/data/models/review_param_model.dart';
-import 'package:shoplify/data/source/secure_storage_data_source.dart';
-import 'package:shoplify/data/source/shared_pref_service_impl.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
-import 'package:shoplify/presentation/service_locator.dart';
 import 'package:shoplify/presentation/ui/auth/account_verification/account_verification.dart';
 import 'package:shoplify/presentation/ui/auth/splash_page.dart';
 import 'package:shoplify/presentation/ui/bottom_nav/bottom_nav.dart';

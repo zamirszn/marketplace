@@ -286,12 +286,18 @@ UNFOLD = {
             {
                 "separator": True,  # Top border
                 "collapsible": True,  # Collapsible group of links
-                "title": lzy("Account"),
+                "title": lzy("Accounts"),
                 "items": [
                     {
                         "icon": "manage_accounts",
                         "title": lzy("Users"),
                         "link": reverse_lazy("admin:core_user_changelist"),
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                    {
+                        "icon": "account_circle",
+                        "title": lzy("Profiles"),
+                        "link": reverse_lazy("admin:core_profile_changelist"),
                         "permission": lambda request: request.user.is_superuser,
                     },
                 ],

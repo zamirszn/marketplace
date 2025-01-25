@@ -10,7 +10,6 @@ import 'package:shoplify/data/source/products_service_data_source.dart';
 import 'package:shoplify/domain/repository/auth_repo.dart';
 import 'package:shoplify/domain/repository/products_repo.dart';
 import 'package:shoplify/domain/repository/review_repo.dart';
-import 'package:shoplify/domain/repository/secure_storage_repo.dart';
 import 'package:shoplify/domain/usecases/auth_usecase.dart';
 import 'package:shoplify/domain/usecases/products_usecase.dart';
 import 'package:shoplify/domain/usecases/user_usecase.dart';

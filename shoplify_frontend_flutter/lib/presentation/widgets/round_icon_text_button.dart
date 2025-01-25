@@ -1,9 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
-import 'package:shoplify/presentation/resources/values_manager.dart';
 
 class RoundIconTextButton extends StatelessWidget {
   const RoundIconTextButton(

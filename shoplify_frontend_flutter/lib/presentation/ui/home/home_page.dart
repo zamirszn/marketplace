@@ -12,8 +12,6 @@ import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
 import 'package:shoplify/presentation/ui/home/popular_products_list_view.dart';
 import 'package:shoplify/presentation/ui/home/product_gridview.dart';
-import 'package:shoplify/presentation/widgets/image_carousel.dart';
-import 'package:shoplify/presentation/ui/home/new_product_widget.dart';
 import 'package:shoplify/presentation/ui/home/new_products_list_view.dart';
 import 'package:shoplify/presentation/ui/home/products_category_list_widget.dart';
 import 'package:shoplify/presentation/widgets/loading_widget.dart';

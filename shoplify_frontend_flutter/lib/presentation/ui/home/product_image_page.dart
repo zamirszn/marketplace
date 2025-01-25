@@ -247,8 +247,9 @@ class _ProductImagePageState extends State<ProductImagePage>
             animation: _dragAnimation!,
             builder: (context, _) {
               Offset finalOffset = _dragOffset ?? const Offset(0.0, 0.0);
-              if (_dragAnimation?.status == AnimationStatus.forward)
+              if (_dragAnimation?.status == AnimationStatus.forward) {
                 finalOffset = _dragAnimation!.value;
+              }
               return Transform.translate(
                 offset: finalOffset,
                 child: _,

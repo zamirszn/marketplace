@@ -19,7 +19,7 @@ class RetryButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ElevatedButton.icon(
-          icon: Icon(Iconsax.link),
+          icon: const Icon(Iconsax.link),
           onPressed: () {
             if (retry != null) {
               retry!();

@@ -6,6 +6,8 @@ from cloudinary.models import CloudinaryField
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
+
+
 class Category(models.Model):
     title = models.CharField(max_length=225)
     category_id = models.UUIDField(
@@ -214,19 +216,39 @@ class OrderItem(models.Model):
         return self.product.name
 
 
-class Profile(models.Model):
-    name = models.CharField(max_length=225)
-    bio = models.TextField()
-    picture = models.ImageField(blank=True, null=True)
+# class Profile(models.Model):
+#     name = models.CharField(max_length=225)
+#     bio = models.TextField()
+#     picture = models.ImageField(blank=True, null=True)
 
-    picture = CloudinaryField(
-        "profile_images",
-        blank=True,
-        null=True,
-    )
+#     picture = CloudinaryField(
+#         "profile_images",
+#         blank=True,
+#         null=True,
+#     )
+#     owner = models.ForeignKey(
+#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
+#     )
+
+#     def __str__(self) -> str:
+#         return self.name
+    
+
+class FavoriteProducts(models.Model):
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True,
+        related_name="favorites"
     )
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="favorited_by")
+    created_at = models.DateTimeField(auto_now_add=True,    blank=True,
+        null=True,)
+
+    class Meta:
+        unique_together = ("owner", "product")
+
+    class Meta:
+        verbose_name = "Favorite Products"
+        verbose_name_plural = "Favorite Products"
 
     def __str__(self) -> str:
-        return self.name
+        return f"{self.owner.email} favorited {self.product.name}"

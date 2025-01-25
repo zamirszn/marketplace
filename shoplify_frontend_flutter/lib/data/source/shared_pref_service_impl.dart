@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:shoplify/presentation/service_locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class SharedPrefDataSource {

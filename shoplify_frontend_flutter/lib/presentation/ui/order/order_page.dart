@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
@@ -14,8 +13,8 @@ class OrderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+        leading: const Padding(
+          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           child: GoBackButton(),
         ),
         backgroundColor: ColorManager.white,
@@ -33,7 +32,7 @@ class OrderPage extends StatelessWidget {
                   backgroundColor: ColorManager.secondary,
                   textColor: ColorManager.white,
                   textStyle: getRegularStyle(font: FontConstants.ojuju),
-                  child: Icon(Iconsax.notification)))
+                  child: const Icon(Iconsax.notification)))
         ],
       ),
     );

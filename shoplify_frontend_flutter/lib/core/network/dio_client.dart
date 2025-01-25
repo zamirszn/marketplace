@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:shoplify/core/constants/api_urls.dart';
 import 'package:shoplify/core/network/interceptor.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';

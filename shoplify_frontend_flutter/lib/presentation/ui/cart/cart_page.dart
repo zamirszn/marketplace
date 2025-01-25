@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
@@ -9,7 +7,6 @@ import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/cart/cart_item_listview.dart';
-import 'package:shoplify/presentation/widgets/back_button.dart';
 import 'package:shoplify/presentation/widgets/dashed_line.dart';
 
 class CartPage extends StatelessWidget {

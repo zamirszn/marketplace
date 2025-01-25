@@ -1,26 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/core/constants/api_urls.dart';
-import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/ui/auth/login/login_page.dart';
-import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
-import 'package:shoplify/presentation/ui/home/home_page.dart';
 import 'package:shoplify/presentation/ui/home/product_widget.dart';
-import 'package:shoplify/presentation/widgets/3d_flip_widget.dart';
-import 'package:shoplify/presentation/widgets/favourite_button.dart';
 import 'package:shoplify/presentation/widgets/interactive_3d_effect.dart';
-import 'package:shoplify/presentation/ui/home/product_details_page.dart';
-import 'package:shoplify/presentation/widgets/loading_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class NewProductWidget extends StatelessWidget {
@@ -48,7 +37,7 @@ class NewProductWidget extends StatelessWidget {
             decoration: BoxDecoration(
                 color: Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(AppSize.s20)),
-            padding: EdgeInsets.symmetric(
+            padding: const EdgeInsets.symmetric(
                 vertical: AppPadding.p12, horizontal: AppPadding.p12),
             child: Stack(
               children: [
@@ -93,7 +82,7 @@ class NewProductWidget extends StatelessWidget {
                           Text(
                             "\$${product.price}",
                             overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: FontSize.s18,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: FontConstants.ojuju),
@@ -147,7 +136,7 @@ class ProductWidgetSkeleton extends StatelessWidget {
           decoration: BoxDecoration(
               color: Colors.grey.shade300,
               borderRadius: BorderRadius.circular(AppSize.s20)),
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
               vertical: AppPadding.p12, horizontal: AppPadding.p12),
           child: Stack(
             children: [

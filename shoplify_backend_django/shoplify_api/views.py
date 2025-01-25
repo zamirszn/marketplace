@@ -5,12 +5,10 @@ from .models import *
 from rest_framework.viewsets import ModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.mixins import (
-    CreateModelMixin,
-    RetrieveModelMixin,
-    DestroyModelMixin,
-)
-from rest_framework.viewsets import GenericViewSet
+
+
+from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -31,6 +29,8 @@ class ProductViewSet(ModelViewSet):
     serializer_class = ProductSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_class = ProductFilter
+    permission_classes = [IsAuthenticated]
+
     search_fields = [
         "name",
         "description",
@@ -64,6 +64,8 @@ def popular_products(request):
 
 class CategoryViewSet(ModelViewSet):
     http_method_names = ["get"]
+    permission_classes = [IsAuthenticated]
+
 
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -89,6 +91,31 @@ class ReviewViewSet(ModelViewSet):
         context = super().get_serializer_context()
         context["product_id"] = self.kwargs.get("product_pk")
         return context
+    
+class ToggleFavoriteAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, product_id):
+        product = Product.objects.filter(id=product_id).first()
+        if not product:
+            return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        favorite, created = FavoriteProducts.objects.get_or_create(owner=request.user, product=product)
+
+        if not created:  # If it already exists, remove it
+            favorite.delete()
+            return Response({'message': 'Removed from favorites'}, status=status.HTTP_200_OK)
+
+        return Response({'message': 'Added to favorites'}, status=status.HTTP_201_CREATED)
+
+
+class ListFavoritesAPIView(ListAPIView):
+    serializer_class = FavoriteProductSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return FavoriteProducts.objects.filter(owner=self.request.user)
+
 
 
 class CartViewSet(ModelViewSet):
@@ -294,24 +321,7 @@ class OrderViewSet(ModelViewSet):
         return Order.objects.filter(owner=user)
 
 
-class ProfileViewSet(ModelViewSet):
-    queryset = Profile.objects.all()
-    serializer_class = ProfileSerializer
-    parser_classes = (MultiPartParser, FormParser)
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        profile = serializer.save()
-        serializer = ProfileSerializer(profile)
-
-        return Response(
-            {
-                "message": "Profile created successfully",
-                "profile": profile,
-            },
-            status=status.HTTP_201_CREATED,
-        )
 
 
 def badge_callback(request):

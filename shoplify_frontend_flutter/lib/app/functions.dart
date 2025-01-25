@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:shoplify/data/models/product_model.dart';
-import 'package:shoplify/data/models/review_model.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/domain/entities/review_entity.dart';
-import 'package:shoplify/presentation/resources/asset_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 

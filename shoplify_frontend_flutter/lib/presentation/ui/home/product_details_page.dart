@@ -12,8 +12,12 @@ import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/cart/bloc/cart_bloc.dart';
+import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
+import 'package:shoplify/presentation/widgets/add_to_cart_bottomsheet.dart';
 import 'package:shoplify/presentation/widgets/back_button.dart';
-import 'package:shoplify/presentation/widgets/image_carousel.dart';
+import 'package:shoplify/presentation/widgets/coverflow_carousel.dart';
+import 'package:shoplify/presentation/widgets/loading_widget.dart';
+import 'package:shoplify/presentation/widgets/snackbar.dart';
 import 'package:shoplify/presentation/widgets/star_rating/star_rating_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -102,7 +106,7 @@ class ProductDetailsPage extends StatelessWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: AppPadding.p20),
-                                  child: CoverFlowCarouselPage(
+                                  child: CoverFlowCarousel(
                                       productImages: product.images),
                                 ))),
                         space(h: AppSize.s3),
@@ -311,8 +315,17 @@ class ProductDetailsPage extends StatelessWidget {
                                     showDragHandle: true,
                                     isScrollControlled: true,
                                     enableDrag: true,
-                                    builder: (context) => AddtoCartBottomSheet(
-                                      product: product,
+                                    builder: (context) => SizedBox(
+                                      height: deviceHeight(context) * .81,
+                                      // using a scaffold here, flutter bug does not
+                                      // let snackbar show at the top of modal bottom sheet
+                                      // using a snackbar is the only fix for now
+                                      child: Scaffold(
+                                        backgroundColor: Colors.transparent,
+                                        body: AddtoCartBottomSheet(
+                                          product: product,
+                                        ),
+                                      ),
                                     ),
                                   );
                                 },
@@ -331,233 +344,5 @@ class ProductDetailsPage extends StatelessWidget {
             ),
           ),
         ));
-  }
-}
-
-class AddtoCartBottomSheet extends StatelessWidget {
-  const AddtoCartBottomSheet({super.key, required this.product});
-  final ProductModelEntity product;
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CartBloc(),
-      child: BlocBuilder<CartBloc, CartState>(
-        builder: (context, state) {
-          return SizedBox(
-            height: deviceHeight(context) * .81,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppPadding.p20),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // title
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const GoBackButton(
-                          padding: EdgeInsets.all(AppPadding.p8),
-                        ),
-                        Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: AppPadding.p20),
-                            child: Center(
-                              child: Text(product.name ?? "",
-                                  textAlign: TextAlign.center,
-                                  overflow: TextOverflow.ellipsis,
-                                  maxLines: 2,
-                                  style: getRegularStyle(
-                                      font: FontConstants.ojuju,
-                                      fontSize: FontSize.s18)),
-                            ),
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Iconsax.heart,
-                          ),
-                        )
-                      ],
-                    ),
-
-                    space(h: AppSize.s20),
-                    // image
-                    RoundCorner(
-                      child: CachedNetworkImage(
-                        imageUrl: product.images.isNotEmpty
-                            ? product.images.first.image!
-                            : "",
-                        height: 310,
-                        width: 310,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => SizedBox(
-                          child: Container(
-                            color: ColorManager.white,
-                            height: 310,
-                            width: 310,
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => Skeletonizer(
-                            child: Container(
-                          color: ColorManager.white,
-                          height: 310,
-                          width: 310,
-                        )),
-                      ),
-                    ),
-                    space(h: AppSize.s20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              AppStrings.unitPrice,
-                              style: getRegularStyle(),
-                            ),
-                            space(h: AppSize.s10),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  "\$${product.price?.toString() ?? ""}",
-                                  textAlign: TextAlign.end,
-                                  style: getBoldStyle(
-                                      fontSize: FontSize.s18,
-                                      font: FontConstants.ojuju),
-                                ),
-                                if (product.oldPrice != null)
-                                  Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: AppPadding.p10),
-                                    child: Text(
-                                      "\$${product.oldPrice}",
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          decoration:
-                                              product.discount != null &&
-                                                      product.discount == true
-                                                  ? TextDecoration.lineThrough
-                                                  : null,
-                                          fontSize: FontSize.s14,
-                                          fontFamily: FontConstants.ojuju),
-                                    ),
-                                  ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              AppStrings.quantity,
-                              style: getRegularStyle(),
-                            ),
-                            space(h: AppSize.s10),
-                            Row(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    // context
-                                    //     .read<CartBloc>()
-                                    //     .add(());
-                                  },
-                                  child: const Icon(
-                                    Iconsax.minus_cirlce,
-                                    size: AppSize.s28,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: AppSize.s16),
-                                  child: Text(
-                                    // amount should be more than whats in inventory
-                                    "${state.singleItem?.quantity ?? '1'} ",
-                                    textAlign: TextAlign.center,
-                                    style: getSemiBoldStyle(
-                                        font: FontConstants.ojuju,
-                                        fontSize: FontSize.s16),
-                                  ),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    context.read<CartBloc>().add(
-                                        IncreaseSingleCartItemCountEvent());
-                                  },
-                                  child: const Icon(
-                                    Iconsax.add_circle5,
-                                    size: AppSize.s28,
-                                  ),
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                    space(h: AppSize.s36),
-                    // add to cart
-                    if (product.inventory != null && product.inventory! > 0)
-                      SizedBox(
-                        height: AppSize.s60,
-                        width: double.infinity,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(AppSize.s20)),
-                            shadowColor: Colors.transparent,
-                            foregroundColor: ColorManager.black,
-                            backgroundColor: ColorManager.primaryDark,
-                          ),
-                          onPressed: () {},
-                          child:
-                              // Transform.scale(
-                              //           scale: .85, child: const LoadingWidget())
-
-                              Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: Text(
-                                  "\$${product.price?.toString() ?? ""}",
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                  style: getRegularStyle(
-                                      font: FontConstants.ojuju,
-                                      fontSize: FontSize.s18),
-                                ),
-                              ),
-                              const VerticalDivider(),
-                              Expanded(
-                                flex: 3,
-                                child: Text(
-                                  AppStrings.addToCart,
-                                  textAlign: TextAlign.center,
-                                  style: getRegularStyle(
-                                      font: FontConstants.ojuju,
-                                      fontSize: FontSize.s18),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-
-                    space(h: AppSize.s6)
-                  ],
-                ),
-              ),
-            ),
-          );
-        },
-      ),
-    );
   }
 }

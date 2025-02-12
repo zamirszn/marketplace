@@ -65,6 +65,29 @@ class ProductRepositoryImpl extends ProductsRepository {
     });
   }
 
+  @override
+  Future<Either> addToFavorite(String productId) async {
+    Either result =
+        await sl<ProductsServiceDataSource>().addToFavorite(productId);
+    return result.fold((error) {
+      return Left(error);
+    }, (data) async {
+      Response response = data;
+      return Right(response.data);
+    });
+  }
+  @override
+  Future<Either> removeToFavorite(String productId) async {
+    Either result =
+        await sl<ProductsServiceDataSource>().removeToFavorite(productId);
+    return result.fold((error) {
+      return Left(error);
+    }, (data) async {
+      Response response = data;
+      return Right(response.data);
+    });
+  }
+
   String? _cartId;
 
   @override

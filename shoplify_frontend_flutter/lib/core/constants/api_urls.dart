@@ -16,5 +16,6 @@ class ApiUrls {
   static const String newProducts = "$api/$products/new-products";
   static const String popularProducts = "$api/$products/popular-products";
   static const String allProducts = "$api/$products";
+  static const String favorites = "$api/favorites";
   static const String cartUrl = "$api/$cart";
 }

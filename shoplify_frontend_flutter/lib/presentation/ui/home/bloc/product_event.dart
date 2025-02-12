@@ -21,4 +21,16 @@ class AddToCartEvent extends ProductEvent {
   AddToCartEvent({required this.params});
 }
 
-class CreateorGetCartEvent extends ProductEvent {}
+class GetOrCreateCartEvent extends ProductEvent {}
+
+class ToggleFavoriteEvent extends ProductEvent {
+  final String productId;
+  final bool isCurrentlyFavorited;
+
+  ToggleFavoriteEvent({
+    required this.productId,
+    required this.isCurrentlyFavorited,
+  });
+
+ 
+}

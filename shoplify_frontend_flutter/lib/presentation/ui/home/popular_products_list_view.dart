@@ -4,8 +4,9 @@ import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
-import 'package:shoplify/presentation/ui/home/popular_products_widget.dart';
+import 'package:shoplify/presentation/widgets/popular_products_widget.dart';
 import 'package:shoplify/presentation/widgets/empty_widget.dart';
+import 'package:shoplify/presentation/widgets/popular_product_widget_skeleton.dart';
 
 class PopularProductsListView extends StatelessWidget {
   const PopularProductsListView({

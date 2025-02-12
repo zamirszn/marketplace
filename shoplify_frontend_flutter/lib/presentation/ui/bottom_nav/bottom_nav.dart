@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
+import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/bottom_nav/bloc/bottom_nav_bloc.dart';
@@ -10,6 +11,7 @@ import 'package:shoplify/presentation/ui/cart/cart_page.dart';
 import 'package:shoplify/presentation/ui/favorite/favorite_page.dart';
 import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
 import 'package:shoplify/presentation/ui/home/home_page.dart';
+import 'package:shoplify/presentation/ui/profile/profile_page.dart';
 
 class BottomNav extends StatelessWidget {
   const BottomNav({super.key});
@@ -22,7 +24,7 @@ class BottomNav extends StatelessWidget {
           create: (context) => BottomNavBloc(),
         ),
         BlocProvider<ProductBloc>(
-          create: (context) => ProductBloc()..add(CreateorGetCartEvent()),
+          create: (context) => ProductBloc()..add(GetOrCreateCartEvent()),
         ),
       ],
       child:
@@ -37,7 +39,7 @@ class BottomNav extends StatelessWidget {
                   HomePage(),
                   CartPage(),
                   FavoritePage(),
-                  Center(child: Text('Profile')),
+                  ProfilePage()
                 ],
               ),
             ),
@@ -56,11 +58,11 @@ class BottomNav extends StatelessWidget {
                   backgroundColor: ColorManager.primary,
                   destinations: [
                     const NavigationDestination(
-                      label: "Catalog",
+                      label: AppStrings.catalog,
                       icon: Icon(Iconsax.shop),
                     ),
                     NavigationDestination(
-                      label: "Cart",
+                      label: AppStrings.cart,
                       icon: Badge(
                           label: const Text("3"),
                           backgroundColor: ColorManager.secondaryDark,
@@ -69,13 +71,13 @@ class BottomNav extends StatelessWidget {
                           child: const Icon(Iconsax.shopping_cart)),
                     ),
                     const NavigationDestination(
-                      label: "Favorite",
+                      label: AppStrings.favorite,
                       icon: Icon(
-                        Iconsax.heart,
+                        Iconsax.save_2,
                       ),
                     ),
                     const NavigationDestination(
-                      label: "Profile",
+                      label: AppStrings.profile,
                       icon: Icon(Iconsax.user),
                     ),
                   ],

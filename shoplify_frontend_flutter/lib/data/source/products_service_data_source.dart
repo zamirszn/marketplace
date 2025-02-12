@@ -14,6 +14,8 @@ abstract class ProductsServiceDataSource {
   Future<Either> getAllProducts(ProductQueryParamsModel productParams);
   Future<Either> addToCart(AddToCartParamsModel addToCartParams);
   Future<Either> getOrCreateCart();
+  Future<Either> addToFavorite(String productId);
+  Future<Either> removeToFavorite(String productId);
 }
 
 class ProductServiceImpl extends ProductsServiceDataSource {
@@ -65,6 +67,27 @@ class ProductServiceImpl extends ProductsServiceDataSource {
       Response response = await sl<DioClient>().post(
           "${ApiUrls.cartUrl}/$cartId/${ApiUrls.items}/",
           data: addToCartParams.toMap());
+      return Right(response);
+    } catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either> addToFavorite(String productId) async {
+    try {
+      Response response = await sl<DioClient>()
+          .post("${ApiUrls.favorites}/add/$productId", data: {});
+      return Right(response);
+    } catch (e) {
+      return Left(e);
+    }
+  }
+  @override
+  Future<Either> removeToFavorite(String productId) async {
+    try {
+      Response response = await sl<DioClient>()
+          .delete("${ApiUrls.favorites}/remove/$productId", data: {});
       return Right(response);
     } catch (e) {
       return Left(e);

@@ -69,7 +69,7 @@ class Command(BaseCommand):
             "Mirror",
         ]
 
-        for _ in range(2):
+        for _ in range(10):
             name = random.choice(product_names)
             description = fake.text()
             discount = fake.boolean()
@@ -78,6 +78,7 @@ class Command(BaseCommand):
             slug = fake.slug()
             inventory = fake.random_int(min=1, max=100)
             flash_sales = fake.boolean()
+
 
             # Create the product
             product = Product.objects.create(
@@ -89,6 +90,8 @@ class Command(BaseCommand):
                 slug=slug,
                 inventory=inventory,
                 flash_sales=flash_sales,
+
+                
             )
 
             # Add multiple Picsum images to each product

@@ -39,7 +39,7 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
     emit(state.copyWith(selectedOption: event.selectedOption, page: 1));
   }
 
-  // dont call this , except you understand when and how its used
+  //TODO: dont call this , except you understand when and how its used
   // this is used to force the loading screen to show when a user
   // click on the sort bottomsheet
   void _onShowReviewsLoading(

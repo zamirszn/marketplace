@@ -2,6 +2,9 @@ class AppStrings {
   static const String noRouteFound = "no_route_found";
   static const String back = "Back";
   static const String quantity = "Quantity";
+  static const String favorite = "Favorite";
+  static const String profile = "Profile";
+  static const String catalog = "Catalog";
   static const String unitPrice = "Unit Price";
   static const String enterReview = "Please enter your review";
   static const String reviewSubmitted = "Review submitted";

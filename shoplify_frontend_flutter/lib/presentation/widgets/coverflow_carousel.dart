@@ -20,8 +20,8 @@ enum CoverFlowStyle {
 
 final _coverFlowStyle = ValueNotifier<CoverFlowStyle>(CoverFlowStyle.both);
 
-class CoverFlowCarouselPage extends StatelessWidget {
-  const CoverFlowCarouselPage({super.key, required this.productImages});
+class CoverFlowCarousel extends StatelessWidget {
+  const CoverFlowCarousel({super.key, required this.productImages});
   final List<ProductImage> productImages;
 
   @override

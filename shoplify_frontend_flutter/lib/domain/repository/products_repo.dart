@@ -10,4 +10,7 @@ abstract class ProductsRepository {
   Future<Either> addToCart(AddToCartParamsModel addToCartParams);
   Future<Either> getOrCreateCart();
   Future<String?> getCartId();
+  Future<Either> addToFavorite(String productId);
+  Future<Either> removeToFavorite(String productId);
+
 }

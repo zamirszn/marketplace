@@ -22,6 +22,7 @@ class ProductModel {
   final int? inventory;
   final num? averageRating;
   final num? reviewsLength;
+  final bool? isFavorite;
 
   final List<ProductImage> images;
 
@@ -37,6 +38,7 @@ class ProductModel {
     this.inventory,
     this.averageRating,
     this.reviewsLength,
+    this.isFavorite,
     required this.images,
   });
 
@@ -53,6 +55,7 @@ class ProductModel {
     num? averageRating,
     num? reviewsLength,
     List<ProductImage>? images,
+    bool? isFavorite,
   }) =>
       ProductModel(
         id: id ?? this.id,
@@ -67,6 +70,7 @@ class ProductModel {
         averageRating: averageRating ?? this.averageRating,
         reviewsLength: reviewsLength ?? this.reviewsLength,
         images: images ?? this.images,
+        isFavorite: isFavorite ?? this.isFavorite,
       );
 
   factory ProductModel.fromMap(Map<String, dynamic> json) => ProductModel(
@@ -83,6 +87,7 @@ class ProductModel {
         inventory: json["inventory"],
         averageRating: json["average_rating"],
         reviewsLength: json["reviews_length"],
+        isFavorite: json["is_favorite"],
         images: List<ProductImage>.from(
             json["images"].map((x) => ProductImage.fromJson(x))),
       );
@@ -99,6 +104,7 @@ class ProductModel {
         "inventory": inventory,
         "average_rating": averageRating,
         "reviews_length": reviewsLength,
+        "is_favorite": isFavorite,
         "images": List<dynamic>.from(images.map((x) => x.toJson())),
       };
 }
@@ -154,6 +160,8 @@ extension ProductModelXModel on ProductModel {
         price: price,
         averageRating: averageRating,
         reviewsLength: reviewsLength,
+        isFavorite: isFavorite,
+      
         slug: slug);
   }
 }

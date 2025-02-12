@@ -11,7 +11,7 @@ abstract class ReviewServiceDataSource {
   Future<Either> submitProductReview(SubmitReviewModel submitReviewParamModel);
 }
 
-class ReviewServiceImpl extends ReviewServiceDataSource {
+class ReviewServiceDataSourceImpl extends ReviewServiceDataSource {
   @override
   Future<Either> getProductReviews(ReviewParamModel reviewParamModel) async {
     try {

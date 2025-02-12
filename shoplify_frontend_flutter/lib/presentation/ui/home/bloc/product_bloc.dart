@@ -22,11 +22,31 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<GetPopularProductsEvent>(_onGetPopularProducts);
     on<GetAllProductsEvent>(_onGetAllProducts);
     on<AddToCartEvent>(_onAddToCart);
-    on<CreateorGetCartEvent>(_getOrCreateCart);
+    on<GetOrCreateCartEvent>(_getOrCreateCart);
+    on<ToggleFavoriteEvent>(_toggleProductToFavorite);
+  }
+
+  _toggleProductToFavorite(
+      ToggleFavoriteEvent event, Emitter<ProductState> emit) async {
+    emit(AddToFavoriteLoading());
+
+    final Either response = event.isCurrentlyFavorited
+        ? await sl<RemovefromFavoriteUseCase>().call(params: event.productId)
+        : await sl<AddtoFavoriteUseCase>().call(params: event.productId);
+
+    response.fold((error) {
+      emit(AddToFavoriteFailure(message: error.toString()));
+    }, (data) {
+      emit(ToggleFavoriteSuccess(
+        message: data["message"],
+        productId: event.productId,
+        isFavorited: !event.isCurrentlyFavorited,
+      ));
+    });
   }
 
   _getOrCreateCart(
-      CreateorGetCartEvent event, Emitter<ProductState> emit) async {
+      GetOrCreateCartEvent event, Emitter<ProductState> emit) async {
     emit(CreateorGetCartLoading());
     Either response = await sl<GetorCreateCartUseCase>().call();
     response.fold((error) {

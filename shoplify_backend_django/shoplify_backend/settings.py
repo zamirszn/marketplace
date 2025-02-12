@@ -21,6 +21,7 @@ from django.urls import reverse_lazy
 import environ
 from django.templatetags.static import static
 from django.utils.translation import gettext_lazy as lzy
+import stripe
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -204,7 +205,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("JWT",),
-    "ACCESS_TOKEN_LIFETIME": timedelta(days=2),
+    "ACCESS_TOKEN_LIFETIME": timedelta(days=10),
     # "REFRESH_TOKEN_LIFETIME": timedelta(days=10),
 }
 
@@ -229,6 +230,8 @@ cloudinary.config(
 
 STRIPE_SECRET_KEY = env("STRIPE_SK")
 STRIPE_PUBLISHABLE_KEY = env("STRIPE_PK")
+
+stripe.api_key = STRIPE_SECRET_KEY
 
 
 UNFOLD = {

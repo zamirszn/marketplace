@@ -41,6 +41,21 @@ class AddToCartUseCase implements Usecase<Either, AddToCartParamsModel> {
   }
 }
 
+class AddtoFavoriteUseCase implements Usecase<Either, String> {
+  @override
+  Future<Either> call({String? params}) async{
+    return sl<ProductsRepository>().addToFavorite(params!);
+  }
+}
+class RemovefromFavoriteUseCase implements Usecase<Either, String> {
+  @override
+  Future<Either> call({String? params}) async{
+    return sl<ProductsRepository>().removeToFavorite(params!);
+  }
+}
+
+
+
 class GetorCreateCartUseCase implements Usecase<Either, dynamic> {
   @override
   Future<Either> call({params}) async {
@@ -68,3 +83,5 @@ class SubmitReviewUsecase implements Usecase<Either, dynamic> {
     return sl<ReviewRepository>().submitProductReview(params!);
   }
 }
+
+

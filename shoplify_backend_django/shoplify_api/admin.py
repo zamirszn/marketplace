@@ -31,13 +31,13 @@ class ProductAdmin(ModelAdmin):
         "category",
     ]
     search_fields = [
+        "name",
         "id",
         "discount",
-        "price",
         "old_price",
         "created_at",
-        "category",
-        "average_rating",
+        
+        
     ]
 
     prepopulated_fields = {"slug": ("name",)}

@@ -41,6 +41,15 @@ class ProductSerializer(serializers.ModelSerializer):
         read_only=True,
     )
 
+    is_favorite = serializers.SerializerMethodField()
+
+    def get_is_favorite(self, obj):
+        """Determines if the product is in the authenticated user's favorites."""
+        request = self.context.get("request")
+        if request and request.user.is_authenticated:
+            return FavoriteProducts.objects.filter(owner=request.user, product=obj).exists()
+        return False
+
     class Meta:
         model = Product
         fields = [
@@ -57,6 +66,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "uploaded_images",
             "average_rating",
             "reviews_length",
+            "is_favorite"
         ]
 
     def create(self, validated_data):

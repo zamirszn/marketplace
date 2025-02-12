@@ -1,19 +1,27 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
+import 'package:shoplify/data/models/add_to_cart_params_model.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
+import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/ui/home/product_widget.dart';
+import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
+import 'package:shoplify/presentation/widgets/add_to_cart_button.dart';
 import 'package:shoplify/presentation/widgets/interactive_3d_effect.dart';
+import 'package:shoplify/presentation/widgets/loading_widget.dart';
+import 'package:shoplify/presentation/widgets/snackbar.dart';
+import 'package:shoplify/presentation/widgets/star_rating/star_rating_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class NewProductWidget extends StatelessWidget {
-  const NewProductWidget({
+class ProductWidget extends StatelessWidget {
+  const ProductWidget({
     super.key,
     required this.product,
   });
@@ -26,14 +34,13 @@ class NewProductWidget extends StatelessWidget {
         goPush(
           context,
           Routes.productDetailsPage,
-          extra: {'product': product, 'heroTag': '${product.id}_new'},
+          extra: {'product': product, 'heroTag': '${product.id}_all'},
         );
       },
       child: Hero(
-        tag: '${product.id}_new',
+        tag: '${product.id}_all',
         child: Interactive3DEffect(
           child: Container(
-            width: AppSize.s200,
             decoration: BoxDecoration(
                 color: Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(AppSize.s20)),
@@ -48,35 +55,43 @@ class NewProductWidget extends StatelessWidget {
                     children: [
                       Center(
                         child: RoundCorner(
-                          child: CachedNetworkImage(
-                            imageUrl: product.images.isNotEmpty
-                                ? product.images.first.image!
-                                : "",
-                            height: AppSize.s120,
-                            width: AppSize.s200,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => SizedBox(
-                              child: Container(
+                          child: FractionallySizedBox(
+                            widthFactor: .98,
+                            child: CachedNetworkImage(
+                              imageUrl: product.images.isNotEmpty
+                                  ? product.images.first.image!
+                                  : "",
+                              height: AppSize.s120,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => Container(
                                 color: ColorManager.white,
                                 height: AppSize.s100,
                                 width: AppSize.s100,
                               ),
+                              errorWidget: (context, url, error) =>
+                                  Skeletonizer(
+                                      child: Container(
+                                color: ColorManager.white,
+                                height: AppSize.s100,
+                                width: AppSize.s100,
+                              )),
                             ),
-                            errorWidget: (context, url, error) => Skeletonizer(
-                                child: Container(
-                              color: ColorManager.white,
-                              height: AppSize.s100,
-                              width: AppSize.s100,
-                            )),
                           ),
                         ),
                       ),
                       space(h: AppSize.s10),
                       Text(
                         product.name ?? "",
-                        maxLines: 2,
+                        maxLines: 1,
                         overflow: TextOverflow.ellipsis,
+                        style: getMediumStyle(),
                       ),
+                      if (product.description != null)
+                        Text(
+                          product.description ?? "",
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       Row(
                         children: [
                           Text(
@@ -113,72 +128,13 @@ class NewProductWidget extends StatelessWidget {
                   right: 2,
                   child: RoundCorner(child: AddToCartWidget(product: product)),
                 ),
+                Positioned(
+                  bottom: 0,
+                  left: 2,
+                  child: StarRatingWidget(rating: product.averageRating ?? 0),
+                ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ProductWidgetSkeleton extends StatelessWidget {
-  const ProductWidgetSkeleton({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Interactive3DEffect(
-      child: Skeletonizer(
-        child: Container(
-          width: AppSize.s200,
-          decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(AppSize.s20)),
-          padding: const EdgeInsets.symmetric(
-              vertical: AppPadding.p12, horizontal: AppPadding.p12),
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: RoundCorner(
-                        child: Container(
-                      color: ColorManager.white,
-                      height: 100,
-                      width: double.infinity,
-                    )),
-                  ),
-                  space(h: AppSize.s10),
-                  Text(
-                    "******************",
-                    style: getRegularStyle(fontSize: FontSize.s16),
-                  ),
-                  Text(
-                    "********",
-                    style: getRegularStyle(fontSize: FontSize.s16),
-                  ),
-                  space(h: AppSize.s20),
-                  Row(
-                    children: [
-                      Text(
-                        "*****",
-                        style: getRegularStyle(fontSize: FontSize.s16),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: AppPadding.p10),
-                        child: Text(
-                          "*****",
-                          style: getRegularStyle(fontSize: FontSize.s16),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
           ),
         ),
       ),

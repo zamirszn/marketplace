@@ -24,7 +24,7 @@ class LoginPage extends StatelessWidget {
   LoginPage({super.key});
   // TODO: remove filled data
   final emailController = TextEditingController(
-      text: kDebugMode ? "Mubaraklawal52@gmail.com" : null);
+      text: kDebugMode ? "mubaraklawal52@gmail.com" : null);
   final passwordController =
       TextEditingController(text: kDebugMode ? "StrongPassword52#" : null);
   final formKey = GlobalKey<FormState>();

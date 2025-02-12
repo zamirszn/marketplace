@@ -53,6 +53,7 @@ class CartPage extends StatelessWidget {
                   )),
             )),
           ),
+          
           sliverSpace(h: AppSize.s40),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: AppPadding.p14),

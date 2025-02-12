@@ -14,6 +14,7 @@ import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/review/bloc/review_bloc.dart';
 import 'package:shoplify/presentation/widgets/back_button.dart';
 import 'package:shoplify/presentation/widgets/empty_widget.dart';
+import 'package:shoplify/presentation/widgets/error_message_widget.dart';
 import 'package:shoplify/presentation/widgets/loading_widget.dart';
 import 'package:shoplify/presentation/widgets/retry_button.dart';
 import 'package:shoplify/presentation/widgets/star_rating/star_rating_widget.dart';
@@ -340,10 +341,18 @@ class _ReviewPageState extends State<ReviewPage> {
                               );
 
                             case ReviewStatus.failure:
-                              if (state.errorMessage != null) {}
-                              return ReviewErrorWidget(
-                                productId: widget.product.id!,
+                              return ErrorMessageWidget(
                                 message: state.errorMessage,
+                                retry: () {
+                                  context
+                                      .read<ReviewBloc>()
+                                      .add(RefreshProductReviewEvent(
+                                        params: ReviewParamModel(
+                                          productId: widget.product.id!,
+                                          page: 1,
+                                        ),
+                                      ));
+                                },
                               );
 
                             case ReviewStatus.success:
@@ -472,12 +481,6 @@ class _ReviewPageState extends State<ReviewPage> {
                                     );
                                   }
                                 },
-                              );
-
-                            default:
-                              return ReviewErrorWidget(
-                                productId: widget.product.id!,
-                                message: null,
                               );
                           }
                         },
@@ -659,40 +662,6 @@ class AddReviewWidget extends StatelessWidget {
               trailing: Icon(Iconsax.arrow_right),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class ReviewErrorWidget extends StatelessWidget {
-  const ReviewErrorWidget({
-    super.key,
-    required this.productId,
-    this.message,
-  });
-
-  final String productId;
-  final String? message;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: deviceHeight(context) / 3,
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: RetryButton(
-            message: message,
-            retry: () {
-              context.read<ReviewBloc>().add(RefreshProductReviewEvent(
-                    params: ReviewParamModel(
-                      productId: productId,
-                      page: 1,
-                    ),
-                  ));
-            },
-          ),
         ),
       ),
     );

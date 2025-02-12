@@ -13,3 +13,8 @@ https://rive.app/community/files/1908-3837-delivery/
 
 https://rive.app/community/files/463-865-shop-icon/
 
+TOD0: fix 400 bad auth where a deactivated user accounts tries to refresh the token and ends up in a loop
+
+fix login state bug with toggle
+
+fix login 401 auth on login retry

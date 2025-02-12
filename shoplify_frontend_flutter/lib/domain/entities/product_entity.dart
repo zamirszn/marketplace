@@ -13,6 +13,7 @@ class ProductModelEntity {
   final int? inventory;
   final num? averageRating;
   final num? reviewsLength;
+  final bool? isFavorite;
   final List<ProductImage> images;
 
   ProductModelEntity({
@@ -27,6 +28,7 @@ class ProductModelEntity {
     this.inventory,
     this.averageRating,
     this.reviewsLength,
+    this.isFavorite,
     required this.images,
   });
 }

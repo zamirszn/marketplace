@@ -64,24 +64,14 @@ class ProductsCategoriesListWidget extends StatelessWidget {
                             const EdgeInsets.symmetric(horizontal: AppSize.s6),
                         alignment: Alignment.center,
                         decoration: ShapeDecoration(
-                          // color: state is HomePageCategoryUpdate
-                          //     ? state.selectedCategory == category
-                          //         ? ColorManager.black.withOpacity(.85)
-                          //         : ColorManager.color2.withOpacity(.3)
-                          //     : null,
+                         
 
                           color: ColorManager.secondary.withOpacity(.3),
                           shape: const StadiumBorder(),
                         ),
                         child: Text(
                           category.title,
-                          // style: getRegularStyle(
-                          //     // color: state is HomePageCategoryUpdate
-                          //     //     ? state.selectedCategory == category
-                          //     //         ? ColorManager.white
-                          //     //         : ColorManager.black
-                          //     //     : null
-                          //     ),
+                          
                         ),
                       ),
                     );

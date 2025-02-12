@@ -6,9 +6,10 @@ import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
-import 'package:shoplify/presentation/ui/home/new_product_widget.dart';
-import 'package:shoplify/presentation/ui/home/product_widget.dart';
+import 'package:shoplify/presentation/widgets/new_product_widget.dart';
+import 'package:shoplify/presentation/widgets/product_widget.dart';
 import 'package:shoplify/presentation/widgets/empty_widget.dart';
+import 'package:shoplify/presentation/widgets/product_widget_skeleton.dart';
 import 'package:shoplify/presentation/widgets/retry_button.dart';
 
 class ProductGridView extends StatefulWidget {

@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from shoplify_api.filters import *
 from .serializers import *
 from .models import *
@@ -23,6 +24,10 @@ from rest_framework.decorators import api_view
 
 
 class ProductViewSet(ModelViewSet):
+
+    def get_serializer_context(self):
+        """Pass request context to the serializer to check favorites"""
+        return {"request": self.request}
     http_method_names = ["get"]
 
     queryset = Product.objects.all()
@@ -44,7 +49,7 @@ class ProductViewSet(ModelViewSet):
 @api_view(["GET"])
 def new_products(request):
     new_products = Product.objects.all()[:50]
-    serializer = ProductSerializer(new_products, many=True)
+    serializer = ProductSerializer(new_products, many=True, context={"request": request})
 
     return Response(serializer.data)
 
@@ -57,7 +62,7 @@ def popular_products(request):
         | Product.objects.filter(flash_sales=True)[:25]
     )
 
-    serializer = ProductSerializer(popular_products, many=True)
+    serializer = ProductSerializer(popular_products, many=True, context={"request": request})
 
     return Response(serializer.data)
 
@@ -92,21 +97,38 @@ class ReviewViewSet(ModelViewSet):
         context["product_id"] = self.kwargs.get("product_pk")
         return context
     
-class ToggleFavoriteAPIView(APIView):
+
+class FavoriteViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
+    serializer_class = FavoriteProductSerializer
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
 
-    def post(self, request, product_id):
-        product = Product.objects.filter(id=product_id).first()
-        if not product:
-            return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        favorite, created = FavoriteProducts.objects.get_or_create(owner=request.user, product=product)
+    def get_queryset(self):
+        """Return the favorite products of the authenticated user."""
+        return FavoriteProducts.objects.filter(owner=self.request.user)
 
-        if not created:  # If it already exists, remove it
+    @action(detail=True, methods=['post'])
+    def add(self, request, pk=None):
+        """Add a product to favorites."""
+        product = get_object_or_404(Product, id=pk)
+        _, created = FavoriteProducts.objects.get_or_create(owner=request.user, product=product)
+
+        if created:
+            return Response({'message': 'Added to favorites'}, status=status.HTTP_201_CREATED)
+        return Response({'message': 'Already in favorites'}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=['delete'])
+    def remove(self, request, pk=None):
+        """Remove a product from favorites."""
+        product = get_object_or_404(Product, id=pk)
+        favorite = FavoriteProducts.objects.filter(owner=request.user, product=product).first()
+
+        if favorite:
             favorite.delete()
             return Response({'message': 'Removed from favorites'}, status=status.HTTP_200_OK)
-
-        return Response({'message': 'Added to favorites'}, status=status.HTTP_201_CREATED)
+        
+        return Response({'error': 'Product not in favorites'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ListFavoritesAPIView(ListAPIView):
@@ -485,3 +507,34 @@ def dashboard_callback(request, context):
     )
 
     return context
+
+
+@api_view(['POST'])
+def save_customer_info(request):
+    data = request.data
+    email = data['email']
+    payment_method_id = data['payment_method_id']
+    extra_msg = '' # add new variable to response message
+    # checking if customer with provided email already exists
+    customer_data = stripe.Customer.list(email=email).data   
+    
+    # if the array is empty it means the email has not been used yet  
+    if len(customer_data) == 0:
+        # creating customer
+        customer = stripe.Customer.create(
+        email=email, payment_method=payment_method_id)
+    else:
+        customer = customer_data[0]
+        extra_msg = "Customer already existed."
+        stripe.PaymentIntent.create(
+            customer=customer, 
+            payment_method=payment_method_id,  
+            currency='pln', # you can provide any currency you want
+            amount=999, confirm=True)
+        
+    return Response(status=status.HTTP_200_OK, 
+        data={'message': 'Success', 'data': {
+        'customer_id': customer.id, 'extra_msg': extra_msg}
+    })
+
+

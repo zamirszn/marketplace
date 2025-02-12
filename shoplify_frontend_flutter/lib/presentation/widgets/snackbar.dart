@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
+import 'package:shoplify/presentation/resources/values_manager.dart';
 
 void showMessage(
   BuildContext context,
@@ -10,6 +11,8 @@ void showMessage(
     backgroundColor: ColorManager.secondaryDark,
     behavior: SnackBarBehavior.floating,
     dismissDirection: DismissDirection.horizontal,
+    shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppSize.s16)),
     margin: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 20),
   );
 
@@ -25,6 +28,8 @@ void showErrorMessage(
     backgroundColor: ColorManager.red,
     behavior: SnackBarBehavior.floating,
     dismissDirection: DismissDirection.horizontal,
+    shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppSize.s16)),
 
     margin: const EdgeInsets.only(
         top: 20,

@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
       ),
       body: RefreshIndicator(
         onRefresh: () async {
-          context.read<ProductBloc>().add(CreateorGetCartEvent());
+          context.read<ProductBloc>().add(GetOrCreateCartEvent());
         },
         child: BlocListener<ProductBloc, ProductState>(
           listener: (context, state) {
@@ -71,7 +71,7 @@ class HomePage extends StatelessWidget {
                     child: RetryButton(
                   message: state.message,
                   retry: () {
-                    context.read<ProductBloc>().add(CreateorGetCartEvent());
+                    context.read<ProductBloc>().add(GetOrCreateCartEvent());
                   },
                 ));
               } else if (state is CreateorGetCartSuccess) {
@@ -201,7 +201,7 @@ class HomePage extends StatelessWidget {
                     child: RetryButton(
                   message: AppStrings.somethingWentWrong,
                   retry: () {
-                    context.read<ProductBloc>().add(CreateorGetCartEvent());
+                    context.read<ProductBloc>().add(GetOrCreateCartEvent());
                   },
                 ));
               }

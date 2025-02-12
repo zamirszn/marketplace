@@ -133,6 +133,14 @@ class Product(models.Model):
 
     class Meta:
         ordering = ["-created_at"]
+    
+    @property
+    def is_favorite(self):
+        """Checks if the current product is in the authenticated user's favorites"""
+        request = getattr(self, '_request', None)
+        if request and request.user.is_authenticated:
+            return FavoriteProducts.objects.filter(owner=request.user, product=self).exists()
+        return False
 
 
 class ProductImage(models.Model):
@@ -191,7 +199,7 @@ class Order(models.Model):
         choices=PAYMENT_STATUS_CHOICES,
         default=PAYMENT_STATUS_PENDING,
     )
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.owner.email + " - " + str(self.placed_at)
@@ -205,7 +213,7 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.PROTECT, related_name="items")
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(
         Product,
         on_delete=models.PROTECT,
@@ -214,24 +222,6 @@ class OrderItem(models.Model):
 
     def __str__(self) -> str:
         return self.product.name
-
-
-# class Profile(models.Model):
-#     name = models.CharField(max_length=225)
-#     bio = models.TextField()
-#     picture = models.ImageField(blank=True, null=True)
-
-#     picture = CloudinaryField(
-#         "profile_images",
-#         blank=True,
-#         null=True,
-#     )
-#     owner = models.ForeignKey(
-#         settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True
-#     )
-
-#     def __str__(self) -> str:
-#         return self.name
     
 
 class FavoriteProducts(models.Model):

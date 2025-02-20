@@ -46,14 +46,13 @@ class CartPage extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           shadowColor: Colors.transparent,
-                          backgroundColor: ColorManager.secondary,
+                          backgroundColor: ColorManager.darkBlue,
                         ),
                         onPressed: () {},
                         child: const Text(AppStrings.apply)),
                   )),
             )),
           ),
-          
           sliverSpace(h: AppSize.s40),
           SliverPadding(
             padding: const EdgeInsets.symmetric(horizontal: AppPadding.p14),
@@ -141,7 +140,7 @@ class CartPage extends StatelessWidget {
                               borderRadius: BorderRadius.circular(14)),
                           shadowColor: Colors.transparent,
                           foregroundColor: ColorManager.black,
-                          backgroundColor: ColorManager.secondary,
+                          backgroundColor: ColorManager.darkBlue,
                         ),
                         onPressed: () {
                           goPush(context, Routes.orderPage);

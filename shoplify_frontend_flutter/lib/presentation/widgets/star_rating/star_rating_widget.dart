@@ -18,13 +18,13 @@ class StarRatingWidget extends StatelessWidget {
         stars.add(Icon(
           Iconsax.star1,
           size: AppSize.s16,
-          color: ColorManager.secondary,
+          color: ColorManager.darkBlue,
         ));
       } else if (i < rating && rating - i >= .5) {
         stars.add(Icon(
           Iconsax.star_11,
           size: AppSize.s12,
-          color: ColorManager.secondary,
+          color: ColorManager.darkBlue,
         ));
       } else {
         stars.add(Padding(

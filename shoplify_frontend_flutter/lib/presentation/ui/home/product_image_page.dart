@@ -240,7 +240,7 @@ class _ProductImagePageState extends State<ProductImagePage>
               font: FontConstants.ojuju, fontSize: FontSize.s20),
         ),
       ),
-      backgroundColor: ColorManager.primary,
+      backgroundColor: ColorManager.lemon,
       body: SizedBox(
         height: deviceHeight(context),
         child: AnimatedBuilder(

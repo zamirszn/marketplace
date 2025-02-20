@@ -36,14 +36,14 @@ class FavoriteProductWidget extends StatelessWidget {
             errorWidget: (context, url, error) => Container(
               height: AppSize.s100,
               width: AppSize.s100,
-              color: ColorManager.secondaryDark,
+              color: ColorManager.darkBlue,
             ),
             placeholder: (
               context,
               url,
             ) =>
                 Container(
-              color: ColorManager.secondaryDark,
+              color: ColorManager.darkBlue,
               height: AppSize.s100,
               width: AppSize.s100,
             ),

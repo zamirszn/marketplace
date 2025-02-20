@@ -47,11 +47,5 @@ class Constant {
     ),
   ];
 
-  static const List<String> blob = [
-    '7-4-66047',
-    '7-4-32',
-    '7-4-26',
-    '7-4-587933',
-    '7-4-57'
-  ];
+  
 }

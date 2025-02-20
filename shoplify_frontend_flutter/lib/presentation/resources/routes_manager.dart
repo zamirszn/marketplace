@@ -13,7 +13,6 @@ import 'package:shoplify/presentation/ui/review/add_review_page.dart';
 import 'package:shoplify/presentation/ui/review/bloc/review_bloc.dart';
 import 'package:shoplify/presentation/ui/review/review_page.dart';
 import 'package:shoplify/presentation/widgets/error_404_page.dart';
-import 'package:shoplify/presentation/ui/auth/login_or_register_page.dart';
 import 'package:shoplify/presentation/ui/auth/login/login_page.dart';
 import 'package:shoplify/presentation/ui/auth/sign_up/sign_up_page.dart';
 import 'package:shoplify/presentation/ui/home/product_details_page.dart';
@@ -31,10 +30,6 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: Routes.onboardingPage,
       builder: (context, state) => const LiquidSwipeOnboarding(),
-    ),
-    GoRoute(
-      path: Routes.loginOrRegisterPage,
-      builder: (context, state) => const LoginOrRegisterPage(),
     ),
     GoRoute(
       path: Routes.loginPage,
@@ -118,7 +113,6 @@ class Routes {
   static const String productDetailsPage = "/productDetailsPage";
   static const String productReviewPage = "/productReviewPage";
   static const String productImagePage = "/productImagePage";
-  static const String loginOrRegisterPage = "/loginOrRegisterPage";
   static const String accountVerificationPage = "/accountVerificationPage";
 }
 

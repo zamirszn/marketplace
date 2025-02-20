@@ -34,7 +34,7 @@ class ProductsCategoriesListWidget extends StatelessWidget {
                           right: AppPadding.p5, left: AppPadding.p5),
                       child: Skeletonizer(
                         effect: PulseEffect(
-                            from: ColorManager.secondary.withOpacity(.1),
+                            from: ColorManager.darkBlue.withOpacity(.1),
                             duration: const Duration(seconds: 5),
                             to: ColorManager.black.withOpacity(.01)),
                         child: Text(
@@ -64,14 +64,11 @@ class ProductsCategoriesListWidget extends StatelessWidget {
                             const EdgeInsets.symmetric(horizontal: AppSize.s6),
                         alignment: Alignment.center,
                         decoration: ShapeDecoration(
-                         
-
-                          color: ColorManager.secondary.withOpacity(.3),
+                          color: ColorManager.darkBlue.withOpacity(.3),
                           shape: const StadiumBorder(),
                         ),
                         child: Text(
                           category.title,
-                          
                         ),
                       ),
                     );

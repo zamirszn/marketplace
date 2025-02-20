@@ -115,7 +115,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                   ),
                   space(h: AppSize.s20),
                   Divider(
-                    color: ColorManager.primary,
+                    color: ColorManager.lemon,
                   ),
                   space(h: AppSize.s10),
                   Text(
@@ -134,7 +134,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                       )),
                   space(h: AppSize.s20),
                   Divider(
-                    color: ColorManager.primary,
+                    color: ColorManager.lemon,
                   ),
                   space(h: AppSize.s40),
                   Align(
@@ -200,7 +200,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                                     BorderRadius.circular(AppSize.s20)),
                             shadowColor: Colors.transparent,
                             foregroundColor: ColorManager.black,
-                            backgroundColor: ColorManager.primaryDark,
+                            backgroundColor: ColorManager.darkBlue,
                           ),
                           child: Transform.scale(
                               scale: .85, child: const LoadingWidget()),
@@ -214,7 +214,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                                     BorderRadius.circular(AppSize.s20)),
                             shadowColor: Colors.transparent,
                             foregroundColor: ColorManager.black,
-                            backgroundColor: ColorManager.primaryDark,
+                            backgroundColor: ColorManager.darkBlue,
                           ),
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {

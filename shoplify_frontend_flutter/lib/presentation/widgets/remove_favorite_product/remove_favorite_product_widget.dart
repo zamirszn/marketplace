@@ -6,6 +6,7 @@ import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/favorite/bloc/favorite_bloc.dart';
 import 'package:shoplify/presentation/widgets/loading_widget.dart';
 import 'package:shoplify/presentation/widgets/remove_favorite_product/bloc/remove_favorite_bloc.dart';
+import 'package:shoplify/presentation/widgets/snackbar.dart';
 
 class RemoveFavoriteProductWidget extends StatelessWidget {
   const RemoveFavoriteProductWidget({super.key, required this.productId});
@@ -16,32 +17,40 @@ class RemoveFavoriteProductWidget extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => FavoriteBloc(),
-        ),
-        BlocProvider(
           create: (context) => RemoveFavoriteBloc(),
         ),
       ],
-      child: BlocBuilder<RemoveFavoriteBloc, RemoveFavoriteState>(
-        builder: (context, state) {
-          if (state is RemoveFromFavoriteLoading) {
-            return SizedBox(
-                height: AppSize.s40,
-                child:
-                    Transform.scale(scale: .7, child: const LoadingWidget()));
+      child: BlocListener<RemoveFavoriteBloc, RemoveFavoriteState>(
+        listener: (ctx, state) {
+          if (state is RemoveFromFavoriteFailure) {
+            showErrorMessage(ctx, state.message);
+          } else if (state is RemoveFromFavoriteSuccess) {
+            context
+                .read<FavoriteBloc>()
+                .add(RemoveFromFavoritePageEvent(productId: productId));
           }
-
-          return IconButton(
-              onPressed: () {
-                context
-                    .read<RemoveFavoriteBloc>()
-                    .add(RemoveFromFavoriteEvent(productId: productId));
-              },
-              icon: Icon(
-                Iconsax.save_remove,
-                color: ColorManager.white,
-              ));
         },
+        child: BlocBuilder<RemoveFavoriteBloc, RemoveFavoriteState>(
+          builder: (context, state) {
+            if (state is RemoveFromFavoriteLoading) {
+              return SizedBox(
+                  height: AppSize.s40,
+                  child:
+                      Transform.scale(scale: .7, child: const LoadingWidget()));
+            }
+
+            return IconButton(
+                onPressed: () {
+                  context
+                      .read<RemoveFavoriteBloc>()
+                      .add(RemoveFromFavoriteByIdEvent(productId: productId));
+                },
+                icon: Icon(
+                  Iconsax.save_remove,
+                  color: ColorManager.white,
+                ));
+          },
+        ),
       ),
     );
   }

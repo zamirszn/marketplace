@@ -11,9 +11,11 @@ import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/cart/bloc/cart_bloc.dart';
+import 'package:shoplify/presentation/ui/favorite/bloc/favorite_bloc.dart';
 import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
 import 'package:shoplify/presentation/widgets/back_button.dart';
 import 'package:shoplify/presentation/widgets/loading_widget.dart';
+import 'package:shoplify/presentation/widgets/remove_favorite_product/bloc/remove_favorite_bloc.dart';
 import 'package:shoplify/presentation/widgets/snackbar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -23,15 +25,27 @@ class AddtoCartBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider<CartBloc>(
-          create: (BuildContext context) => CartBloc(),
-        ),
-        BlocProvider<ProductBloc>(
-          create: (BuildContext context) => ProductBloc(),
-        ),
-      ],
+    return BlocListener<ProductBloc, ProductState>(
+      listener: (ctx, state) {
+        if (state is AddToFavoriteFailure) {
+          showErrorMessage(context, state.message);
+        } else if (state is ToggleFavoriteAddSuccess) {
+          if (state.message != null) {
+            showMessage(context, state.message!);
+          }
+          // if the server returns a product object (product was favorited)
+          // add the object to favorite product page
+          // server returns null if the
+
+          ctx
+              .read<FavoriteBloc>()
+              .add(AddToFavoritePageEvent(product: state.product!));
+        } else if (state is ToggleFavoriteRemoveSuccess) {
+          if (state.message != null) {
+            showMessage(context, state.message!);
+          }
+        }
+      },
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppPadding.p20),
         child: SingleChildScrollView(
@@ -60,69 +74,53 @@ class AddtoCartBottomSheet extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 50,
-                    width: 50,
-                    child: BlocListener<ProductBloc, ProductState>(
-                      listener: (ctx, state) {
-                        if (state is AddToFavoriteFailure) {
-                          showErrorMessage(context, state.message);
-                        } else if (state is ToggleFavoriteSuccess &&
-                            state.message!.isNotEmpty) {
-                          showMessage(context, state.message!);
+                    height: AppSize.s50,
+                    width: AppSize.s50,
+                    child: BlocBuilder<ProductBloc, ProductState>(
+                      builder: (context, state) {
+                        bool currentFavoritedState =
+                            product.isFavorite ?? false;
+
+                        if (state is AddToFavoriteLoading) {
+                          return Transform.scale(
+                              scale: .5, child: const LoadingWidget());
+                        }
+
+                        if (state is ToggleFavoriteAddSuccess &&
+                            state.isFavorited == true) {
+                          return IconButton(
+                              onPressed: () {
+                                context.read<ProductBloc>().add(
+                                      ToggleFavoriteEvent(
+                                        productId: product.id!,
+                                        isCurrentlyFavorited:
+                                            currentFavoritedState,
+                                      ),
+                                    );
+                              },
+                              icon: Icon(
+                                Iconsax.heart5,
+                                color: ColorManager.darkBlue,
+                                size: AppSize.s28,
+                              ));
+                        } else {
+                          return IconButton(
+                              onPressed: () {
+                                context.read<ProductBloc>().add(
+                                      ToggleFavoriteEvent(
+                                        productId: product.id!,
+                                        isCurrentlyFavorited:
+                                            currentFavoritedState,
+                                      ),
+                                    );
+                              },
+                              icon: Icon(
+                                Iconsax.heart,
+                                color: ColorManager.darkBlue,
+                                size: AppSize.s28,
+                              ));
                         }
                       },
-                      child: BlocBuilder<ProductBloc, ProductState>(
-                        builder: (context, state) {
-                          print("is liked ${product.isFavorite} - $state");
-                          bool currentFavoritedState =
-                              product.isFavorite ?? false;
-
-                          if (state is ToggleFavoriteSuccess &&
-                              state.productId == product.id) {
-                            currentFavoritedState = state.isFavorited;
-                          }
-
-                          if (state is AddToFavoriteLoading) {
-                            return Transform.scale(
-                                scale: .5, child: const LoadingWidget());
-                          }
-
-                          if (state is ToggleFavoriteSuccess &&
-                              state.isFavorited == true) {
-                            return IconButton(
-                                onPressed: () {
-                                  context.read<ProductBloc>().add(
-                                        ToggleFavoriteEvent(
-                                          productId: product.id!,
-                                          isCurrentlyFavorited:
-                                              currentFavoritedState,
-                                        ),
-                                      );
-                                },
-                                icon: Icon(
-                                  Iconsax.heart5,
-                                  color: ColorManager.secondary,
-                                  size: AppSize.s28,
-                                ));
-                          } else {
-                            return IconButton(
-                                onPressed: () {
-                                  context.read<ProductBloc>().add(
-                                        ToggleFavoriteEvent(
-                                          productId: product.id!,
-                                          isCurrentlyFavorited:
-                                              currentFavoritedState,
-                                        ),
-                                      );
-                                },
-                                icon: Icon(
-                                  Iconsax.heart,
-                                  color: ColorManager.secondary,
-                                  size: AppSize.s28,
-                                ));
-                          }
-                        },
-                      ),
                     ),
                   )
                 ],
@@ -166,14 +164,20 @@ class AddtoCartBottomSheet extends StatelessWidget {
                       ),
                       space(h: AppSize.s10),
                       Row(
-                        crossAxisAlignment: CrossAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text(
-                            "\$${product.price?.toString() ?? ""}",
-                            textAlign: TextAlign.end,
-                            style: getBoldStyle(
-                                fontSize: FontSize.s18,
-                                font: FontConstants.ojuju),
+                          SizedBox(
+                            width: AppSize.s100,
+                            child: Text(
+                              product.price?.toString() ?? "",
+                              textAlign: TextAlign.start,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: getBoldStyle(
+                                  fontSize: FontSize.s18,
+                                  font: FontConstants.ojuju),
+                            ),
                           ),
                           if (product.oldPrice != null &&
                               product.oldPrice != product.price)
@@ -181,7 +185,7 @@ class AddtoCartBottomSheet extends StatelessWidget {
                               padding:
                                   const EdgeInsets.only(left: AppPadding.p10),
                               child: Text(
-                                "\$${product.oldPrice}",
+                                "${product.oldPrice}",
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     decoration: product.discount != null &&
@@ -263,7 +267,7 @@ class AddtoCartBottomSheet extends StatelessWidget {
                           borderRadius: BorderRadius.circular(AppSize.s20)),
                       shadowColor: Colors.transparent,
                       foregroundColor: ColorManager.black,
-                      backgroundColor: ColorManager.primaryDark,
+                      backgroundColor: ColorManager.darkBlue,
                     ),
                     onPressed: () {},
                     child:
@@ -276,7 +280,7 @@ class AddtoCartBottomSheet extends StatelessWidget {
                         Expanded(
                           flex: 2,
                           child: Text(
-                            "\$${product.price?.toString() ?? ""}",
+                            product.price?.toString() ?? "",
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.center,
                             style: getRegularStyle(

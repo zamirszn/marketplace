@@ -1,6 +1,8 @@
 part of 'favorite_bloc.dart';
 
 @immutable
+
+///event for the `FavoritePage`
 sealed class FavoriteEvent {}
 
 final class GetFavoriteProductEvent extends FavoriteEvent {
@@ -14,7 +16,17 @@ final class RefreshFavoriteProductEvent extends FavoriteEvent {
 
   RefreshFavoriteProductEvent({required this.params});
 }
+/// event removes products from the `FavoritePage` list using
+/// thier id
+class RemoveFromFavoritePageEvent extends FavoriteEvent {
+  final String productId;
 
+  RemoveFromFavoritePageEvent({required this.productId});
+}
 
+/// event adds product object to the `FavoritePage` list
+final class AddToFavoritePageEvent extends FavoriteEvent {
+  final ProductModelEntity product;
 
-
+  AddToFavoritePageEvent({required this.product});
+}

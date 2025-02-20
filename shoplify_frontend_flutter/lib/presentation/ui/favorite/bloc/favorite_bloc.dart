@@ -16,18 +16,28 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
   FavoriteBloc() : super(const FavoriteState()) {
     on<GetFavoriteProductEvent>(_getFavoriteProduct);
     on<RefreshFavoriteProductEvent>(_refreshFavoriteProduct);
-    // on<RemoveFromFavoriteEvent>(_removeFromFavorite);
+    on<RemoveFromFavoritePageEvent>(_removeFavoriteByIdEvent);
+    on<AddToFavoritePageEvent>(_addToFavorite);
   }
 
-  // void _removeFromFavorite(
-  //     RemoveFromFavoriteEvent event, Emitter<FavoriteState> emit) {
-  //   emit(RemoveFromFavoriteLoading());
-  //   print(state.favoriteProducts.length);
+  void _addToFavorite(
+      AddToFavoritePageEvent event, Emitter<FavoriteState> emit) {
+    final List<ProductModelEntity> updatedFavorites =
+        List.from(state.favoriteProducts)..add(event.product);
 
-  // state.favoriteProducts
-  //     .removeWhere((product) => product.id == event.productId);
-  // print(state.favoriteProducts.length);
-  // }
+    emit(state.copyWith(
+        favoriteProducts: updatedFavorites,
+        status: FavoriteProductStatus.success));
+  }
+
+  void _removeFavoriteByIdEvent(
+      RemoveFromFavoritePageEvent event, Emitter<FavoriteState> emit) {
+    List<ProductModelEntity> updatedFavoriteList =
+        List.from(state.favoriteProducts)
+          ..removeWhere((product) => product.id == event.productId);
+
+    emit(state.copyWith(favoriteProducts: updatedFavoriteList));
+  }
 
   void _refreshFavoriteProduct(
       RefreshFavoriteProductEvent event, Emitter<FavoriteState> emit) async {
@@ -72,19 +82,23 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
         return;
       }
 
+      final String? nextPage = data["next"];
+
       emit(state.copyWith(
         status: FavoriteProductStatus.success,
         favoriteProducts: fetchedFavoriteProducts,
         page: state.page,
-        hasReachedMax: false,
+        hasReachedMax: nextPage != null ? false : true,
         isFetching: false,
       ));
+      print("refresh ${state.page}");
     });
   }
 
   void _getFavoriteProduct(
       GetFavoriteProductEvent event, Emitter<FavoriteState> emit) async {
     if (state.isFetching || state.hasReachedMax) {
+      print(state.page);
       return;
     }
 

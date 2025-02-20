@@ -199,7 +199,7 @@ class _CoverFlowPositionedItem extends StatelessWidget {
         width: _calculateItemWidth,
         height: size.height,
         child: ColoredBox(
-          color: ColorManager.secondary,
+          color: ColorManager.darkBlue,
           child: GestureDetector(
             onTap: () {
               goPush(context, Routes.productImagePage, extra: imagePath);

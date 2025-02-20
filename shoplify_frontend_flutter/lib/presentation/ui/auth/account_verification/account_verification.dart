@@ -1,5 +1,4 @@
 
-import 'package:blobs/blobs.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shoplify/app/functions.dart';
@@ -54,20 +53,11 @@ class AccountVerification extends StatelessWidget {
                   const FilledInput(),
                   space(h: AppSize.s20),
                   Center(
-                    child: Blob.animatedFromID(
-                      id: Constant.blob,
-                      duration: const Duration(seconds: 4),
-                      size: 350,
-                      styles: BlobStyles(
-                          fillType: BlobFillType.fill,
-                          color: ColorManager.black),
-                      loop: true,
-                      child: Transform.scale(
-                        scale: .4,
-                        child: MoveAndBounceAnimation(
-                          child: Image.asset(
-                            ImageAsset.box,
-                          ),
+                    child: Transform.scale(
+                      scale: .4,
+                      child: MoveAndBounceAnimation(
+                        child: Image.asset(
+                          ImageAsset.box,
                         ),
                       ),
                     ),

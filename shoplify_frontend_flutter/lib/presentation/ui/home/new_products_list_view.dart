@@ -42,20 +42,14 @@ class NewProductsListView extends StatelessWidget {
               ),
             );
           } else if (state is NewProductSuccess) {
-            return ListView.builder(
-                physics: const BouncingScrollPhysics(),
-                itemCount: state.newProducts.length,
+            return CarouselView.weighted(
+                enableSplash: false,
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  ProductModelEntity newProducts = state.newProducts[index];
-
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: NewProductWidget(
-                      product: newProducts,
-                    ),
-                  );
-                });
+                consumeMaxWeight: true,
+                flexWeights: const [3, 2],
+                children: state.newProducts
+                    .map((product) => NewProductWidget(product: product))
+                    .toList());
           }
 
           return const SizedBox();

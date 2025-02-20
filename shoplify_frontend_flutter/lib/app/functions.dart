@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/domain/entities/review_entity.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
@@ -164,6 +165,16 @@ UnderlineInputBorder noOutlineInput = UnderlineInputBorder(
   ),
   borderRadius: BorderRadius.circular(AppSize.s10),
 );
+
+OutlineInputBorder outlineInputBorder({Color? color, double? width}) {
+  return OutlineInputBorder(
+    borderSide: BorderSide(
+      width: width ?? AppSize.s2,
+      color: color ?? ColorManager.lightGrey,
+    ),
+    borderRadius: BorderRadius.circular(AppSize.s10),
+  );
+}
 
 final RegExp oneDigitRegex = RegExp(r'^(?=.*?[0-9])');
 final RegExp upperCaseRegex = RegExp(r'^(?=.*[A-Z])');

@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
@@ -16,59 +16,51 @@ class ProductWidgetSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Interactive3DEffect(
-      child: Skeletonizer(
+    return Stack(children: [
+      Skeletonizer(
         child: Container(
-          width: AppSize.s200,
-          decoration: BoxDecoration(
-              color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(AppSize.s20)),
-          padding: const EdgeInsets.symmetric(
-              vertical: AppPadding.p12, horizontal: AppPadding.p12),
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Center(
-                    child: RoundCorner(
-                        child: Container(
-                      color: ColorManager.white,
-                      height: 100,
-                      width: double.infinity,
-                    )),
-                  ),
-                  space(h: AppSize.s10),
-                  Text(
-                    "******************",
-                    style: getRegularStyle(fontSize: FontSize.s16),
-                  ),
-                  Text(
-                    "********",
-                    style: getRegularStyle(fontSize: FontSize.s16),
-                  ),
-                  space(h: AppSize.s20),
-                  Row(
-                    children: [
-                      Text(
-                        "*****",
-                        style: getRegularStyle(fontSize: FontSize.s16),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: AppPadding.p10),
-                        child: Text(
-                          "*****",
-                          style: getRegularStyle(fontSize: FontSize.s16),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
+          color: Colors.white,
+          height: 400,
+          width: 400,
         ),
       ),
-    );
+      const Positioned(
+        bottom: AppPadding.p20,
+        right: AppPadding.p30,
+        child: Skeletonizer(
+            effect: PulseEffect(),
+            child: Icon(
+              Iconsax.save_minus,
+              size: AppSize.s36,
+            )),
+      ),
+      Positioned(
+          bottom: AppPadding.p20,
+          left: AppPadding.p10,
+          child: Skeletonizer(
+            effect: const PulseEffect(),
+            child: Text(
+              "*******",
+              overflow: TextOverflow.ellipsis,
+              style: getSemiBoldStyle(
+                  fontSize: FontSize.s23, font: FontConstants.ojuju),
+            ),
+          )),
+      Positioned(
+        top: AppPadding.p20,
+        right: AppPadding.p30,
+        child: Skeletonizer(
+          effect: const PulseEffect(),
+          child: Text(
+            "*******",
+            textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: getSemiBoldStyle(
+                fontSize: FontSize.s18, font: FontConstants.ojuju),
+          ),
+        ),
+      )
+    ]);
   }
 }

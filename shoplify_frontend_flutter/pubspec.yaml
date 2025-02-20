@@ -35,7 +35,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   go_router: ^14.2.0
   shared_preferences: ^2.2.3
-  blobs: ^2.0.0
   iconsax: ^0.0.8
   dio: ^5.5.0+1
   flutter_secure_storage: ^9.2.2

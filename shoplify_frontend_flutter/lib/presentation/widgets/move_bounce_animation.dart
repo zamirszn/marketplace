@@ -55,7 +55,7 @@ class _MoveAndBounceAnimationState extends State<MoveAndBounceAnimation>
   void startAnimation() {
     bounceController = AnimationController(
         vsync: this,
-        duration: Duration(milliseconds: widget.milliseconds ?? 8000));
+        duration: Duration(milliseconds: widget.milliseconds ?? 5000));
     bounceAnimation = Tween(
             begin: Offset(widget.dx ?? 10, widget.dy ?? 10),
             end: Offset(widget.dx2 ?? -10, widget.dy2 ?? 30))

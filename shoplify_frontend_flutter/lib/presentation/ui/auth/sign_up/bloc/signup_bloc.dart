@@ -90,6 +90,14 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
   void _onTogglePasswordVisibility(
       SignUpPasswordVisibilityEvent event, Emitter<SignUpState> emit) {
-    emit(SignUpTogglePasswordState(isPasswordVisible: event.isPasswordVisible));
+    print(event.isPasswordVisible);
+
+    final currentState = state;
+    if (currentState is SignUpTogglePasswordState ) {
+      emit(
+        SignUpTogglePasswordState(
+            isPasswordVisible: !currentState.isPasswordVisible),
+      );
+    }
   }
 }

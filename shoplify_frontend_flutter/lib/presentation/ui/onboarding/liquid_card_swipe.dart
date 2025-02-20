@@ -51,10 +51,10 @@ class LiquidSwipeCard extends StatelessWidget {
             Builder(
               builder: (context) {
                 var style = TextStyle(
-                  color: buttonColor,
-                  fontSize: 15,
-                  fontWeight: FontWeight.normal,
-                );
+                    color: buttonColor,
+                    fontSize: 15,
+                    fontWeight: FontWeightManager.semiBold,
+                    fontFamily: FontConstants.poppins);
 
                 return Row(
                   children: [
@@ -97,7 +97,7 @@ class LiquidSwipeCard extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                  fontSize: FontSize.s35,
+                  fontSize: FontSize.s50,
                   color: titleColor,
                   fontWeight: FontWeightManager.bold,
                   fontFamily: FontConstants.ojuju),
@@ -108,7 +108,7 @@ class LiquidSwipeCard extends StatelessWidget {
                   fontSize: FontSize.s28,
                   height: 1.0,
                   color: subtitleColor,
-                  fontWeight: FontWeightManager.regular,
+                  fontWeight: FontWeightManager.medium,
                   fontFamily: FontConstants.poppins),
             ),
             const SizedBox(height: 16),

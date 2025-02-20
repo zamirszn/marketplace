@@ -27,12 +27,12 @@ class SignUpInitialState extends SignUpState {
 
 class SignUpLoadingState extends SignUpState {
   @override
-  List<Object?> get props => []; // No properties to compare, remains stateless
+  List<Object?> get props => []; 
 }
 
 class SignUpSuccessState extends SignUpState {
   @override
-  List<Object?> get props => []; // No properties to compare, remains stateless
+  List<Object?> get props => []; 
 }
 
 class SignUpFailureState extends SignUpState {

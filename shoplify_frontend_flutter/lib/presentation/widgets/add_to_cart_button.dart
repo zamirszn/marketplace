@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/data/models/add_to_cart_params_model.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
@@ -36,6 +36,7 @@ class AddToCartWidget extends StatelessWidget {
                   splashColor: Colors.transparent,
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
+                  color: ColorManager.white,
                   onPressed: () {
                     if (product.inventory != null && product.inventory! > 0) {
                       context.read<ProductBloc>().add(AddToCartEvent(

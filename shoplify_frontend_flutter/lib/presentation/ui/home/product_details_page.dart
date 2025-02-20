@@ -12,6 +12,7 @@ import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/cart/bloc/cart_bloc.dart';
+import 'package:shoplify/presentation/ui/favorite/bloc/favorite_bloc.dart';
 import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
 import 'package:shoplify/presentation/widgets/add_to_cart_bottomsheet.dart';
 import 'package:shoplify/presentation/widgets/back_button.dart';
@@ -54,7 +55,7 @@ class ProductDetailsPage extends StatelessWidget {
                           height: AppSize.s100,
                           width: deviceWidth(context),
                           decoration: BoxDecoration(
-                              color: ColorManager.primary,
+                              color: ColorManager.lemon,
                               borderRadius: const BorderRadius.only(
                                 bottomLeft: Radius.circular(AppSize.s20),
                                 bottomRight: Radius.circular(AppSize.s20),
@@ -86,7 +87,7 @@ class ProductDetailsPage extends StatelessWidget {
                                         child: Badge(
                                             label: const Text("3"),
                                             backgroundColor:
-                                                ColorManager.secondaryDark,
+                                                ColorManager.darkBlue,
                                             textColor: ColorManager.white,
                                             textStyle: getRegularStyle(
                                                 font: FontConstants.ojuju),
@@ -102,7 +103,7 @@ class ProductDetailsPage extends StatelessWidget {
                         ClipRRect(
                             borderRadius: BorderRadius.circular(AppSize.s20),
                             child: ColoredBox(
-                                color: ColorManager.primary,
+                                color: ColorManager.lemon,
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: AppPadding.p20),
@@ -113,7 +114,7 @@ class ProductDetailsPage extends StatelessWidget {
                         ClipRRect(
                           borderRadius: BorderRadius.circular(AppSize.s20),
                           child: ColoredBox(
-                              color: ColorManager.primary,
+                              color: ColorManager.lemon,
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: AppPadding.p10,
@@ -219,7 +220,7 @@ class ProductDetailsPage extends StatelessWidget {
                           child: ClipRRect(
                               borderRadius: BorderRadius.circular(AppSize.s20),
                               child: ColoredBox(
-                                  color: ColorManager.primary,
+                                  color: ColorManager.lemon,
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: AppPadding.p10,
@@ -271,7 +272,7 @@ class ProductDetailsPage extends StatelessWidget {
                                           "${AppStrings.basedOn} ${product.reviewsLength} ${AppStrings.reviews}",
                                           style: getLightStyle(
                                               fontSize: FontSize.s14,
-                                              color: ColorManager.grey,
+                                              color: ColorManager.lightGrey,
                                               font: FontConstants.poppins),
                                         ),
                                         space(h: AppSize.s12),
@@ -306,7 +307,7 @@ class ProductDetailsPage extends StatelessWidget {
                                           BorderRadius.circular(AppSize.s20)),
                                   shadowColor: Colors.transparent,
                                   foregroundColor: ColorManager.black,
-                                  backgroundColor: ColorManager.primaryDark,
+                                  backgroundColor: ColorManager.darkBlue,
                                 ),
                                 onPressed: () {
                                   showModalBottomSheet(

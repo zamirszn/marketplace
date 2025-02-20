@@ -37,11 +37,23 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     response.fold((error) {
       emit(AddToFavoriteFailure(message: error.toString()));
     }, (data) {
-      emit(ToggleFavoriteSuccess(
-        message: data["message"],
-        productId: event.productId,
-        isFavorited: !event.isCurrentlyFavorited,
-      ));
+      // product was removed from favorites
+
+      if (data["product"] != null) {
+        final ProductModelEntity product =
+            ProductModel.fromMap(data["product"]).toEntity();
+
+        emit(ToggleFavoriteAddSuccess(
+          message: data["message"],
+          product: product,
+          isFavorited: event.isCurrentlyFavorited,
+        ));
+      } else {
+        // product was removed from favorites
+        emit(ToggleFavoriteRemoveSuccess(
+          message: data["message"],
+        ));
+      }
     });
   }
 

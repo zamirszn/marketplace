@@ -29,7 +29,7 @@ class OrderPage extends StatelessWidget {
               onPressed: () {},
               icon: Badge(
                   label: const Text("2"),
-                  backgroundColor: ColorManager.secondary,
+                  backgroundColor: ColorManager.darkBlue,
                   textColor: ColorManager.white,
                   textStyle: getRegularStyle(font: FontConstants.ojuju),
                   child: const Icon(Iconsax.notification)))

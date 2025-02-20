@@ -16,7 +16,7 @@ class EmptyWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: AppPadding.p10),
+          padding: const EdgeInsets.symmetric(vertical: AppPadding.p20),
           child: icon ??
               const Icon(
                 Iconsax.shop_add,

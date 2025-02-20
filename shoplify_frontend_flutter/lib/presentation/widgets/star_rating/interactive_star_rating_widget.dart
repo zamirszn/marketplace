@@ -57,7 +57,7 @@ class InteractiveStarRatingWidget extends StatelessWidget {
                           ? 20
                           : 16, // Bigger size for selected stars
                       color: isFullStar
-                          ? ColorManager.secondary
+                          ? ColorManager.darkBlue
                           : ColorManager.black.withOpacity(0.7),
                     ),
                   ),

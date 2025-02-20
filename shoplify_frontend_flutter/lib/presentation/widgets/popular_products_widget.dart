@@ -10,6 +10,7 @@ import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/widgets/interactive_3d_effect.dart';
+import 'package:shoplify/presentation/widgets/star_rating/star_rating_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class PopularProductsWidget extends StatelessWidget {
@@ -81,30 +82,36 @@ class PopularProductsWidget extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              Text(
-                                "\$${product.price}",
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                    fontSize: FontSize.s18,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: FontConstants.ojuju),
-                              ),
-                              if (product.discount == true)
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: AppPadding.p5),
-                                  child: Text(
-                                    "\$${product.oldPrice}",
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        decoration: product.discount != null &&
-                                                product.discount == true
-                                            ? TextDecoration.lineThrough
-                                            : null,
-                                        fontSize: FontSize.s12,
-                                        fontFamily: FontConstants.ojuju),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (product.discount == true)
+                                    Text(
+                                      "\$${product.oldPrice}",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                          decoration:
+                                              product.discount != null &&
+                                                      product.discount == true
+                                                  ? TextDecoration.lineThrough
+                                                  : null,
+                                          fontSize: FontSize.s12,
+                                          fontFamily: FontConstants.ojuju),
+                                    ),
+                                  ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                        maxWidth: AppSize.s90),
+                                    child: Text(
+                                      "\$${product.price}",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                          fontSize: FontSize.s16,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: FontConstants.ojuju),
+                                    ),
                                   ),
-                                ),
+                                ],
+                              ),
                             ],
                           ),
                         ],
@@ -112,6 +119,11 @@ class PopularProductsWidget extends StatelessWidget {
                     )
                   ],
                 ),
+                Positioned(
+                    top: 0,
+                    right: 2,
+                    child:
+                        StarRatingWidget(rating: product.averageRating ?? 0)),
                 Positioned(
                   bottom: 0,
                   right: 2,

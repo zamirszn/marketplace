@@ -63,18 +63,17 @@ class ProductWidget extends StatelessWidget {
                                   : "",
                               height: AppSize.s120,
                               fit: BoxFit.cover,
-                              placeholder: (context, url) => Container(
-                                color: ColorManager.white,
-                                height: AppSize.s100,
-                                width: AppSize.s100,
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  Skeletonizer(
-                                      child: Container(
-                                color: ColorManager.white,
+                              placeholder: (context, url) => Skeletonizer(
+                                  child: Container(
+                                color: ColorManager.darkBlue,
                                 height: AppSize.s100,
                                 width: AppSize.s100,
                               )),
+                              errorWidget: (context, url, error) => Container(
+                                color: ColorManager.darkBlue,
+                                height: AppSize.s100,
+                                width: AppSize.s100,
+                              ),
                             ),
                           ),
                         ),
@@ -92,31 +91,32 @@ class ProductWidget extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                      Row(
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "\$${product.price}",
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: FontSize.s18,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontConstants.ojuju),
+                          ConstrainedBox(
+                            constraints:
+                                const BoxConstraints(maxWidth: AppSize.s100),
+                            child: Text(
+                              "\$${product.price}",
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  fontSize: FontSize.s18,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontConstants.ojuju),
+                            ),
                           ),
                           if (product.discount == true)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: AppPadding.p10),
-                              child: Text(
-                                "\$${product.oldPrice}",
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    decoration: product.discount != null &&
-                                            product.discount == true
-                                        ? TextDecoration.lineThrough
-                                        : null,
-                                    fontSize: FontSize.s14,
-                                    fontFamily: FontConstants.ojuju),
-                              ),
+                            Text(
+                              "\$${product.oldPrice}",
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  decoration: product.discount != null &&
+                                          product.discount == true
+                                      ? TextDecoration.lineThrough
+                                      : null,
+                                  fontSize: FontSize.s14,
+                                  fontFamily: FontConstants.ojuju),
                             ),
                         ],
                       ),

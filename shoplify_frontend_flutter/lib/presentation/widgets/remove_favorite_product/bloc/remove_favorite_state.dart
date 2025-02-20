@@ -9,4 +9,8 @@ final class RemoveFromFavoriteLoading extends RemoveFavoriteState {}
 
 final class RemoveFromFavoriteSuccess extends RemoveFavoriteState {}
 
-final class RemoveFromFavoriteFailure extends RemoveFavoriteState {}
+final class RemoveFromFavoriteFailure extends RemoveFavoriteState {
+  final String message;
+
+  RemoveFromFavoriteFailure({required this.message});
+}

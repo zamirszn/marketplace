@@ -102,7 +102,7 @@ class _ReviewPageState extends State<ReviewPage> {
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(AppSize.s20),
                       child: ColoredBox(
-                          color: ColorManager.primary,
+                          color: ColorManager.lemon,
                           child: BlocBuilder<ReviewBloc, ReviewState>(
                             builder: (context, state) {
                               switch (state.status) {
@@ -166,7 +166,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                               "${AppStrings.basedOn} ${widget.product.reviewsLength} ${AppStrings.reviews}",
                                               style: getLightStyle(
                                                   fontSize: FontSize.s12,
-                                                  color: ColorManager.grey,
+                                                  color: ColorManager.darkBlue,
                                                   font: FontConstants.poppins),
                                             ),
                                             space(h: AppSize.s12),
@@ -322,7 +322,7 @@ class _ReviewPageState extends State<ReviewPage> {
                       margin:
                           const EdgeInsets.symmetric(horizontal: AppMargin.m12),
                       decoration: BoxDecoration(
-                        color: ColorManager.primary,
+                        color: ColorManager.lemon,
                         borderRadius: BorderRadius.circular(AppSize.s20),
                       ),
                       child: BlocBuilder<ReviewBloc, ReviewState>(
@@ -471,7 +471,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: AppPadding.p20),
                                             child: Divider(
-                                              color: ColorManager.primaryLight,
+                                              color: ColorManager.darkBlue,
                                               thickness: AppSize.s1,
                                             ),
                                           )
@@ -531,7 +531,7 @@ class ReviewSortBottomSheet extends StatelessWidget {
               space(h: AppSize.s20),
               ...sortOptions.map((option) => RadioListTile<String>(
                     contentPadding: const EdgeInsets.only(left: AppPadding.p2),
-                    activeColor: ColorManager.secondary,
+                    activeColor: ColorManager.darkBlue,
                     title: Text(
                       option,
                       style: getRegularStyle(fontSize: FontSize.s14),
@@ -560,7 +560,7 @@ class ReviewSortBottomSheet extends StatelessWidget {
                           borderRadius: BorderRadius.circular(AppSize.s20)),
                       shadowColor: Colors.transparent,
                       foregroundColor: ColorManager.black,
-                      backgroundColor: ColorManager.primaryDark,
+                      backgroundColor: ColorManager.darkBlue,
                     ),
                     onPressed: () {
                       reviewBloc.add(ShowLoadingReviewEvent());
@@ -622,7 +622,7 @@ class RatingBar extends StatelessWidget {
             // bottom
             Container(
               decoration: BoxDecoration(
-                color: ColorManager.primaryDark,
+                color: ColorManager.darkBlue,
                 borderRadius: BorderRadius.circular(AppSize.s10),
               ),
               height: AppSize.s8,
@@ -632,7 +632,7 @@ class RatingBar extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(AppSize.s10),
-                color: ColorManager.secondary,
+                color: ColorManager.darkBlue,
               ),
               height: AppSize.s8,
               width: deviceWidth(context) * .2 * percentage / 100,
@@ -652,7 +652,7 @@ class AddReviewWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppSize.s10),
       child: ColoredBox(
-        color: ColorManager.primary,
+        color: ColorManager.lemon,
         child: const Column(
           children: [
             ListTile(
@@ -744,7 +744,7 @@ class ReviewWidgetSkeleton extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: AppPadding.p20),
           child: Divider(
-            color: ColorManager.primaryLight,
+            color: ColorManager.darkBlue,
             thickness: AppSize.s1,
           ),
         )

@@ -158,9 +158,7 @@ final class CartItemState extends ProductState {
 
 // add to favorite
 
-class AddToFavoriteLoading extends ProductState {
-  
-}
+class AddToFavoriteLoading extends ProductState {}
 
 class AddToFavoriteFailure extends ProductState {
   final String message;
@@ -171,20 +169,23 @@ class AddToFavoriteFailure extends ProductState {
   List<Object?> get props => [message];
 }
 
-class ToggleFavoriteSuccess extends ProductState {
-  final String productId;
+class ToggleFavoriteAddSuccess extends ProductState {
+  final ProductModelEntity? product;
   final bool isFavorited;
   final String? message;
 
-
-
-
-  ToggleFavoriteSuccess({
-    required this.productId,
-    required this.isFavorited,
-    required this.message
-  });
+  ToggleFavoriteAddSuccess(
+      {this.product, required this.isFavorited, required this.message});
 
   @override
-  List<Object?> get props => [productId, isFavorited, message];
+  List<Object?> get props => [product, isFavorited, message];
+}
+class ToggleFavoriteRemoveSuccess extends ProductState {
+  final String? message;
+
+  ToggleFavoriteRemoveSuccess(
+      { required this.message});
+
+  @override
+  List<Object?> get props => [message];
 }

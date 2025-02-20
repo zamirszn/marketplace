@@ -19,7 +19,7 @@ class ErrorMessageWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppSize.s10),
       child: ColoredBox(
-        color: ColorManager.primary,
+        color: ColorManager.lemon,
         child: SizedBox(
           height: deviceHeight(context) / 3,
           child: Center(

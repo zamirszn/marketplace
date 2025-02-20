@@ -7,6 +7,9 @@ import 'package:shoplify/presentation/resources/values_manager.dart';
 
 class AppTheme {
   static final ThemeData appTheme = ThemeData(
+
+    
+
       navigationBarTheme: NavigationBarThemeData(
           labelTextStyle: WidgetStateProperty.all(
               getRegularStyle(font: FontConstants.poppins))),
@@ -18,11 +21,11 @@ class AppTheme {
           TargetPlatform.windows: FadeInPageTransition(),
         },
       ),
-      scaffoldBackgroundColor: ColorManager.primaryLight,
+      scaffoldBackgroundColor: ColorManager.darkBlue,
       popupMenuTheme: const PopupMenuThemeData(surfaceTintColor: Colors.white),
-      colorScheme: ColorScheme.fromSeed(seedColor: ColorManager.secondary),
+      colorScheme: ColorScheme.fromSeed(seedColor: ColorManager.darkBlue),
       radioTheme: RadioThemeData(
-          fillColor: WidgetStateProperty.all(ColorManager.secondary)),
+          fillColor: WidgetStateProperty.all(ColorManager.darkBlue)),
       inputDecorationTheme: InputDecorationTheme(
         // contentPadding: const EdgeInsets.all(AppPadding.p8),
         hintStyle: getRegularStyle(
@@ -35,11 +38,11 @@ class AppTheme {
 //         // error style
         errorStyle: getRegularStyle(color: ColorManager.red),
 
-        outlineBorder: BorderSide(color: ColorManager.secondary),
+        outlineBorder: BorderSide(color: ColorManager.darkBlue),
 
         border: OutlineInputBorder(
             borderSide:
-                BorderSide(color: ColorManager.secondary, width: AppSize.s1),
+                BorderSide(color: ColorManager.darkBlue, width: AppSize.s1),
             borderRadius: const BorderRadius.all(Radius.circular(AppSize.s14))),
 
 //         // enabled border
@@ -61,11 +64,11 @@ class AppTheme {
         // focused error border
         focusedErrorBorder: OutlineInputBorder(
             borderSide:
-                BorderSide(color: ColorManager.secondary, width: AppSize.s1),
+                BorderSide(color: ColorManager.darkBlue, width: AppSize.s1),
             borderRadius: const BorderRadius.all(Radius.circular(AppSize.s14))),
       ),
       // main colors of the app
-      primaryColor: ColorManager.secondary,
+      primaryColor: ColorManager.darkBlue,
       // primaryColorLight: ColorManager.primaryOpacity70,
       // primaryColorDark: ColorManager.darkPrimary,
       // disabledColor: ColorManager.grey1,
@@ -75,13 +78,13 @@ class AppTheme {
       // card view theme
       fontFamily: FontConstants.poppins,
       cardTheme: CardTheme(
-          color: ColorManager.secondary,
+          color: ColorManager.darkBlue,
           // shadowColor: ColorManager.grey,
           elevation: AppSize.s4),
       // App bar theme
       appBarTheme: AppBarTheme(
         centerTitle: true,
-        color: ColorManager.primary,
+        color: ColorManager.lemon,
         elevation: AppSize.s4,
 
         // shadowColor: ColorManager.primaryOpacity70,
@@ -95,7 +98,7 @@ class AppTheme {
       buttonTheme: ButtonThemeData(
         shape: const StadiumBorder(),
         // disabledColor: ColorManager.grey1,
-        buttonColor: ColorManager.secondary,
+        buttonColor: ColorManager.darkBlue,
         // splashColor: ColorManager.primaryOpacity70,
       ));
 

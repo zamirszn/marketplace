@@ -1,6 +1,7 @@
 class AppStrings {
   static const String noRouteFound = "no_route_found";
   static const String back = "Back";
+  static const String noFavoriteProduct = "No Favorite Product";
   static const String quantity = "Quantity";
   static const String favorite = "Favorite";
   static const String profile = "Profile";
@@ -63,11 +64,11 @@ class AppStrings {
   static const String skip = "Skip";
   static const String browse = "Browse &";
   static const String buy = "Buy";
-  static const String letsGetStarted = "Lets Get you started";
+  static const String letsGetStarted = "Lets Get\nyou started";
   static const String shop = "Shop &";
   static const String password = "Password";
   static const String phoneNumber = "Phone Number";
-  static const String helloWelcome = "Hello, Welcome";
+  static const String helloThereWelcome = "Hello there \n& Welcome Back";
   static const String listYourItems = "List Your Items";
   static const String shopAnExtensive = "Shop an extensive\nrange of products";
 

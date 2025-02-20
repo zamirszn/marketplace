@@ -114,9 +114,11 @@ class FavoriteViewSet(ModelViewSet):
         product = get_object_or_404(Product, id=pk)
         _, created = FavoriteProducts.objects.get_or_create(owner=request.user, product=product)
 
+        product_data = ProductSerializer(product).data
+
         if created:
-            return Response({'message': 'Added to favorites'}, status=status.HTTP_201_CREATED)
-        return Response({'message': 'Already in favorites'}, status=status.HTTP_200_OK)
+            return Response({'message': 'Added to favorites', "product": product_data}, status=status.HTTP_201_CREATED)
+        return Response({'message': 'Already in favorites', "product": product_data}, status=status.HTTP_200_OK)
 
     @action(detail=True, methods=['delete'])
     def remove(self, request, pk=None):

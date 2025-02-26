@@ -51,17 +51,22 @@ class User(AbstractUser, PermissionsMixin):
     username = None
     first_name = None
     last_name = None
+    email_verified = models.BooleanField(default=False)
+    account_blocked = models.BooleanField(default=False)
     objects = UserManager()
     USERNAME_FIELD = "email"
     EMAIL_FIELD = "email"
     REQUIRED_FIELDS = []
-    otp = models.CharField(max_length=6, blank=True, null=True)
-    otp_expiry = models.DateTimeField(blank=True, null=True)
+    email_verification_otp = models.CharField(max_length=4, blank=True, null=True)
+    email_verification_otp_expiry = models.DateTimeField(blank=True, null=True)
+    password_reset_otp = models.CharField(max_length=4, null=True, blank=True)
+    password_reset_expiry = models.DateTimeField(null=True, blank=True)
+    
 
-    def generate_otp(self):
-        otp = str(random.randint(100000, 999999))  # Generate a 6-digit OTP
-        self.otp = otp
-        self.otp_expiry = timezone.now() + timezone.timedelta(
+    def generate_email_verification_otp(self):
+        otp = str(random.randint(1000, 9999))  # Generate a 4-digit OTP
+        self.email_verification_otp = otp
+        self.email_verification_otp_expiry = timezone.now() + timezone.timedelta(
             minutes=10
         )  # OTP expires in 10 minutes
         self.save()

@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'package:shoplify/data/models/login_params_model.dart';
 import 'package:shoplify/data/models/signup_params_model.dart';
 import 'package:shoplify/data/models/user_model.dart';
+import 'package:shoplify/data/models/verify_otp_params.dart';
 import 'package:shoplify/data/source/auth_service_data_source.dart';
 import 'package:shoplify/data/source/secure_storage_data_source.dart';
 import 'package:shoplify/domain/entities/user_entity.dart';
@@ -32,6 +33,13 @@ class AuthRepositoryImpl extends AuthRepository {
       return Left(error);
     }, (data) async {
       Response response = data;
+      // email verification and account block check
+      if (response.data[Constant.success] == false) {
+        return Right(response.data);
+      }
+
+      // if account isnt blocked and email is verified
+      // save token
 
       sl<DioClient>().setAuthToken(response.data[Constant.accessToken]);
       await sl<SecureStorageDataSource>()
@@ -39,7 +47,7 @@ class AuthRepositoryImpl extends AuthRepository {
       await sl<SecureStorageDataSource>()
           .write(Constant.accessToken, response.data[Constant.accessToken]);
 
-      return const Right(null);
+      return Right(response.data);
     });
   }
 
@@ -57,8 +65,8 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either> refresh(String token) async {
-    Either result = await sl<AuthServiceDataSource>().refresh(token);
+  Future<Either> refresh(String refreshToken) async {
+    Either result = await sl<AuthServiceDataSource>().refresh(refreshToken);
 
     return result.fold((error) {
       return Left(error);
@@ -70,6 +78,31 @@ class AuthRepositoryImpl extends AuthRepository {
           .write(Constant.accessToken, response.data[Constant.accessToken]);
 
       return Right(response.data);
+    });
+  }
+
+  @override
+  Future<Either> requestOTP(String email) async {
+    Either result = await sl<AuthServiceDataSource>().requestOTP(email);
+
+    return result.fold((error) {
+      return Left(error);
+    }, (data) async {
+      Response response = data;
+      return Right(response);
+    });
+  }
+
+  @override
+  Future<Either> verifyOTP(VerifyOtpParams verifyOtpParams) async {
+    Either result =
+        await sl<AuthServiceDataSource>().verifyOTP(verifyOtpParams);
+
+    return result.fold((error) {
+      return Left(error);
+    }, (data) async {
+      Response response = data;
+      return Right(response);
     });
   }
 }

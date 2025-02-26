@@ -1,64 +1,55 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'login_bloc.dart';
 
-@immutable
-sealed class LoginState extends Equatable {
-  @override
-  List<Object?> get props => []; // Default empty props for base class
+enum LoginStatus {
+  initial,
+  success,
+  failure,
+  loading,
+  accountBlocked,
+  unverified
 }
 
-class LoginInitialState extends LoginState {
-  final bool isUsernameValid;
+class LoginState extends Equatable {
+  final bool isEmailValid;
   final bool isPasswordValid;
-  final bool isPasswordVisible;
+  final String? errorMessage;
+  final PasswordVisibility passwordVisibility;
+  final LoginStatus logInStatus;
+  final String? email;
 
-  LoginInitialState({
-    this.isUsernameValid = true,
-    this.isPasswordValid = true,
-    this.isPasswordVisible = false,
-  });
-
-  @override
-  List<Object?> get props =>
-      [isUsernameValid, isPasswordValid, isPasswordVisible];
-}
-
-class LoginLoadingState extends LoginState {
-  @override
-  List<Object?> get props => []; // No properties to compare, remains stateless
-}
-
-class LoginSuccessState extends LoginState {
-  @override
-  List<Object?> get props => []; // No properties to compare, remains stateless
-}
-
-class LoginFailureState extends LoginState {
-  final String error;
-
-  LoginFailureState(this.error);
+  const LoginState(
+      {this.isEmailValid = false,
+      this.isPasswordValid = false,
+      this.errorMessage,
+      this.passwordVisibility = PasswordVisibility.off,
+      this.logInStatus = LoginStatus.initial,
+      this.email});
 
   @override
-  List<Object?> get props => [error];
-}
+  List<Object?> get props => [
+        isEmailValid,
+        isPasswordValid,
+        errorMessage,
+        passwordVisibility,
+        logInStatus,
+        email
+      ];
 
-class LoginFormUpdateState extends LoginState {
-  final bool isUsernameValid;
-  final bool isPasswordValid;
-
-  LoginFormUpdateState({
-    required this.isUsernameValid,
-    required this.isPasswordValid,
-  });
-
-  @override
-  List<Object?> get props => [isUsernameValid, isPasswordValid];
-}
-
-class LoginTogglePasswordState extends LoginState {
-  final bool isPasswordVisible;
-
-  LoginTogglePasswordState({required this.isPasswordVisible});
-
-  @override
-  List<Object?> get props => [isPasswordVisible];
+  LoginState copyWith(
+      {bool? isEmailValid,
+      bool? isPasswordValid,
+      String? errorMessage,
+      PasswordVisibility? passwordVisibility,
+      LoginStatus? logInStatus,
+      String? email}) {
+    return LoginState(
+      isEmailValid: isEmailValid ?? this.isEmailValid,
+      isPasswordValid: isPasswordValid ?? this.isPasswordValid,
+      errorMessage: errorMessage,
+      email: email,
+      passwordVisibility: passwordVisibility ?? this.passwordVisibility,
+      logInStatus: logInStatus ?? this.logInStatus,
+    );
+  }
 }

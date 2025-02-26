@@ -22,6 +22,8 @@ class UserAdmin(ModelAdmin):
         "is_staff",
         "date_joined",
         "last_login",
+        "email_verified",
+        "account_blocked"
     ]
     list_display = [
         "email",
@@ -32,11 +34,17 @@ class UserAdmin(ModelAdmin):
         "is_staff",
         "date_joined",
         "last_login",
+        "email_verified",
+                "account_blocked"
+
     ]
     search_fields = [
         "id",
         "email",
         "full_name",
+        "email_verified",
+                "account_blocked"
+
     ]
 
 @admin.register(Profile)

@@ -1,69 +1,49 @@
 part of 'signup_bloc.dart';
 
+enum SignUpStatus { initial, success, failure, loading }
 
-@immutable
-sealed class SignUpState extends Equatable {
-  @override
-  List<Object?> get props => []; // Default empty props for base class
-}
-
-class SignUpInitialState extends SignUpState {
+class SignUpState extends Equatable {
   final bool isFullNameValid;
   final bool isEmailValid;
   final bool isPasswordValid;
-  final bool isPasswordVisible;
+  final String? errorMessage;
+  final PasswordVisibility passwordVisibility;
+  final SignUpStatus signUpStatus;
 
-  SignUpInitialState({
-    this.isFullNameValid = true,
-    this.isEmailValid = true,
-    this.isPasswordValid = true,
-    this.isPasswordVisible = false,
+  const SignUpState({
+    this.passwordVisibility = PasswordVisibility.off,
+    this.signUpStatus = SignUpStatus.initial,
+    this.isFullNameValid = false,
+    this.isEmailValid = false,
+    this.errorMessage,
+    this.isPasswordValid = false,
   });
 
   @override
-  List<Object?> get props =>
-      [isFullNameValid, isEmailValid, isPasswordValid, isPasswordVisible];
-}
+  List<Object?> get props => [
+        isFullNameValid,
+        isEmailValid,
+        isPasswordValid,
+        errorMessage,
+        passwordVisibility,
+        signUpStatus
+      ];
 
-class SignUpLoadingState extends SignUpState {
-  @override
-  List<Object?> get props => []; 
-}
-
-class SignUpSuccessState extends SignUpState {
-  @override
-  List<Object?> get props => []; 
-}
-
-class SignUpFailureState extends SignUpState {
-  final String error;
-
-  SignUpFailureState(this.error);
-
-  @override
-  List<Object?> get props => [error];
-}
-
-class SignUpTogglePasswordState extends SignUpState {
-  final bool isPasswordVisible;
-
-  SignUpTogglePasswordState({required this.isPasswordVisible});
-
-  @override
-  List<Object?> get props => [isPasswordVisible];
-}
-
-class SignUpFormUpdateState extends SignUpState {
-  final bool isFullNameValid;
-  final bool isEmailValid;
-  final bool isPasswordValid;
-
-  SignUpFormUpdateState({
-    required this.isFullNameValid,
-    required this.isEmailValid,
-    required this.isPasswordValid,
-  });
-
-  @override
-  List<Object?> get props => [isFullNameValid, isEmailValid, isPasswordValid];
+  SignUpState copyWith({
+    bool? isFullNameValid,
+    bool? isEmailValid,
+    bool? isPasswordValid,
+    String? errorMessage,
+    PasswordVisibility? passwordVisibility,
+    SignUpStatus? signUpStatus,
+  }) {
+    return SignUpState(
+      isFullNameValid: isFullNameValid ?? this.isFullNameValid,
+      isEmailValid: isEmailValid ?? this.isEmailValid,
+      isPasswordValid: isPasswordValid ?? this.isPasswordValid,
+      errorMessage: errorMessage,
+      passwordVisibility: passwordVisibility ?? this.passwordVisibility,
+      signUpStatus: signUpStatus ?? this.signUpStatus,
+    );
+  }
 }

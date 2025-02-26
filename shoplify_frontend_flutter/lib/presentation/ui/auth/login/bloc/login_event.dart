@@ -3,9 +3,9 @@ part of 'login_bloc.dart';
 @immutable
 sealed class LoginEvent {}
 
-class LoginFullNameChangedEvent extends LoginEvent {
-  final String fullName;
-  LoginFullNameChangedEvent(this.fullName);
+class LoginEmailChangedEvent extends LoginEvent {
+  final String email;
+  LoginEmailChangedEvent(this.email);
 }
 
 class LoginPasswordChangedEvent extends LoginEvent {
@@ -20,7 +20,7 @@ class LoginSubmittedEvent extends LoginEvent {
 }
 
 class LoginPasswordVisibileEvent extends LoginEvent {
-  final bool isPasswordVisible;
+  final PasswordVisibility isPasswordVisible;
 
   LoginPasswordVisibileEvent({required this.isPasswordVisible});
 }

@@ -1,8 +1,16 @@
 class AppStrings {
   static const String noRouteFound = "no_route_found";
   static const String back = "Back";
+  static const String lostYourPassword =
+      "Lost Your Password?, Lets get you back in ";
+  static const String forgotPassword = "Forgot Password ?";
+  static const String enterCodeSent =
+      "Please enter the code sent to your email\n code expires in 10 minutes";
+  static const String seconds = "seconds";
+  static const String requestAgainIn = "Request again in";
   static const String noFavoriteProduct = "No Favorite Product";
   static const String quantity = "Quantity";
+  static const String verify = "Verify";
   static const String favorite = "Favorite";
   static const String profile = "Profile";
   static const String catalog = "Catalog";
@@ -47,10 +55,10 @@ class AppStrings {
   static const String pleaseSignUpHere = "Please sign up here";
   static const String resendCode = "Resend code";
   static const String continue_ = "Continue";
-  static const String didntRecieveOTP = "Didn't Recieve OTP?";
+  static const String didntRecieveOTP = "Didn't recieve OTP?";
   static const String enterOTPHere = "Enter OTP Code Here";
-  static const String activeYourAccount = "Active Your Account";
-  static const String signUpSuccessful = "Sign Up Successful!";
+  static const String greatNowLets = "Great, Now Let's Activate\nYour Account";
+  static const String signUpSuccessful = "Sign Up Successful";
   static const String fullName = "Full Name";
   static const String needAnAccount = "Need an account?";
   static const String alreadyHaveAnAccount = "Already have an account?";

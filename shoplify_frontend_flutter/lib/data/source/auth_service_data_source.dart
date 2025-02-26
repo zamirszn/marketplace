@@ -3,6 +3,7 @@ import 'package:shoplify/core/constants/api_urls.dart';
 import 'package:shoplify/core/network/dio_client.dart';
 import 'package:shoplify/data/models/login_params_model.dart';
 import 'package:shoplify/data/models/signup_params_model.dart';
+import 'package:shoplify/data/models/verify_otp_params.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 
 abstract class AuthServiceDataSource {
@@ -10,6 +11,8 @@ abstract class AuthServiceDataSource {
   Future<Either> login(LoginParamsModel logInParam);
   Future<Either> getUser();
   Future<Either> refresh(String token);
+  Future<Either> requestOTP(String email);
+  Future<Either> verifyOTP(VerifyOtpParams verifyParams);
 }
 
 class AuthServiceImpl extends AuthServiceDataSource {
@@ -47,6 +50,28 @@ class AuthServiceImpl extends AuthServiceDataSource {
       final response = await sl<DioClient>().post(ApiUrls.refreshToken, data: {
         "refresh": token,
       });
+      return Right(response);
+    } catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either> requestOTP(String email) async {
+    try {
+      final response = await sl<DioClient>()
+          .post(ApiUrls.requestOTP, data: {"email": email});
+      return Right(response);
+    } catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either> verifyOTP(VerifyOtpParams verifyParams) async {
+    try {
+      final response = await sl<DioClient>()
+          .post(ApiUrls.verifyOTP, data: verifyParams.toMap());
       return Right(response);
     } catch (e) {
       return Left(e);

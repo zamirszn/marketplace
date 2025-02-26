@@ -210,7 +210,10 @@ SIMPLE_JWT = {
 }
 
 DJOSER = {
-    "SERIALIZERS": {"user_create": "core.serializers.UserSerializer"},
+    "SERIALIZERS": {
+        "user_create": "core.serializers.UserSerializer",
+        "token_obtain_pair": "core.serializers.CustomJWTSerializer", 
+    },
     "SEND_ACTIVATION_EMAIL": True,
     "SEND_CONFIRMATION_EMAIL": True,
     "LOGOUT_ON_PASSWORD_CHANGE": True,
@@ -220,6 +223,7 @@ DJOSER = {
         "activation": "djoser.email.ActivationEmail",
     },
 }
+
 
 cloudinary.config(
     cloud_name=env("CLOUDINARY_CLOUD_NAME"),

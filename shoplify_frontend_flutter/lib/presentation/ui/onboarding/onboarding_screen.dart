@@ -134,6 +134,6 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
   }
 
   void doneOnboarding() async {
-    // await sl<SharedPrefDataSource>().writeBool(Constant.doneOnboarding, true);
+    await sl<SharedPrefDataSource>().writeBool(Constant.doneOnboarding, true);
   }
 }

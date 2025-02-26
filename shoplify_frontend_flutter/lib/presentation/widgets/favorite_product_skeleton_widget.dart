@@ -29,7 +29,7 @@ class FavoriteProductSkeletonWidget extends StatelessWidget {
       children: [
         Skeletonizer(
           child: Container(
-            color: Colors.white,
+            color: ColorManager.white,
             height: 400,
             width: 400,
           ),

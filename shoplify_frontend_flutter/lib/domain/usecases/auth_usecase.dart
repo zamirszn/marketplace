@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:shoplify/core/usecase/usecase.dart';
 import 'package:shoplify/data/models/login_params_model.dart';
 import 'package:shoplify/data/models/signup_params_model.dart';
+import 'package:shoplify/data/models/verify_otp_params.dart';
 import 'package:shoplify/domain/repository/auth_repo.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 
@@ -25,3 +26,18 @@ class RefreshTokenUsecase implements Usecase<Either, String> {
     return sl<AuthRepository>().refresh(params!);
   }
 }
+
+class RequestVerificationOTPUsecase implements Usecase<Either, String> {
+  @override
+  Future<Either> call({String? params}) async {
+    return sl<AuthRepository>().requestOTP(params!);
+  }
+}
+
+class VerifyOTPUsecase implements Usecase<Either, VerifyOtpParams> {
+  @override
+  Future<Either> call({VerifyOtpParams? params}) async {
+    return sl<AuthRepository>().verifyOTP(params!);
+  }
+}
+

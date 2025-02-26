@@ -1,4 +1,3 @@
-
 class ApiUrls {
   static const String prodBaseUrl = "https://shoplify-pwmk.onrender.com/";
   static const String baseUrl = "http://127.0.0.1:8000/";
@@ -9,7 +8,7 @@ class ApiUrls {
   static const String cart = "cart";
   static const String items = "items";
   static const String register = "$auth/signup/";
-  static const String login = "$auth/jwt/create";
+  static const String login = "$auth/jwt/create/";
   static const String refreshToken = "$auth/jwt/refresh";
   static const String userProfile = "$auth/users";
   static const String categories = "$api/categories";
@@ -18,4 +17,6 @@ class ApiUrls {
   static const String allProducts = "$api/$products";
   static const String favorites = "$api/favorites";
   static const String cartUrl = "$api/$cart";
+  static const String requestOTP = "$auth/request-otp/";
+  static const String verifyOTP = "$auth/verify-otp/";
 }

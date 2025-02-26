@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shoplify/data/models/review_param_model.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
-import 'package:shoplify/presentation/ui/auth/account_verification/account_verification.dart';
+import 'package:shoplify/presentation/ui/auth/account_blocked.dart';
+import 'package:shoplify/presentation/ui/auth/account_verification/account_verification_page.dart';
+import 'package:shoplify/presentation/ui/auth/forgot_password/forgot_password_page.dart';
 import 'package:shoplify/presentation/ui/auth/splash_page.dart';
 import 'package:shoplify/presentation/ui/bottom_nav/bottom_nav.dart';
 import 'package:shoplify/presentation/ui/home/product_image_page.dart';
@@ -41,7 +43,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: Routes.accountVerificationPage,
-      builder: (context, state) => const AccountVerification(),
+      builder: (context, state) => const AccountVerificationPage(),
     ),
     GoRoute(
       path: Routes.bottomNav,
@@ -50,6 +52,14 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: Routes.orderPage,
       builder: (context, state) => const OrderPage(),
+    ),
+    GoRoute(
+      path: Routes.accountBlocked,
+      builder: (context, state) => const AccountBlocked(),
+    ),
+    GoRoute(
+      path: Routes.forgotPasswordPage,
+      builder: (context, state) => ForgotPasswordPage(),
     ),
     GoRoute(
       path: Routes.addReviewPage,
@@ -104,6 +114,7 @@ final GoRouter appRouter = GoRouter(
 
 class Routes {
   static const String onboardingPage = "/onboardingPage";
+  static const String forgotPasswordPage = "/forgotPasswordPage";
   static const String addReviewPage = "/addReviewPage";
   static const String loginPage = "/loginPage";
   static const String splashPage = "/splashPage";
@@ -114,6 +125,7 @@ class Routes {
   static const String productReviewPage = "/productReviewPage";
   static const String productImagePage = "/productImagePage";
   static const String accountVerificationPage = "/accountVerificationPage";
+  static const String accountBlocked = "/accountBlocked";
 }
 
 Future<void> goPush(BuildContext context, String routeName,

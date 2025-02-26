@@ -18,19 +18,35 @@ import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoplify/presentation/widgets/snackbar.dart';
 
-class SignUpPage extends StatelessWidget {
-  SignUpPage({super.key});
-  // TODO: remove filled data
+class SignUpPage extends StatefulWidget {
+  const SignUpPage({super.key});
 
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
+  // TODO: remove filled data
   final emailController = TextEditingController(
       text: kDebugMode
           ? "testmail${DateTime.now().microsecondsSinceEpoch}@gmail.com"
           : null);
+
   final fullNameController =
       TextEditingController(text: kDebugMode ? "Mubarak Lawal" : null);
+
   final passwordController =
       TextEditingController(text: kDebugMode ? "StrongPassword52#" : null);
+
   final formKey = GlobalKey<FormState>();
+
+  @override
+  void dispose() {
+    fullNameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +54,7 @@ class SignUpPage extends StatelessWidget {
         getRegularStyle(color: ColorManager.white, fontSize: FontSize.s10);
     final cursorColor = ColorManager.white;
     return Scaffold(
-      backgroundColor: ColorManager.red,
+      backgroundColor: ColorManager.orange,
       appBar: AppBar(
         toolbarHeight: 0,
         forceMaterialTransparency: true,
@@ -48,17 +64,26 @@ class SignUpPage extends StatelessWidget {
         create: (context) => SignUpBloc(),
         child: BlocListener<SignUpBloc, SignUpState>(
           listener: (context, state) {
-            if (state is SignUpSuccessState) {
-              showMessage(context, AppStrings.signUpSuccessful);
-              goPush(context, Routes.accountVerificationPage);
-            } else if (state is SignUpFailureState) {
-              showErrorMessage(context, state.error);
+            switch (state.signUpStatus) {
+              case SignUpStatus.initial:
+                return;
+              case SignUpStatus.loading:
+                return;
+
+              case SignUpStatus.success:
+                showMessage(context, AppStrings.signUpSuccessful);
+                goPush(context, Routes.loginPage);
+
+              case SignUpStatus.failure:
+                if (state.errorMessage != null) {
+                  showErrorMessage(context, state.errorMessage!);
+                }
             }
           },
           child: Form(
             key: formKey,
             child: ColoredBox(
-              color: ColorManager.red,
+              color: ColorManager.orange,
               child: SizedBox(
                 height: deviceHeight(context),
                 width: deviceWidth(context),
@@ -158,7 +183,7 @@ class SignUpPage extends StatelessWidget {
                                 },
                                 onChanged: (value) => context
                                     .read<SignUpBloc>()
-                                    .add(EmailChangedEvent(value)),
+                                    .add(SignUpEmailChangedEvent(value)),
                                 controller: emailController,
                                 autofillHints: const [AutofillHints.email],
                                 inputFormatters: [
@@ -207,8 +232,9 @@ class SignUpPage extends StatelessWidget {
                                 onChanged: (value) => context
                                     .read<SignUpBloc>()
                                     .add(SignUpPasswordChangedEvent(value)),
-                                obscureText: state is SignUpTogglePasswordState
-                                    ? state.isPasswordVisible
+                                obscureText: state.passwordVisibility ==
+                                        PasswordVisibility.on
+                                    ? false
                                     : true,
                                 validator: (value) {
                                   return passwordValidator(value);
@@ -231,18 +257,16 @@ class SignUpPage extends StatelessWidget {
                                     onTap: () {
                                       context.read<SignUpBloc>().add(
                                           SignUpPasswordVisibilityEvent(
-                                              isPasswordVisible: state
-                                                      is SignUpTogglePasswordState
-                                                  ? state.isPasswordVisible
-                                                  : false));
+                                              isPasswordVisible:
+                                                  state.passwordVisibility));
                                     },
                                     child: Padding(
                                       padding: const EdgeInsets.only(
                                         right: AppPadding.p10,
                                       ),
                                       child: Icon(
-                                        (state is SignUpTogglePasswordState &&
-                                                state.isPasswordVisible)
+                                        state.passwordVisibility ==
+                                                PasswordVisibility.on
                                             ? Iconsax.eye
                                             : Iconsax.eye_slash,
                                         color: ColorManager.white,
@@ -271,7 +295,8 @@ class SignUpPage extends StatelessWidget {
                               height: AppSize.s50,
                               child: BlocBuilder<SignUpBloc, SignUpState>(
                                 builder: (context, state) {
-                                  if (state is SignUpLoadingState) {
+                                  if (state.signUpStatus ==
+                                      SignUpStatus.loading) {
                                     return const ButtonLoadingWidget();
                                   }
 

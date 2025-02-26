@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class Constant {
   static const String doneOnboarding = "doneOnboarding";
   static const String accessToken = "access";
   static const String refreshToken = "refresh";
+  static const String emailVerified = "email_verified";
+  static const String accountBlocked = "account_blocked";
   static const String appName = "Shoplify";
+  static int otpCountdown = 60;
   static int phoneLength = 20;
   static int passwordLength = 20;
   static int nameLength = 50;
@@ -47,5 +51,6 @@ class Constant {
     ),
   ];
 
-  
+  static final ShakeEffect shakeEffect = ShakeEffect(
+      rotation: 0, duration: 500.ms, hz: 5, offset: const Offset(10, 0));
 }

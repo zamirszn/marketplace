@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -6,18 +6,86 @@ from django.contrib.auth import get_user_model
 from django.core.mail import send_mail, BadHeaderError
 from smtplib import SMTPException
 from django.conf import settings
-from .serializers import ProfileSerializer, UserSerializer
+from .serializers import CustomJWTSerializer, ProfileSerializer, UserSerializer
 from django.utils import timezone
 from .models import *
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-
-
+from djoser.views import TokenCreateView
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.decorators import api_view
+from django.utils.crypto import get_random_string
+from django.contrib.auth.hashers import make_password
 
 
 
 User = get_user_model()
+
+
+@api_view(["POST"])
+def reset_password_with_otp(request):
+    email = request.data.get("email")
+    otp_code = request.data.get("otp")
+    new_password = request.data.get("new_password")
+
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    # Validate OTP
+    if user.password_reset_otp != otp_code or user.password_reset_expiry < timezone.now():
+        return Response({"error": "Invalid or expired OTP"}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Reset the password
+    user.password = make_password(new_password)  # Hash the new password
+    user.password_reset_otp = None  # Clear OTP after successful reset
+    user.password_reset_expiry = None
+    user.save()
+
+    return Response({"message": "Password reset successful"}, status=status.HTTP_200_OK)
+
+
+@api_view(["POST"])
+def request_password_reset_otp(request):
+    email = request.data.get("email")
+
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    # Generate a 6-digit OTP
+    reset_otp = get_random_string(length=4, allowed_chars="0123456789")
+    user.password_reset_otp = reset_otp
+    user.password_reset_expiry = timezone.now() + timezone.timedelta(minutes=10)  # OTP valid for 10 minutes
+    user.save()
+
+    # Send OTP via email (Replace with actual email sending logic)
+    send_mail(
+        "Password Reset OTP",
+        f"Your OTP for password reset is: {reset_otp}",
+        settings.DEFAULT_FROM_EMAIL,
+        [user.email],
+        fail_silently=False,
+    )
+
+    return Response({"message": "OTP has been sent to your email"}, status=status.HTTP_200_OK)
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomJWTSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        try:
+            serializer.is_valid(raise_exception=True)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+
+        return Response(serializer.validated_data, status=status.HTTP_200_OK)    
+
 
 
 class UserCreateView(APIView):
@@ -25,66 +93,93 @@ class UserCreateView(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            otp = user.generate_otp()
+            # Create a profile for the user when they sign up
+            Profile.objects.create(owner=user)
 
-            try:
-                send_mail(
+            return Response(
+                {"message": "User created successfully."},
+                status=status.HTTP_201_CREATED,
+            )
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(["POST"])
+def get_otp_code(request):
+    email = request.data.get("email")        
+    try:
+        user = User.objects.get(email=email)
+        otp = user.generate_email_verification_otp()
+        send_mail(
                     "Your OTP for account verification",
                     f"Your OTP is {otp}",
                     settings.DEFAULT_FROM_EMAIL,
                     [user.email],
                     fail_silently=False,
                 )
-                return Response(
-                    {"message": "OTP has been sent to your email"},
-                    status=status.HTTP_201_CREATED,
-                )
-            except BadHeaderError:
-                return Response(
-                    {"error": "Invalid header found in the email."},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            except SMTPException:
-                return Response(
-                    {
-                        "error": "There was an error sending the OTP email. Please try again later."
-                    },
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                )
-            except Exception as e:
-                return Response(
-                    {"error": f"An unexpected error occurred: {str(e)}"},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
-                )
+        return Response(
+                {"message": "OTP has been sent to your email"},
+                status=status.HTTP_200_OK,
+            )
+    
+    except User.DoesNotExist:
+        return Response(
+            {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
+        )
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class OTPVerificationView(APIView):
-    def post(self, request, *args, **kwargs):
-        email = request.data.get("email")
-        otp = request.data.get("otp")
-
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
+    except BadHeaderError:
             return Response(
-                {"error": "User not found"}, status=status.HTTP_404_NOT_FOUND
+                {"error": "Invalid header found in the email."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+    except SMTPException:
+            return Response(
+                {
+                    "error": "There was an error sending the OTP email. Please try again later."
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+    except Exception as e:
+            return Response(
+                {"error": f"An unexpected error occurred: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-        if user.otp == otp and user.otp_expiry > datetime.now():
-            user.is_active = True  # Activate user
-            user.otp = None  # Clear OTP after successful verification
-            user.otp_expiry = None
-            user.save()
 
-            return Response(
-                {"detail": "Account verified successfully"}, status=status.HTTP_200_OK
-            )
-        else:
-            return Response(
-                {"error": "Invalid or expired OTP"}, status=status.HTTP_400_BAD_REQUEST
-            )
+
+@api_view(["POST"])
+def verify_otp(request):
+    email = request.data.get("email")
+    otp_code = request.data.get("otp")
+
+    if not email or not otp_code:
+        return Response({"error": "Email and OTP are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+    # Verify OTP and expiry
+    if user.email_verification_otp and str(user.otp) == str(otp_code) and user.email_verification_otp_expiry and user.email_verification_otp_expiry > timezone.now():
+        # Mark email as verified
+        user.email_verified = True
+        user.email_verification_otp = None  # Clear OTP after successful verification
+        user.email_verification_otp_expiry = None
+        user.save()
+
+        # Generate JWT tokens
+        refresh = RefreshToken.for_user(user)
+
+        return Response({
+            "message": "Account verified successfully",
+            "email_verified": True,
+            "access": str(refresh.access_token),
+            "refresh": str(refresh)
+        }, status=status.HTTP_200_OK)
+    else:
+        return Response({"error": "Invalid or expired OTP"}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ProfileView(APIView):
     serializer_class = ProfileSerializer

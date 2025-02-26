@@ -7,9 +7,6 @@ import 'package:shoplify/presentation/resources/values_manager.dart';
 
 class AppTheme {
   static final ThemeData appTheme = ThemeData(
-
-    
-
       navigationBarTheme: NavigationBarThemeData(
           labelTextStyle: WidgetStateProperty.all(
               getRegularStyle(font: FontConstants.poppins))),
@@ -21,7 +18,7 @@ class AppTheme {
           TargetPlatform.windows: FadeInPageTransition(),
         },
       ),
-      scaffoldBackgroundColor: ColorManager.darkBlue,
+      scaffoldBackgroundColor: ColorManager.white,
       popupMenuTheme: const PopupMenuThemeData(surfaceTintColor: Colors.white),
       colorScheme: ColorScheme.fromSeed(seedColor: ColorManager.darkBlue),
       radioTheme: RadioThemeData(

@@ -189,3 +189,6 @@ final FilteringTextInputFormatter textWithSpaceInputFormatter =
 
 final FilteringTextInputFormatter textOnlyInputFormatter =
     FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'));
+
+
+enum PasswordVisibility { on, off }

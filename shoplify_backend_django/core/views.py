@@ -11,6 +11,7 @@ from django.utils import timezone
 from .models import *
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.viewsets import ModelViewSet
+from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from djoser.views import TokenCreateView
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -24,9 +25,9 @@ User = get_user_model()
 
 
 @api_view(["POST"])
-def reset_password_with_otp(request):
+def reset_password(request):
     email = request.data.get("email")
-    otp_code = request.data.get("otp")
+    otp = request.data.get("otp")
     new_password = request.data.get("new_password")
 
     try:
@@ -35,21 +36,24 @@ def reset_password_with_otp(request):
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
     # Validate OTP
-    if user.password_reset_otp != otp_code or user.password_reset_expiry < timezone.now():
-        return Response({"error": "Invalid or expired OTP"}, status=status.HTTP_400_BAD_REQUEST)
+    if user.password_reset_otp == str(otp) or user.password_reset_otp_expiry > timezone.now():
 
     # Reset the password
-    user.password = make_password(new_password)  # Hash the new password
-    user.password_reset_otp = None  # Clear OTP after successful reset
-    user.password_reset_expiry = None
-    user.save()
+        user.password = make_password(new_password)  # Hash the new password
+        user.password_reset_otp = None  # Clear OTP after successful reset
+        user.password_reset_otp_expiry = None
+        user.save()
+        return Response({"message": "Password reset successful"}, status=status.HTTP_200_OK)
+    else:
+        return Response({"error": "Invalid or expired OTP"}, status=status.HTTP_400_BAD_REQUEST)
 
-    return Response({"message": "Password reset successful"}, status=status.HTTP_200_OK)
+
 
 
 @api_view(["POST"])
 def request_password_reset_otp(request):
     email = request.data.get("email")
+    print(email)
 
     try:
         user = User.objects.get(email=email)
@@ -59,19 +63,40 @@ def request_password_reset_otp(request):
     # Generate a 6-digit OTP
     reset_otp = get_random_string(length=4, allowed_chars="0123456789")
     user.password_reset_otp = reset_otp
-    user.password_reset_expiry = timezone.now() + timezone.timedelta(minutes=10)  # OTP valid for 10 minutes
+    user.password_reset_otp_expiry = timezone.now() + timezone.timedelta(minutes=10)  # OTP valid for 10 minutes
     user.save()
 
-    # Send OTP via email (Replace with actual email sending logic)
-    send_mail(
-        "Password Reset OTP",
-        f"Your OTP for password reset is: {reset_otp}",
-        settings.DEFAULT_FROM_EMAIL,
-        [user.email],
-        fail_silently=False,
-    )
 
-    return Response({"message": "OTP has been sent to your email"}, status=status.HTTP_200_OK)
+    try:
+        # Send OTP via email
+        send_mail(
+            "Password Reset OTP",
+            f"Your OTP for password reset is: {reset_otp}",
+            settings.DEFAULT_FROM_EMAIL,
+            [user.email],
+            fail_silently=False,
+        )
+        return Response({"message": "Password reset OTP has been sent to your email"}, status=status.HTTP_200_OK)
+    
+    except BadHeaderError:
+            return Response(
+                {"error": "Invalid header found in the email."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+    except SMTPException:
+            return Response(
+                {
+                    "error": "There was an error sending the OTP email. Please try again later."
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+    except Exception as e:
+            return Response(
+                {"error": f"An unexpected error occurred: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomJWTSerializer
@@ -93,6 +118,9 @@ class UserCreateView(APIView):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
+            user.is_active=True
+            user.save()
+
             # Create a profile for the user when they sign up
             Profile.objects.create(owner=user)
 
@@ -105,7 +133,7 @@ class UserCreateView(APIView):
 
 
 @api_view(["POST"])
-def get_otp_code(request):
+def request_email_verification_otp(request):
     email = request.data.get("email")        
     try:
         user = User.objects.get(email=email)
@@ -118,7 +146,7 @@ def get_otp_code(request):
                     fail_silently=False,
                 )
         return Response(
-                {"message": "OTP has been sent to your email"},
+                {"message": "Email verfication OTP has been sent to your email"},
                 status=status.HTTP_200_OK,
             )
     
@@ -148,11 +176,11 @@ def get_otp_code(request):
 
 
 @api_view(["POST"])
-def verify_otp(request):
+def verify_email(request):
     email = request.data.get("email")
-    otp_code = request.data.get("otp")
+    otp = request.data.get("otp")
 
-    if not email or not otp_code:
+    if not email or not otp:
         return Response({"error": "Email and OTP are required"}, status=status.HTTP_400_BAD_REQUEST)
 
     try:
@@ -161,7 +189,7 @@ def verify_otp(request):
         return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
     # Verify OTP and expiry
-    if user.email_verification_otp and str(user.otp) == str(otp_code) and user.email_verification_otp_expiry and user.email_verification_otp_expiry > timezone.now():
+    if user.email_verification_otp == str(otp)  and user.email_verification_otp_expiry > timezone.now():
         # Mark email as verified
         user.email_verified = True
         user.email_verification_otp = None  # Clear OTP after successful verification

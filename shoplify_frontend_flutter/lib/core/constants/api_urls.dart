@@ -17,6 +17,10 @@ class ApiUrls {
   static const String allProducts = "$api/$products";
   static const String favorites = "$api/favorites";
   static const String cartUrl = "$api/$cart";
-  static const String requestOTP = "$auth/request-otp/";
-  static const String verifyOTP = "$auth/verify-otp/";
+  static const String requestEmailActivationOTP =
+      "$auth/request-email-verification-otp/";
+  static const String verifyEmail = "$auth/verify-email/";
+  static const String requestNewPasswordOTP =
+      "$auth/request-password-reset-otp/";
+  static const String resetPassword = "$auth/reset-password/";
 }

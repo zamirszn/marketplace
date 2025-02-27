@@ -11,16 +11,13 @@ import 'package:shoplify/presentation/widgets/count_down_widget/bloc/countdown_b
 import 'package:shoplify/presentation/widgets/snackbar.dart';
 
 class CountdownWidget extends StatelessWidget {
-  const CountdownWidget({super.key});
+  const CountdownWidget({super.key, required this.callback});
+  final VoidCallback callback;
 
   @override
   Widget build(BuildContext context) {
     final countdownBloc = BlocProvider.of<CountdownBloc>(context);
-    countdownBloc.setCallBack(
-      () {
-        context.read<AccountVerificationBloc>().add(CanRequestOTPEvent());
-      },
-    );
+    countdownBloc.setCallBack(() => callback());
     return BlocBuilder<CountdownBloc, CountdownState>(
       builder: (context, state) {
         return Text("${state.secondsRemaining} ${AppStrings.seconds}",

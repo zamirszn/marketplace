@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shoplify/data/models/login_params_model.dart';
+import 'package:shoplify/data/models/reset_password_params.dart';
 import 'package:shoplify/data/models/signup_params_model.dart';
 import 'package:shoplify/data/models/user_model.dart';
 import 'package:shoplify/data/models/verify_otp_params.dart';
@@ -82,8 +83,9 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either> requestOTP(String email) async {
-    Either result = await sl<AuthServiceDataSource>().requestOTP(email);
+  Future<Either> requestEmailVerificationOTP(String email) async {
+    Either result =
+        await sl<AuthServiceDataSource>().requestEmailVerificationOTP(email);
 
     return result.fold((error) {
       return Left(error);
@@ -94,10 +96,36 @@ class AuthRepositoryImpl extends AuthRepository {
   }
 
   @override
-  Future<Either> verifyOTP(VerifyOtpParams verifyOtpParams) async {
-    Either result =
-        await sl<AuthServiceDataSource>().verifyOTP(verifyOtpParams);
+  Future<Either> verifyEmailVerificationOTP(
+      VerifyOtpParams verifyOtpParams) async {
+    Either result = await sl<AuthServiceDataSource>()
+        .verifyEmailVerificationOTP(verifyOtpParams);
 
+    return result.fold((error) {
+      return Left(error);
+    }, (data) async {
+      Response response = data;
+      return Right(response);
+    });
+  }
+
+  @override
+  Future<Either> requestNewPasswordOTP(String email) async {
+    Either result =
+        await sl<AuthServiceDataSource>().requestNewPasswordOTP(email);
+
+    return result.fold((error) {
+      return Left(error);
+    }, (data) async {
+      Response response = data;
+      return Right(response);
+    });
+  }
+
+  @override
+  Future<Either> resetPassword(ResetPasswordParams resetPasswordParams) async {
+    Either result =
+        await sl<AuthServiceDataSource>().resetPassword(resetPasswordParams);
     return result.fold((error) {
       return Left(error);
     }, (data) async {

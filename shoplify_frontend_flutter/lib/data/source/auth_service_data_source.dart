@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:shoplify/core/constants/api_urls.dart';
 import 'package:shoplify/core/network/dio_client.dart';
 import 'package:shoplify/data/models/login_params_model.dart';
+import 'package:shoplify/data/models/reset_password_params.dart';
 import 'package:shoplify/data/models/signup_params_model.dart';
 import 'package:shoplify/data/models/verify_otp_params.dart';
 import 'package:shoplify/presentation/service_locator.dart';
@@ -11,8 +12,10 @@ abstract class AuthServiceDataSource {
   Future<Either> login(LoginParamsModel logInParam);
   Future<Either> getUser();
   Future<Either> refresh(String token);
-  Future<Either> requestOTP(String email);
-  Future<Either> verifyOTP(VerifyOtpParams verifyParams);
+  Future<Either> requestEmailVerificationOTP(String email);
+  Future<Either> requestNewPasswordOTP(String email);
+  Future<Either> resetPassword(ResetPasswordParams resetPasswordParams);
+  Future<Either> verifyEmailVerificationOTP(VerifyOtpParams verifyParams);
 }
 
 class AuthServiceImpl extends AuthServiceDataSource {
@@ -57,10 +60,10 @@ class AuthServiceImpl extends AuthServiceDataSource {
   }
 
   @override
-  Future<Either> requestOTP(String email) async {
+  Future<Either> requestEmailVerificationOTP(String email) async {
     try {
       final response = await sl<DioClient>()
-          .post(ApiUrls.requestOTP, data: {"email": email});
+          .post(ApiUrls.requestEmailActivationOTP, data: {"email": email});
       return Right(response);
     } catch (e) {
       return Left(e);
@@ -68,10 +71,33 @@ class AuthServiceImpl extends AuthServiceDataSource {
   }
 
   @override
-  Future<Either> verifyOTP(VerifyOtpParams verifyParams) async {
+  Future<Either> verifyEmailVerificationOTP(
+      VerifyOtpParams verifyParams) async {
     try {
       final response = await sl<DioClient>()
-          .post(ApiUrls.verifyOTP, data: verifyParams.toMap());
+          .post(ApiUrls.verifyEmail, data: verifyParams.toMap());
+      return Right(response);
+    } catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either> requestNewPasswordOTP(String email) async {
+    try {
+      final response = await sl<DioClient>()
+          .post(ApiUrls.requestNewPasswordOTP, data: {"email": email});
+      return Right(response);
+    } catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either> resetPassword(ResetPasswordParams resetPasswordParams) async {
+    try {
+      final response = await sl<DioClient>()
+          .post(ApiUrls.resetPassword, data: resetPasswordParams.toMap());
       return Right(response);
     } catch (e) {
       return Left(e);

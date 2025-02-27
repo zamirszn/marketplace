@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoplify/app/functions.dart';
+import 'package:shoplify/core/constants/constant.dart';
 import 'package:shoplify/data/models/signup_params_model.dart';
 import 'package:shoplify/domain/usecases/auth_usecase.dart';
 import 'package:shoplify/presentation/service_locator.dart';

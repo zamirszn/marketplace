@@ -50,7 +50,6 @@ class _AccountVerificationPageState extends State<AccountVerificationPage>
   @override
   Widget build(BuildContext context) {
     final emailToVerify = context.read<LoginBloc>().state.email;
-
     return BlocBuilder<AccountVerificationBloc, AccountVerificationState>(
       builder: (context, state) {
         return Scaffold(
@@ -121,12 +120,14 @@ class _AccountVerificationPageState extends State<AccountVerificationPage>
                                         fontSize: FontSize.s12,
                                         color: ColorManager.lightGrey),
                                   ),
+                                  space(h: AppSize.s20),
                                   Center(
                                       child: Animate(
                                           controller: _animationController,
                                           autoPlay: false,
                                           effects: [Constant.shakeEffect],
-                                          child: const FilledInput())),
+                                          child:
+                                              const VerifyAccountFilledInput())),
                                   space(h: AppSize.s36),
                                   Center(
                                     child: ConstrainedBox(
@@ -151,7 +152,7 @@ class _AccountVerificationPageState extends State<AccountVerificationPage>
                                                   context
                                                       .read<
                                                           AccountVerificationBloc>()
-                                                      .add(SubmitOTPEvent(
+                                                      .add(SubmitEmailVerificationOTPEvent(
                                                           params: VerifyOtpParams(
                                                               email:
                                                                   emailToVerify!,
@@ -182,7 +183,13 @@ class _AccountVerificationPageState extends State<AccountVerificationPage>
                                               fontSize: FontSize.s14),
                                         ),
                                         space(w: AppSize.s4),
-                                        const CountdownWidget()
+                                        CountdownWidget(
+                                          callback: () {
+                                            context
+                                                .read<AccountVerificationBloc>()
+                                                .add(CanRequestEmailOTPEvent());
+                                          },
+                                        )
                                       ],
                                     ),
                                   if (!state.isRequestingOTP)
@@ -233,14 +240,15 @@ class _AccountVerificationPageState extends State<AccountVerificationPage>
   }
 }
 
-class FilledInput extends StatefulWidget {
-  const FilledInput({super.key});
+class VerifyAccountFilledInput extends StatefulWidget {
+  const VerifyAccountFilledInput({super.key});
 
   @override
-  FilledInputState createState() => FilledInputState();
+  VerifyAccountFilledInputState createState() =>
+      VerifyAccountFilledInputState();
 }
 
-class FilledInputState extends State<FilledInput> {
+class VerifyAccountFilledInputState extends State<VerifyAccountFilledInput> {
   final controller = TextEditingController();
   final focusNode = FocusNode();
 
@@ -260,14 +268,20 @@ class FilledInputState extends State<FilledInput> {
             child: Pinput(
               scrollPadding: const EdgeInsets.only(bottom: AppSize.s470),
               onChanged: (value) {
-                context.read<AccountVerificationBloc>().add(OTPCompleteEvent(
-                    otpComplete: OTPComplete.incomplete,
-                    otp: int.parse(controller.text)));
+                context.read<AccountVerificationBloc>().add(
+                    EmailVerificationOTPCompleteEvent(
+                        otpComplete: OTPComplete.incomplete,
+                        otp: controller.text.isEmpty
+                            ? null
+                            : int.tryParse(controller.text)));
               },
               onCompleted: (value) {
-                context.read<AccountVerificationBloc>().add(OTPCompleteEvent(
-                    otpComplete: OTPComplete.complete,
-                    otp: int.parse(controller.text)));
+                context.read<AccountVerificationBloc>().add(
+                    EmailVerificationOTPCompleteEvent(
+                        otpComplete: OTPComplete.complete,
+                        otp: controller.text.isEmpty
+                            ? null
+                            : int.tryParse(controller.text)));
               },
               inputFormatters: [
                 LengthLimitingTextInputFormatter(4),

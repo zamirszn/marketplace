@@ -54,3 +54,9 @@ class Constant {
   static final ShakeEffect shakeEffect = ShakeEffect(
       rotation: 0, duration: 500.ms, hz: 5, offset: const Offset(10, 0));
 }
+
+enum PasswordVisibility { on, off }
+
+enum OTPComplete { incomplete, complete }
+
+

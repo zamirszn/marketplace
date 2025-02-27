@@ -16,20 +16,20 @@ part 'account_verification_state.dart';
 class AccountVerificationBloc
     extends Bloc<AccountVerificationEvent, AccountVerificationState> {
   AccountVerificationBloc() : super(const AccountVerificationState()) {
-    on<OTPCompleteEvent>(_otpCompleteEvent);
+    on<EmailVerificationOTPCompleteEvent>(_otpCompleteEvent);
     on<ResendOTPEvent>(_requestOTPEvent);
-    on<CanRequestOTPEvent>(_canRequestOTPAgainEvent);
-    on<SubmitOTPEvent>(_submitOTPEvent);
+    on<CanRequestEmailOTPEvent>(_canRequestEmailOTPAgainEvent);
+    on<SubmitEmailVerificationOTPEvent>(_submitOTPEvent);
   }
 
-  void _submitOTPEvent(
-      SubmitOTPEvent event, Emitter<AccountVerificationState> emit) async {
+  void _submitOTPEvent(SubmitEmailVerificationOTPEvent event,
+      Emitter<AccountVerificationState> emit) async {
     emit(
       state.copyWith(verificationStatus: VerificationStatus.loading),
     );
 
     final Either response =
-        await sl<VerifyOTPUsecase>().call(params: event.params);
+        await sl<VerifyEmailOTPUsecase>().call(params: event.params);
     response.fold((error) {
       emit(state.copyWith(
         errorMessage: error,
@@ -54,8 +54,8 @@ class AccountVerificationBloc
       ResendOTPEvent event, Emitter<AccountVerificationState> emit) async {
     emit(state.copyWith(
         isRequestingOTP: true, otpComplete: OTPComplete.incomplete));
-    Either response =
-        await sl<RequestVerificationOTPUsecase>().call(params: event.email);
+    Either response = await sl<RequestEmailVerificationOTPUsecase>()
+        .call(params: event.email);
     response.fold((error) {
       emit(state.copyWith(
           verificationStatus: VerificationStatus.failure,
@@ -66,15 +66,15 @@ class AccountVerificationBloc
     });
   }
 
-  void _canRequestOTPAgainEvent(
-      CanRequestOTPEvent event, Emitter<AccountVerificationState> emit) {
+  void _canRequestEmailOTPAgainEvent(
+      CanRequestEmailOTPEvent event, Emitter<AccountVerificationState> emit) {
     emit(state.copyWith(
       isRequestingOTP: false,
     ));
   }
 
-  void _otpCompleteEvent(
-      OTPCompleteEvent event, Emitter<AccountVerificationState> emit) {
+  void _otpCompleteEvent(EmailVerificationOTPCompleteEvent event,
+      Emitter<AccountVerificationState> emit) {
     if (event.otpComplete == OTPComplete.complete) {
       emit(state.copyWith(
           otpComplete: OTPComplete.complete, otpCode: event.otp));

@@ -1,6 +1,13 @@
 class AppStrings {
   static const String noRouteFound = "no_route_found";
   static const String back = "Back";
+  static const String passwordChangedSuccessfully =
+      "Password changed successfully";
+  static const String passwordsDoesntMatch = "Passwords Doesn't Match";
+  static const String confirmPassword = "Confirm Password";
+  static const String newPassword = "New Password";
+  static const String pageNotFound = "Page Not found";
+  static const String enterYourNewPassword = "Enter Your New Password";
   static const String lostYourPassword =
       "Lost Your Password?, Lets get you back in ";
   static const String forgotPassword = "Forgot Password ?";

@@ -50,9 +50,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    final errorStyle =
-        getRegularStyle(color: ColorManager.white, fontSize: FontSize.s10);
-    final cursorColor = ColorManager.white;
     return Scaffold(
       backgroundColor: ColorManager.orange,
       appBar: AppBar(

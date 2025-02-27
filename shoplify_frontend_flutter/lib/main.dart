@@ -7,6 +7,7 @@ import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/core/config/theme/theme_manager.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 import 'package:shoplify/presentation/ui/auth/account_verification/bloc/account_verification_bloc.dart';
+import 'package:shoplify/presentation/ui/auth/forgot_password/bloc/forgot_password_bloc.dart';
 import 'package:shoplify/presentation/ui/auth/login/bloc/login_bloc.dart';
 import 'package:shoplify/presentation/ui/bottom_nav/bloc/bottom_nav_bloc.dart';
 import 'package:shoplify/presentation/ui/cart/bloc/cart_bloc.dart';
@@ -64,5 +65,8 @@ final List<SingleChildWidget> providers = [
   ),
   BlocProvider<LoginBloc>(
     create: (context) => LoginBloc(),
+  ),
+  BlocProvider<ForgotPasswordBloc>(
+    create: (context) => ForgotPasswordBloc(),
   ),
 ];

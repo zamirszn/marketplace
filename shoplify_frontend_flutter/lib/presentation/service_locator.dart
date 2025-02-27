@@ -44,9 +44,13 @@ void setupServiceLocator() async {
   sl.registerSingleton<LogInUseCase>(LogInUseCase());
   sl.registerSingleton<UserUsecase>(UserUsecase());
   sl.registerSingleton<RefreshTokenUsecase>(RefreshTokenUsecase());
-  sl.registerSingleton<RequestVerificationOTPUsecase>(
-      RequestVerificationOTPUsecase());
-  sl.registerSingleton<VerifyOTPUsecase>(VerifyOTPUsecase());
+  sl.registerSingleton<RequestEmailVerificationOTPUsecase>(
+      RequestEmailVerificationOTPUsecase());
+  sl.registerSingleton<VerifyEmailOTPUsecase>(VerifyEmailOTPUsecase());
+  sl.registerSingleton<RequestNewPasswordOTPUsecase>(
+      RequestNewPasswordOTPUsecase());
+  sl.registerSingleton<ResetPasswordUsecase>(
+      ResetPasswordUsecase());
 
   //product usecases
   sl.registerSingleton<GetProductCategoryUsecase>(GetProductCategoryUsecase());

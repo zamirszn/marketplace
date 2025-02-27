@@ -5,24 +5,30 @@ import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 
 class GoBackButton extends StatelessWidget {
-  const GoBackButton({super.key, this.color, this.padding});
+  const GoBackButton(
+      {super.key, this.color, this.padding, this.backgroundColor});
   final Color? color;
+  final Color? backgroundColor;
   final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: RoundCorner(
-        child: InkWell(
-          borderRadius: BorderRadius.circular(10),
-          onTap: () => goPopRoute(context),
-          child: Padding(
-            padding: padding ?? const EdgeInsets.all(0),
-            child: Icon(
-              Icons.arrow_back_ios_new_rounded,
-              color: color ?? ColorManager.black,
-              size: AppSize.s20,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(AppSize.s10),
+      child: Material(
+        color: Colors.transparent,
+        child: ColoredBox(
+          color: backgroundColor ?? Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(10),
+            onTap: () => goPopRoute(context),
+            child: Padding(
+              padding: padding ?? const EdgeInsets.all(0),
+              child: Icon(
+                Icons.arrow_back_ios_new_rounded,
+                color: color ?? ColorManager.black,
+                size: AppSize.s20,
+              ),
             ),
           ),
         ),

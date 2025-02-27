@@ -3,7 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/domain/entities/review_entity.dart';
+import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
+import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 
 num calculateProductAmountByQuantity(num productPrice, int quantity) {
@@ -191,4 +193,6 @@ final FilteringTextInputFormatter textOnlyInputFormatter =
     FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'));
 
 
-enum PasswordVisibility { on, off }
+ final errorStyle =
+        getRegularStyle(color: ColorManager.white, fontSize: FontSize.s10);
+    final cursorColor = ColorManager.white;

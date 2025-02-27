@@ -43,7 +43,6 @@ class User(AbstractUser, PermissionsMixin):
         blank=True,
         default="",
     )
-    is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now=True)
@@ -60,7 +59,7 @@ class User(AbstractUser, PermissionsMixin):
     email_verification_otp = models.CharField(max_length=4, blank=True, null=True)
     email_verification_otp_expiry = models.DateTimeField(blank=True, null=True)
     password_reset_otp = models.CharField(max_length=4, null=True, blank=True)
-    password_reset_expiry = models.DateTimeField(null=True, blank=True)
+    password_reset_otp_expiry = models.DateTimeField(null=True, blank=True)
     
 
     def generate_email_verification_otp(self):

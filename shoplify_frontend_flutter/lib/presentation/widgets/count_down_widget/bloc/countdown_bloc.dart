@@ -27,6 +27,7 @@ class CountdownBloc extends Bloc<CountdownEvent, CountdownState> {
       _timer?.cancel();
       _timer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
         final currentSeconds = state.secondsRemaining;
+        print(currentSeconds);
         if (currentSeconds > 0) {
           add(CountdownTickEvent(secondsRemaining: currentSeconds - 1));
         } else {

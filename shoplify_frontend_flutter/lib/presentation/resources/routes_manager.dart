@@ -7,6 +7,7 @@ import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/ui/auth/account_blocked.dart';
 import 'package:shoplify/presentation/ui/auth/account_verification/account_verification_page.dart';
 import 'package:shoplify/presentation/ui/auth/forgot_password/forgot_password_page.dart';
+import 'package:shoplify/presentation/ui/auth/forgot_password/new_password_page.dart';
 import 'package:shoplify/presentation/ui/auth/splash_page.dart';
 import 'package:shoplify/presentation/ui/bottom_nav/bottom_nav.dart';
 import 'package:shoplify/presentation/ui/home/product_image_page.dart';
@@ -35,11 +36,11 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: Routes.loginPage,
-      builder: (context, state) => LoginPage(),
+      builder: (context, state) => const LoginPage(),
     ),
     GoRoute(
       path: Routes.signUpPage,
-      builder: (context, state) => SignUpPage(),
+      builder: (context, state) => const SignUpPage(),
     ),
     GoRoute(
       path: Routes.accountVerificationPage,
@@ -59,7 +60,17 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: Routes.forgotPasswordPage,
-      builder: (context, state) => ForgotPasswordPage(),
+      builder: (context, state) => const ForgotPasswordPage(),
+    ),
+    GoRoute(
+      path: Routes.newPasswordPage,
+      builder: (context, state) {
+        final String email = state.extra as String;
+
+        return NewPasswordPage(
+          emailToSendOTP: email,
+        );
+      },
     ),
     GoRoute(
       path: Routes.addReviewPage,
@@ -114,6 +125,7 @@ final GoRouter appRouter = GoRouter(
 
 class Routes {
   static const String onboardingPage = "/onboardingPage";
+  static const String newPasswordPage = "/newPasswordPage";
   static const String forgotPasswordPage = "/forgotPasswordPage";
   static const String addReviewPage = "/addReviewPage";
   static const String loginPage = "/loginPage";

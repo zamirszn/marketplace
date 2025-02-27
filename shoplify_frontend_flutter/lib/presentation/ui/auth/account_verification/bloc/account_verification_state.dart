@@ -5,7 +5,6 @@ part of 'account_verification_bloc.dart';
 /// based on the OTP code entered, if a complete code or valid code is entered
 /// the background color changes to green , if an invalid or incomplete code is
 /// entered it changes to red
-enum OTPComplete { incomplete, complete }
 
 enum VerificationStatus {
   initial,

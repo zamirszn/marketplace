@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:shoplify/core/usecase/usecase.dart';
 import 'package:shoplify/data/models/login_params_model.dart';
+import 'package:shoplify/data/models/reset_password_params.dart';
 import 'package:shoplify/data/models/signup_params_model.dart';
 import 'package:shoplify/data/models/verify_otp_params.dart';
 import 'package:shoplify/domain/repository/auth_repo.dart';
@@ -27,17 +28,30 @@ class RefreshTokenUsecase implements Usecase<Either, String> {
   }
 }
 
-class RequestVerificationOTPUsecase implements Usecase<Either, String> {
+class RequestEmailVerificationOTPUsecase implements Usecase<Either, String> {
   @override
   Future<Either> call({String? params}) async {
-    return sl<AuthRepository>().requestOTP(params!);
+    return sl<AuthRepository>().requestEmailVerificationOTP(params!);
   }
 }
 
-class VerifyOTPUsecase implements Usecase<Either, VerifyOtpParams> {
+class VerifyEmailOTPUsecase implements Usecase<Either, VerifyOtpParams> {
   @override
   Future<Either> call({VerifyOtpParams? params}) async {
-    return sl<AuthRepository>().verifyOTP(params!);
+    return sl<AuthRepository>().verifyEmailVerificationOTP(params!);
   }
 }
 
+class RequestNewPasswordOTPUsecase implements Usecase<Either, String> {
+  @override
+  Future<Either> call({String? params}) async {
+    return sl<AuthRepository>().requestNewPasswordOTP(params!);
+  }
+}
+
+class ResetPasswordUsecase implements Usecase<Either, ResetPasswordParams> {
+  @override
+  Future<Either> call({ResetPasswordParams? params}) async {
+    return sl<AuthRepository>().resetPassword(params!);
+  }
+}

@@ -3,11 +3,12 @@ part of 'account_verification_bloc.dart';
 @immutable
 sealed class AccountVerificationEvent {}
 
-class OTPCompleteEvent extends AccountVerificationEvent {
+class EmailVerificationOTPCompleteEvent extends AccountVerificationEvent {
   final OTPComplete otpComplete;
-  final int otp;
+  final int? otp;
 
-  OTPCompleteEvent({required this.otpComplete, required this.otp});
+  EmailVerificationOTPCompleteEvent(
+      {required this.otpComplete, required this.otp});
 }
 
 final class ResendOTPEvent extends AccountVerificationEvent {
@@ -16,10 +17,10 @@ final class ResendOTPEvent extends AccountVerificationEvent {
   ResendOTPEvent({required this.email});
 }
 
-final class CanRequestOTPEvent extends AccountVerificationEvent {}
+final class CanRequestEmailOTPEvent extends AccountVerificationEvent {}
 
-final class SubmitOTPEvent extends AccountVerificationEvent {
+final class SubmitEmailVerificationOTPEvent extends AccountVerificationEvent {
   final VerifyOtpParams params;
 
-  SubmitOTPEvent({required this.params});
+  SubmitEmailVerificationOTPEvent({required this.params});
 }

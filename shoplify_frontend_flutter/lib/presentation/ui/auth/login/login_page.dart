@@ -43,8 +43,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    final errorStyle =
-        getRegularStyle(color: ColorManager.white, fontSize: FontSize.s10);
+
     final cursorColor = ColorManager.white;
     return Scaffold(
         backgroundColor: ColorManager.blue,

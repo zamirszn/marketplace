@@ -5,20 +5,18 @@ sealed class CartEvent {}
 
 class IncreaseSingleCartItemCountEvent extends CartEvent {}
 
-class SetSingleItemEvent extends CartEvent {
-  final CartItem item;
+class DecreaseSingleCartItemCountEvent extends CartEvent {}
 
-  SetSingleItemEvent(this.item);
-}
 
-class IncreaseCartItemCountEvent extends CartEvent {
-  final String productId;
 
-  IncreaseCartItemCountEvent(this.productId);
-}
+// class IncreaseCartItemCountEvent extends CartEvent {
+//   final String productId;
 
-class DecreaseCartItemCountEvent extends CartEvent {
-  final String productId;
+//   IncreaseCartItemCountEvent(this.productId);
+// }
 
-  DecreaseCartItemCountEvent(this.productId);
-}
+// class DecreaseCartItemCountEvent extends CartEvent {
+//   final String productId;
+
+//   DecreaseCartItemCountEvent(this.productId);
+// }

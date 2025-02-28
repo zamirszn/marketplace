@@ -367,16 +367,22 @@ class _SignUpPageState extends State<SignUpPage> {
 }
 
 class ButtonLoadingWidget extends StatelessWidget {
-  const ButtonLoadingWidget({
-    super.key,
-  });
+  final Color? backgroundColor;
+  final Color? color;
+
+  const ButtonLoadingWidget({super.key, this.backgroundColor, this.color});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
-            elevation: 0, backgroundColor: ColorManager.white),
+            elevation: 0,
+            backgroundColor: backgroundColor ?? ColorManager.white),
         onPressed: () {},
-        child: Transform.scale(scale: .7, child: const LoadingWidget()));
+        child: Transform.scale(
+            scale: .7,
+            child: LoadingWidget(
+              color: color,
+            )));
   }
 }

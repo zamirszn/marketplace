@@ -76,6 +76,7 @@ class ProductRepositoryImpl extends ProductsRepository {
       return Right(response.data);
     });
   }
+
   @override
   Future<Either> removeToFavorite(String productId) async {
     Either result =
@@ -103,6 +104,18 @@ class ProductRepositoryImpl extends ProductsRepository {
     }, (data) async {
       Response response = data;
       _cartId = response.data["id"];
+      return Right(response.data);
+    });
+  }
+
+  @override
+  Future<Either> refreshProductDetails(String productId) async {
+    Either result =
+        await sl<ProductsServiceDataSource>().refreshProductDetails(productId);
+    return result.fold((error) {
+      return Left(error);
+    }, (data) async {
+      Response response = data;
       return Right(response.data);
     });
   }

@@ -62,6 +62,7 @@ void setupServiceLocator() async {
   sl.registerSingleton<GetCartIdUseCase>(GetCartIdUseCase());
   sl.registerSingleton<AddtoFavoriteUseCase>(AddtoFavoriteUseCase());
   sl.registerSingleton<RemovefromFavoriteUseCase>(RemovefromFavoriteUseCase());
+  sl.registerSingleton<RefreshProductDetails>(RefreshProductDetails());
 
   // review usecase
   sl.registerSingleton<GetReviewsUseCase>(GetReviewsUseCase());

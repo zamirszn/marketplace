@@ -8,7 +8,7 @@ class ProductModelEntity {
   final ProductCategoryModel? category;
   final bool? discount;
   final double? oldPrice;
-  final double? price;
+  final num? price;
   final String? slug;
   final int? inventory;
   final num? averageRating;

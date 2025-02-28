@@ -10,6 +10,7 @@ import 'package:shoplify/presentation/ui/auth/forgot_password/forgot_password_pa
 import 'package:shoplify/presentation/ui/auth/forgot_password/new_password_page.dart';
 import 'package:shoplify/presentation/ui/auth/splash_page.dart';
 import 'package:shoplify/presentation/ui/bottom_nav/bottom_nav.dart';
+import 'package:shoplify/presentation/ui/home/bloc/product_details/product_details_page.dart';
 import 'package:shoplify/presentation/ui/home/product_image_page.dart';
 import 'package:shoplify/presentation/ui/order/order_page.dart';
 import 'package:shoplify/presentation/ui/review/add_review_page.dart';
@@ -18,7 +19,6 @@ import 'package:shoplify/presentation/ui/review/review_page.dart';
 import 'package:shoplify/presentation/widgets/error_404_page.dart';
 import 'package:shoplify/presentation/ui/auth/login/login_page.dart';
 import 'package:shoplify/presentation/ui/auth/sign_up/sign_up_page.dart';
-import 'package:shoplify/presentation/ui/home/product_details_page.dart';
 import 'package:shoplify/presentation/ui/onboarding/onboarding_screen.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -84,11 +84,9 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) {
         final Map<String, dynamic> extraData =
             state.extra as Map<String, dynamic>;
-        final ProductModelEntity product = extraData['product'];
         final String heroTag = extraData['heroTag'];
 
         return ProductDetailsPage(
-          product: product,
           heroTag: heroTag,
         );
       },

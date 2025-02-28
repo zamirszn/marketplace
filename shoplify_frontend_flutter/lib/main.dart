@@ -13,6 +13,8 @@ import 'package:shoplify/presentation/ui/bottom_nav/bloc/bottom_nav_bloc.dart';
 import 'package:shoplify/presentation/ui/cart/bloc/cart_bloc.dart';
 import 'package:shoplify/presentation/ui/favorite/bloc/favorite_bloc.dart';
 import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
+import 'package:shoplify/presentation/ui/home/bloc/product_details/bloc/product_details_bloc.dart';
+import 'package:shoplify/presentation/widgets/add_to_cart_bottomsheet/bloc/add_to_cart_bottomsheet_bloc.dart';
 import 'package:shoplify/presentation/widgets/count_down_widget/bloc/countdown_bloc.dart';
 
 void main() {
@@ -68,5 +70,11 @@ final List<SingleChildWidget> providers = [
   ),
   BlocProvider<ForgotPasswordBloc>(
     create: (context) => ForgotPasswordBloc(),
+  ),
+  BlocProvider<AddToCartBottomsheetBloc>(
+    create: (context) => AddToCartBottomsheetBloc(),
+  ),
+  BlocProvider<ProductDetailsBloc>(
+    create: (context) => ProductDetailsBloc(),
   ),
 ];

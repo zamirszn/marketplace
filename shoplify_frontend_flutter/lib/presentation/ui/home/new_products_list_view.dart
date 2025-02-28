@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
+import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
 import 'package:shoplify/presentation/widgets/new_product_widget.dart';
 import 'package:shoplify/presentation/widgets/empty_widget.dart';
@@ -17,6 +18,7 @@ class NewProductsListView extends StatelessWidget {
       create: (context) => ProductBloc()..add(GetNewProductsEvent()),
       child: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
+          print(state);
           if (state is NewProductLoading) {
             return ListView.builder(
                 physics: const BouncingScrollPhysics(),
@@ -24,8 +26,11 @@ class NewProductsListView extends StatelessWidget {
                 scrollDirection: Axis.horizontal,
                 itemBuilder: (context, index) {
                   return const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: ProductWidgetSkeleton());
+                      padding: EdgeInsets.only(
+                          right: AppPadding.p2,
+                          top: AppPadding.p10,
+                          left: AppPadding.p10),
+                      child: NewProductWidgetSkeleton());
                 });
           } else if (state is NewProductEmpty) {
             return const Center(
@@ -51,7 +56,7 @@ class NewProductsListView extends StatelessWidget {
                     .map((product) => NewProductWidget(product: product))
                     .toList());
           }
-
+      
           return const SizedBox();
         },
       ),

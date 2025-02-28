@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
+import 'package:shoplify/data/models/product_query_params_model.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
@@ -26,38 +27,20 @@ class HomePage extends StatelessWidget {
     return BlocProvider(
       create: (context) => ProductBloc()..add(GetOrCreateCartEvent()),
       child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: ColorManager.white,
-          elevation: 0,
-          leading: const Padding(
-            padding: EdgeInsets.only(left: AppPadding.p7),
-            child: Align(
-              alignment: Alignment.centerLeft,
-              child: Icon(
-                Iconsax.shop,
-                size: AppSize.s28,
-              ),
-            ),
-          ),
-          centerTitle: false,
-          forceMaterialTransparency: true,
-          automaticallyImplyLeading: false,
-          actions: [
-            const CircleAvatar(
-              child: Text("M"),
-            ),
-            space(w: AppSize.s10)
-          ],
-        ),
         body: RefreshIndicator(
           onRefresh: () async {
             context.read<ProductBloc>().add(GetOrCreateCartEvent());
+            context.read<ProductBloc>().add(GetProductCategoryEvent());
+            context.read<ProductBloc>().add(GetNewProductsEvent());
+            context.read<ProductBloc>().add(GetPopularProductsEvent());
+            context.read<ProductBloc>().add(
+                GetAllProductsEvent(params: ProductQueryParamsModel(page: 1)));
           },
           child: BlocListener<ProductBloc, ProductState>(
             listener: (context, state) {
               if (state is CreateorGetCartFailure) {
                 if (state.message.contains("token_not_valid")) {
-                  goPush(context, Routes.loginPage);
+                  goto(context, Routes.loginPage);
                   showErrorMessage(context, "Please login");
                 }
               }
@@ -79,6 +62,8 @@ class HomePage extends StatelessWidget {
                 } else if (state is CreateorGetCartSuccess) {
                   return CustomScrollView(
                     slivers: [
+                      sliverSpace(h: AppSize.s20),
+
                       SliverPadding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: AppPadding.p7),

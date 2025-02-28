@@ -18,7 +18,7 @@ class GoBackButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: ColoredBox(
-          color: backgroundColor ?? Colors.transparent,
+          color: backgroundColor ?? ColorManager.grey,
           child: InkWell(
             borderRadius: BorderRadius.circular(10),
             onTap: () => goPopRoute(context),

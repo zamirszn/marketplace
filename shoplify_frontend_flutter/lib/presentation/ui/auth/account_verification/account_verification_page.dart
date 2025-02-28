@@ -65,6 +65,8 @@ class _AccountVerificationPageState extends State<AccountVerificationPage>
                 }
               } else if (state.verificationStatus ==
                   VerificationStatus.success) {
+                context.read<CountdownBloc>().add(CountdownStopEvent());
+
                 goto(context, Routes.bottomNav);
               }
             },
@@ -118,7 +120,7 @@ class _AccountVerificationPageState extends State<AccountVerificationPage>
                                     style: getLightStyle(
                                         font: FontConstants.poppins,
                                         fontSize: FontSize.s12,
-                                        color: ColorManager.lightGrey),
+                                        color: ColorManager.grey),
                                   ),
                                   space(h: AppSize.s20),
                                   Center(

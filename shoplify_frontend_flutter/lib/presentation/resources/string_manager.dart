@@ -1,6 +1,8 @@
 class AppStrings {
   static const String noRouteFound = "no_route_found";
   static const String back = "Back";
+  static const String invalidImage = "Invalid image";
+  static const String inventoryLimitReached = "Inventory limit reached";
   static const String passwordChangedSuccessfully =
       "Password changed successfully";
   static const String passwordsDoesntMatch = "Passwords Doesn't Match";

@@ -12,5 +12,6 @@ abstract class ProductsRepository {
   Future<String?> getCartId();
   Future<Either> addToFavorite(String productId);
   Future<Either> removeToFavorite(String productId);
+  Future<Either> refreshProductDetails(String productId);
 
 }

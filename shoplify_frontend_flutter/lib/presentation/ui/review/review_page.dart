@@ -73,9 +73,11 @@ class _ReviewPageState extends State<ReviewPage> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: Colors.transparent,
-          leading: const Padding(
-            padding: EdgeInsets.all(AppPadding.p10),
-            child: GoBackButton(),
+          leading: Padding(
+            padding: const EdgeInsets.all(AppPadding.p10),
+            child: GoBackButton(
+              backgroundColor: ColorManager.lightGrey,
+            ),
           ),
           title: Text(
             AppStrings.reviews,
@@ -102,7 +104,7 @@ class _ReviewPageState extends State<ReviewPage> {
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(AppSize.s20),
                       child: ColoredBox(
-                          color: ColorManager.lemon,
+                          color: ColorManager.lightGrey,
                           child: BlocBuilder<ReviewBloc, ReviewState>(
                             builder: (context, state) {
                               switch (state.status) {
@@ -322,7 +324,7 @@ class _ReviewPageState extends State<ReviewPage> {
                       margin:
                           const EdgeInsets.symmetric(horizontal: AppMargin.m12),
                       decoration: BoxDecoration(
-                        color: ColorManager.lemon,
+                        color: ColorManager.lightGrey,
                         borderRadius: BorderRadius.circular(AppSize.s20),
                       ),
                       child: BlocBuilder<ReviewBloc, ReviewState>(
@@ -516,8 +518,9 @@ class ReviewSortBottomSheet extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const GoBackButton(
-                    padding: EdgeInsets.all(AppPadding.p8),
+                  GoBackButton(
+                    padding: const EdgeInsets.all(AppPadding.p8),
+                    backgroundColor: ColorManager.grey,
                   ),
                   Center(
                     child: Text('Sort',
@@ -622,7 +625,7 @@ class RatingBar extends StatelessWidget {
             // bottom
             Container(
               decoration: BoxDecoration(
-                color: ColorManager.darkBlue,
+                color: ColorManager.grey,
                 borderRadius: BorderRadius.circular(AppSize.s10),
               ),
               height: AppSize.s8,
@@ -652,13 +655,13 @@ class AddReviewWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppSize.s10),
       child: ColoredBox(
-        color: ColorManager.lemon,
+        color: ColorManager.lightGrey,
         child: const Column(
           children: [
             ListTile(
               minTileHeight: AppSize.s70,
               leading: Icon(Iconsax.message_edit),
-              title: Text("Add review"),
+              title: Text(AppStrings.addReview),
               trailing: Icon(Iconsax.arrow_right),
             ),
           ],

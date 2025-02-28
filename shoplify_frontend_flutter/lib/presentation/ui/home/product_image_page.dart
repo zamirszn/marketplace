@@ -1,11 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
+import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/widgets/back_button.dart';
+import 'package:shoplify/presentation/widgets/error_message_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductImagePage extends StatefulWidget {
@@ -240,10 +243,9 @@ class _ProductImagePageState extends State<ProductImagePage>
               font: FontConstants.ojuju, fontSize: FontSize.s20),
         ),
       ),
-      backgroundColor: ColorManager.lemon,
       body: SizedBox(
-        height: deviceHeight(context),
-        child: AnimatedBuilder(
+          height: deviceHeight(context),
+          child: AnimatedBuilder(
             animation: _dragAnimation!,
             builder: (context, _) {
               Offset finalOffset = _dragOffset ?? const Offset(0.0, 0.0);
@@ -289,27 +291,31 @@ class _ProductImagePageState extends State<ProductImagePage>
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(AppSize.s10),
                     child: CachedNetworkImage(
-                      alignment: Alignment.center,
-                      imageUrl: widget.imagePath,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => Container(
-                        color: ColorManager.white,
-                        height: AppSize.s100,
-                        width: AppSize.s100,
-                      ),
-                      errorWidget: (context, url, error) => Skeletonizer(
-                          child: Container(
-                        color: ColorManager.white,
-                        height: AppSize.s100,
-                        width: AppSize.s100,
-                      )),
-                    ),
+                        alignment: Alignment.center,
+                        imageUrl: widget.imagePath,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) => Skeletonizer(
+                                child: Container(
+                              color: ColorManager.white,
+                              height: AppSize.s100,
+                              width: AppSize.s100,
+                            )),
+                        errorWidget: (context, url, error) => Container(
+                              margin: const EdgeInsets.all(AppMargin.m20),
+                              color: ColorManager.white,
+                              height: AppSize.s400,
+                              width: AppSize.s100,
+                              child: ErrorMessageWidget(
+                                retry: () {},
+                                message: AppStrings.invalidImage,
+                              ),
+                            )),
                   ),
                 ),
               ),
-            )),
-      ),
+            ),
+          )),
     );
   }
 }

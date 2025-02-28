@@ -8,6 +8,7 @@ import 'package:shoplify/data/models/favorite_product_params_model.dart';
 import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
+import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
@@ -151,14 +152,6 @@ class _FavoritePageState extends State<FavoritePage> {
                             },
                             child: CarouselView.weighted(
                                 enableSplash: false,
-                                onTap: (value) {
-                                  print("tap");
-                                },
-                                // onTap: (value) => goPush(context, Routes.productDetailsPage,
-                                //         extra: {
-                                //           'product': product,
-                                //           'heroTag': '${product.id}_popular'
-                                //         }),
                                 scrollDirection: Axis.vertical,
                                 consumeMaxWeight: true,
                                 flexWeights: const [4, 2, 1],

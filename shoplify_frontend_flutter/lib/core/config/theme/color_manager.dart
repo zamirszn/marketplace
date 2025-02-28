@@ -12,7 +12,8 @@ class ColorManager {
   static Color red = HexColor.fromHex("#FE2601");
   static Color green = HexColor.fromHex("#7ADF81");
   static Color darkGreen = HexColor.fromHex("#0FAE3A");
-  static Color lightGrey = HexColor.fromHex("#ACACAC");
+  static Color grey = HexColor.fromHex("#ACACAC");
+  static Color lightGrey = HexColor.fromHex("#F5F5F5");
   static Color lightGreen = HexColor.fromHex("#BDFFA7");
   static Color lemon = HexColor.fromHex("#E5FF46");
   static Color cyan = HexColor.fromHex("#00E1B5");

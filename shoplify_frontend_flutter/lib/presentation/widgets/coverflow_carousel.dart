@@ -123,7 +123,7 @@ class _CoverFlowCarouselViewState extends State<CoverFlowCarouselView> {
               children: widget.productImages.asMap().entries.map((item) {
                 final currentIndex = _currentPageIndex - item.key;
                 return _CoverFlowPositionedItem(
-                  imagePath: item.value.image ?? "",
+                  imagePath: item.value.image,
                   index: currentIndex,
                   absIndex: currentIndex.abs(),
                   size: Size(screenWidth, _maxHeight),
@@ -163,7 +163,7 @@ class _CoverFlowPositionedItem extends StatelessWidget {
     required this.spacing,
     required this.style,
   });
-  final String imagePath;
+  final String? imagePath;
   final double index;
   final double absIndex;
   final Size size;
@@ -198,27 +198,26 @@ class _CoverFlowPositionedItem extends StatelessWidget {
       child: SizedBox(
         width: _calculateItemWidth,
         height: size.height,
-        child: ColoredBox(
-          color: ColorManager.darkBlue,
-          child: GestureDetector(
-            onTap: () {
+        child: GestureDetector(
+          onTap: () {
+            if (imagePath != null) {
               goPush(context, Routes.productImagePage, extra: imagePath);
-            },
-            child: CachedNetworkImage(
-              imageUrl: imagePath,
-              height: AppSize.s120,
-              fit: BoxFit.cover,
-              placeholder: (context, url) => Container(
-                color: ColorManager.white,
-                height: AppSize.s100,
-                width: AppSize.s100,
-              ),
-              errorWidget: (context, url, error) => Skeletonizer(
-                  child: Container(
-                color: ColorManager.white,
-                height: AppSize.s100,
-                width: AppSize.s100,
-              )),
+            }
+          },
+          child: CachedNetworkImage(
+            imageUrl: imagePath ?? "",
+            height: AppSize.s120,
+            fit: BoxFit.cover,
+            placeholder: (context, url) => Skeletonizer(
+                child: Container(
+              color: ColorManager.white,
+              height: AppSize.s100,
+              width: AppSize.s100,
+            )),
+            errorWidget: (context, url, error) => Container(
+              color: ColorManager.darkBlue,
+              height: AppSize.s100,
+              width: AppSize.s100,
             ),
           ),
         ),

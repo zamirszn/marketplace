@@ -242,7 +242,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                                         false) {
                                       showModalBottomSheet(
                                         context: context,
-                                        isDismissible:  true,
+                                        isDismissible: true,
                                         showDragHandle: true,
                                         isScrollControlled: true,
                                         enableDrag: true,
@@ -336,7 +336,7 @@ class _ResetPasswordOTPBottomSheetState
                       style: getLightStyle(
                           font: FontConstants.poppins,
                           fontSize: FontSize.s12,
-                          color: ColorManager.lightGrey),
+                          color: ColorManager.grey),
                     ),
                   ),
                   space(h: AppSize.s20),
@@ -385,7 +385,7 @@ class _ResetPasswordOTPBottomSheetState
                                         color: ColorManager.white),
                                   )))),
                   space(h: AppSize.s20),
-                  if (state.isRequestingOTP )
+                  if (state.isRequestingOTP)
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

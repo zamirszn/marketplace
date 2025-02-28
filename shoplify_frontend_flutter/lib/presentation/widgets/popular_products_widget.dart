@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
@@ -9,6 +10,7 @@ import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
+import 'package:shoplify/presentation/ui/home/bloc/product_details/bloc/product_details_bloc.dart';
 import 'package:shoplify/presentation/widgets/interactive_3d_effect.dart';
 import 'package:shoplify/presentation/widgets/star_rating/star_rating_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -24,10 +26,13 @@ class PopularProductsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        context
+            .read<ProductDetailsBloc>()
+            .add(SetProductDetailsEvent(product: product));
         goPush(
           context,
           Routes.productDetailsPage,
-          extra: {'product': product, 'heroTag': '${product.id}_popular'},
+          extra: {'heroTag': '${product.id}_popular'},
         );
       },
       child: Hero(

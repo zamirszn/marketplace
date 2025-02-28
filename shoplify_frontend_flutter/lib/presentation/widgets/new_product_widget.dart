@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
@@ -8,6 +10,7 @@ import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
+import 'package:shoplify/presentation/ui/home/bloc/product_details/bloc/product_details_bloc.dart';
 import 'package:shoplify/presentation/widgets/blur_background_widget.dart';
 import 'package:shoplify/presentation/widgets/product_widget.dart';
 import 'package:shoplify/presentation/widgets/add_to_cart_button.dart';
@@ -26,10 +29,13 @@ class NewProductWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        context
+            .read<ProductDetailsBloc>()
+            .add(SetProductDetailsEvent(product: product));
         goPush(
           context,
           Routes.productDetailsPage,
-          extra: {'product': product, 'heroTag': '${product.id}_new'},
+          extra: {'heroTag': '${product.id}_new'},
         );
       },
       child: Hero(
@@ -37,8 +43,8 @@ class NewProductWidget extends StatelessWidget {
         child: Stack(
           children: [
             SizedBox(
-              height: 400,
-              width: 300,
+              height: AppSize.s400,
+              width: AppSize.s300,
               child: CachedNetworkImage(
                 imageUrl: product.images.first.image!,
                 height: AppSize.s120,
@@ -59,15 +65,6 @@ class NewProductWidget extends StatelessWidget {
                 ),
               ),
             ),
-            // Positioned(
-            //     bottom: AppPadding.p20,
-            //     right: AppPadding.p10,
-            //     child: BlurBackgroundWidget(
-            //         width: AppSize.s40,
-            //         child: AddToCartWidget(
-    
-            //           product: product,
-            //         ))),
             if (product.price != null)
               Positioned(
                   bottom: AppPadding.p20,
@@ -102,6 +99,66 @@ class NewProductWidget extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class NewProductWidgetSkeleton extends StatelessWidget {
+  const NewProductWidgetSkeleton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(AppSize.s20),
+      child: Stack(children: [
+        Skeletonizer(
+          containersColor: Colors.red,
+          child: Container(
+            color: Colors.white,
+            height: 400,
+            width: 220,
+          ),
+        ),
+        const Positioned(
+          bottom: AppPadding.p20,
+          right: AppPadding.p30,
+          child: Skeletonizer(
+              effect: PulseEffect(),
+              child: Icon(
+                Iconsax.save_minus,
+                size: AppSize.s36,
+              )),
+        ),
+        Positioned(
+            bottom: AppPadding.p20,
+            left: AppPadding.p10,
+            child: Skeletonizer(
+              effect: const PulseEffect(),
+              child: Text(
+                "*******",
+                overflow: TextOverflow.ellipsis,
+                style: getSemiBoldStyle(
+                    fontSize: FontSize.s23, font: FontConstants.ojuju),
+              ),
+            )),
+        Positioned(
+          top: AppPadding.p20,
+          right: AppPadding.p30,
+          child: Skeletonizer(
+            effect: const PulseEffect(),
+            child: Text(
+              "*******",
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: getSemiBoldStyle(
+                  fontSize: FontSize.s18, font: FontConstants.ojuju),
+            ),
+          ),
+        )
+      ]),
     );
   }
 }

@@ -9,9 +9,11 @@ import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/core/constants/api_urls.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
+import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/ui/favorite/bloc/favorite_bloc.dart';
+import 'package:shoplify/presentation/ui/home/bloc/product_details/bloc/product_details_bloc.dart';
 import 'package:shoplify/presentation/widgets/blur_background_widget.dart';
 import 'package:shoplify/presentation/widgets/loading_widget.dart';
 import 'package:shoplify/presentation/widgets/new_product_widget.dart';
@@ -26,26 +28,39 @@ class FavoriteProductWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        SizedBox(
-          height: 400,
-          width: 400,
-          child: CachedNetworkImage(
-            imageUrl: product.images.first.image!,
-            height: AppSize.s120,
-            fit: BoxFit.cover,
-            errorWidget: (context, url, error) => Container(
-              height: AppSize.s100,
-              width: AppSize.s100,
-              color: ColorManager.darkBlue,
-            ),
-            placeholder: (
-              context,
-              url,
-            ) =>
-                Container(
-              color: ColorManager.darkBlue,
-              height: AppSize.s100,
-              width: AppSize.s100,
+        GestureDetector(
+          onTap: () {
+            context
+                .read<ProductDetailsBloc>()
+                .add(SetProductDetailsEvent(product: product));
+            goPush(context, Routes.productDetailsPage,
+                extra: {'heroTag': '${product.id}_favorite'});
+          },
+          child: Hero(
+            
+            tag: '${product.id}_favorite',
+            child: SizedBox(
+              height: 400,
+              width: 400,
+              child: CachedNetworkImage(
+                imageUrl: product.images.first.image!,
+                height: AppSize.s120,
+                fit: BoxFit.cover,
+                errorWidget: (context, url, error) => Container(
+                  height: AppSize.s100,
+                  width: AppSize.s100,
+                  color: ColorManager.darkBlue,
+                ),
+                placeholder: (
+                  context,
+                  url,
+                ) =>
+                    Container(
+                  color: ColorManager.darkBlue,
+                  height: AppSize.s100,
+                  width: AppSize.s100,
+                ),
+              ),
             ),
           ),
         ),

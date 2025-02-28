@@ -48,9 +48,11 @@ class _AddReviewPageState extends State<AddReviewPage> {
           appBar: AppBar(
             elevation: 0,
             backgroundColor: Colors.transparent,
-            leading: const Padding(
-              padding: EdgeInsets.all(AppPadding.p10),
-              child: GoBackButton(),
+            leading: Padding(
+              padding: const EdgeInsets.all(AppPadding.p10),
+              child: GoBackButton(
+                backgroundColor: ColorManager.lightGrey,
+              ),
             ),
             title: Text(
               AppStrings.addReview,
@@ -115,7 +117,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                   ),
                   space(h: AppSize.s20),
                   Divider(
-                    color: ColorManager.lemon,
+                    color: ColorManager.lightGrey,
                   ),
                   space(h: AppSize.s10),
                   Text(
@@ -134,7 +136,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                       )),
                   space(h: AppSize.s20),
                   Divider(
-                    color: ColorManager.lemon,
+                    color: ColorManager.lightGrey,
                   ),
                   space(h: AppSize.s40),
                   Align(
@@ -200,7 +202,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                                     BorderRadius.circular(AppSize.s20)),
                             shadowColor: Colors.transparent,
                             foregroundColor: ColorManager.black,
-                            backgroundColor: ColorManager.darkBlue,
+                            backgroundColor: ColorManager.grey,
                           ),
                           child: Transform.scale(
                               scale: .85, child: const LoadingWidget()),
@@ -214,7 +216,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                                     BorderRadius.circular(AppSize.s20)),
                             shadowColor: Colors.transparent,
                             foregroundColor: ColorManager.black,
-                            backgroundColor: ColorManager.darkBlue,
+                            backgroundColor: ColorManager.grey,
                           ),
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {

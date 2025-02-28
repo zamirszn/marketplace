@@ -172,7 +172,7 @@ OutlineInputBorder outlineInputBorder({Color? color, double? width}) {
   return OutlineInputBorder(
     borderSide: BorderSide(
       width: width ?? AppSize.s2,
-      color: color ?? ColorManager.lightGrey,
+      color: color ?? ColorManager.grey,
     ),
     borderRadius: BorderRadius.circular(AppSize.s10),
   );
@@ -192,7 +192,6 @@ final FilteringTextInputFormatter textWithSpaceInputFormatter =
 final FilteringTextInputFormatter textOnlyInputFormatter =
     FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'));
 
-
- final errorStyle =
-        getRegularStyle(color: ColorManager.white, fontSize: FontSize.s10);
-    final cursorColor = ColorManager.white;
+final errorStyle =
+    getRegularStyle(color: ColorManager.white, fontSize: FontSize.s10);
+final cursorColor = ColorManager.white;

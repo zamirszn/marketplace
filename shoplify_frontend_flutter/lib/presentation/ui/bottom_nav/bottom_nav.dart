@@ -48,7 +48,6 @@ class BottomNav extends StatelessWidget {
                       .read<BottomNavBloc>()
                       .add(BottomNavChangedEvent(index: index));
                 },
-                backgroundColor: ColorManager.lemon,
                 destinations: [
                   const NavigationDestination(
                     label: AppStrings.catalog,

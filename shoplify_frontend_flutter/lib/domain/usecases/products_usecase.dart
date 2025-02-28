@@ -47,6 +47,14 @@ class AddtoFavoriteUseCase implements Usecase<Either, String> {
     return sl<ProductsRepository>().addToFavorite(params!);
   }
 }
+
+class RefreshProductDetails implements Usecase<Either, String> {
+  @override
+  Future<Either> call({String? params}) async{
+    return sl<ProductsRepository>().refreshProductDetails(params!);
+  }
+}
+
 class RemovefromFavoriteUseCase implements Usecase<Either, String> {
   @override
   Future<Either> call({String? params}) async{

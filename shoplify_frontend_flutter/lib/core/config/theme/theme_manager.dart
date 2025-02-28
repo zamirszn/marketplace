@@ -65,7 +65,7 @@ class AppTheme {
             borderRadius: const BorderRadius.all(Radius.circular(AppSize.s14))),
       ),
       // main colors of the app
-      primaryColor: ColorManager.darkBlue,
+      primaryColor: ColorManager.lightGrey,
       // primaryColorLight: ColorManager.primaryOpacity70,
       // primaryColorDark: ColorManager.darkPrimary,
       // disabledColor: ColorManager.grey1,
@@ -81,7 +81,7 @@ class AppTheme {
       // App bar theme
       appBarTheme: AppBarTheme(
         centerTitle: true,
-        color: ColorManager.lemon,
+        color: ColorManager.lightGrey,
         elevation: AppSize.s4,
 
         // shadowColor: ColorManager.primaryOpacity70,

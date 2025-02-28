@@ -26,7 +26,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     on<ToggleFavoriteEvent>(_toggleProductToFavorite);
   }
 
-  _toggleProductToFavorite(
+  void _toggleProductToFavorite(
       ToggleFavoriteEvent event, Emitter<ProductState> emit) async {
     emit(AddToFavoriteLoading());
 
@@ -57,7 +57,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     });
   }
 
-  _getOrCreateCart(
+  void _getOrCreateCart(
       GetOrCreateCartEvent event, Emitter<ProductState> emit) async {
     emit(CreateorGetCartLoading());
     Either response = await sl<GetorCreateCartUseCase>().call();
@@ -69,7 +69,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     });
   }
 
-  _onAddToCart(AddToCartEvent event, Emitter<ProductState> emit) async {
+  void _onAddToCart(AddToCartEvent event, Emitter<ProductState> emit) async {
     emit(AddToCartLoading());
     Either response = await sl<AddToCartUseCase>().call(params: event.params);
     response.fold((error) {
@@ -79,7 +79,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     });
   }
 
-  _onGetAllProducts(
+  void _onGetAllProducts(
       GetAllProductsEvent event, Emitter<ProductState> emit) async {
     if (!_hasReachedMax(state)) {
       try {
@@ -127,7 +127,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       state is AllProductSuccess && state.hasReachedMax;
 }
 
-_onGetNewProducts(GetNewProductsEvent event, Emitter<ProductState> emit) async {
+void _onGetNewProducts(
+    GetNewProductsEvent event, Emitter<ProductState> emit) async {
   emit(NewProductLoading());
   Either response = await sl<GetNewProductsUseCase>().call();
   response.fold((error) {
@@ -143,7 +144,7 @@ _onGetNewProducts(GetNewProductsEvent event, Emitter<ProductState> emit) async {
   });
 }
 
-_onGetProductsGategory(
+void _onGetProductsGategory(
     GetProductCategoryEvent event, Emitter<ProductState> emit) async {
   emit(ProductCategoryLoading());
   Either response = await sl<GetProductCategoryUsecase>().call();
@@ -157,7 +158,7 @@ _onGetProductsGategory(
   });
 }
 
-_onGetPopularProducts(
+void _onGetPopularProducts(
     GetPopularProductsEvent event, Emitter<ProductState> emit) async {
   emit(PopularProductLoading());
   Either response = await sl<GetPopularProductUseCase>().call();

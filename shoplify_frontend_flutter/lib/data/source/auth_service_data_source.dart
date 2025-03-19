@@ -10,7 +10,6 @@ import 'package:shoplify/presentation/service_locator.dart';
 abstract class AuthServiceDataSource {
   Future<Either> signup(SignupParamsModel signUpParam);
   Future<Either> login(LoginParamsModel logInParam);
-  Future<Either> getUser();
   Future<Either> refresh(String token);
   Future<Either> requestEmailVerificationOTP(String email);
   Future<Either> requestNewPasswordOTP(String email);
@@ -41,11 +40,7 @@ class AuthServiceImpl extends AuthServiceDataSource {
     }
   }
 
-  @override
-  Future<Either> getUser() {
-    // TODO: implement getUser
-    throw UnimplementedError();
-  }
+  
 
   @override
   Future<Either> refresh(String token) async {

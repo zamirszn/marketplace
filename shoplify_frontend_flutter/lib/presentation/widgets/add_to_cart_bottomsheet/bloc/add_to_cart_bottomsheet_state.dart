@@ -8,26 +8,32 @@ class AddToCartBottomsheetState extends Equatable {
   final int itemCount;
   final AddToCartStatus status;
   final String? errorMessage;
+  final CartItem? cartItemToAdd;
 
   const AddToCartBottomsheetState(
       {this.selectedProductId,
       this.itemCount = 1,
-      this.status = AddToCartStatus.initial, this.errorMessage});
+      this.status = AddToCartStatus.initial,
+      this.errorMessage,
+      this.cartItemToAdd});
 
   @override
-  List<Object?> get props => [selectedProductId, itemCount, status, errorMessage];
+  List<Object?> get props =>
+      [selectedProductId, itemCount, status, errorMessage, cartItemToAdd];
 
   AddToCartBottomsheetState copyWith({
     String? selectedProductId,
     int? itemCount,
     AddToCartStatus? status,
-       String? errorMessage,
-
+    String? errorMessage,
+    CartItem? cartItemToAdd,
   }) {
     return AddToCartBottomsheetState(
-        selectedProductId: selectedProductId ?? this.selectedProductId,
-        itemCount: itemCount ?? this.itemCount,
-        errorMessage: errorMessage ?? this.errorMessage,
-        status: status ?? this.status);
+      selectedProductId: selectedProductId ?? this.selectedProductId,
+      itemCount: itemCount ?? this.itemCount,
+      errorMessage: errorMessage ?? this.errorMessage,
+      status: status ?? this.status,
+      cartItemToAdd: cartItemToAdd ?? this.cartItemToAdd,
+    );
   }
 }

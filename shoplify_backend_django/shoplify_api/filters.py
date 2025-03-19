@@ -6,7 +6,11 @@ from .models import Product, Review
 class ProductFilter(FilterSet):
     class Meta:
         model = Product
-        fields = {"category_id": ["exact"], "old_price": ["gt", "lt"]}
+        fields = {"category_id": ["exact"], "old_price": ["gt", "lt"],
+                "discount": ["exact"],
+                "flash_sales": ["exact"],
+                  
+                  }
 
 
 class ReviewFilter(FilterSet):

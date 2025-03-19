@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:shoplify/core/usecase/usecase.dart';
 import 'package:shoplify/data/models/add_to_cart_params_model.dart';
+import 'package:shoplify/data/models/cart_model.dart';
 import 'package:shoplify/data/models/product_query_params_model.dart';
+import 'package:shoplify/data/models/search_params_model.dart';
 import 'package:shoplify/domain/repository/products_repo.dart';
 import 'package:shoplify/domain/repository/review_repo.dart';
 import 'package:shoplify/presentation/service_locator.dart';
@@ -27,6 +29,13 @@ class GetPopularProductUseCase implements Usecase<Either, dynamic> {
   }
 }
 
+class SearchProductUseCase implements Usecase<Either, SearchParamsModel> {
+  @override
+  Future<Either> call({SearchParamsModel? params}) async {
+    return sl<ProductsRepository>().searchProduct(params!);
+  }
+}
+
 class GetAllProductUseCase implements Usecase<Either, ProductQueryParamsModel> {
   @override
   Future<Either> call({ProductQueryParamsModel? params}) async {
@@ -43,26 +52,24 @@ class AddToCartUseCase implements Usecase<Either, AddToCartParamsModel> {
 
 class AddtoFavoriteUseCase implements Usecase<Either, String> {
   @override
-  Future<Either> call({String? params}) async{
+  Future<Either> call({String? params}) async {
     return sl<ProductsRepository>().addToFavorite(params!);
   }
 }
 
 class RefreshProductDetails implements Usecase<Either, String> {
   @override
-  Future<Either> call({String? params}) async{
+  Future<Either> call({String? params}) async {
     return sl<ProductsRepository>().refreshProductDetails(params!);
   }
 }
 
 class RemovefromFavoriteUseCase implements Usecase<Either, String> {
   @override
-  Future<Either> call({String? params}) async{
+  Future<Either> call({String? params}) async {
     return sl<ProductsRepository>().removeToFavorite(params!);
   }
 }
-
-
 
 class GetorCreateCartUseCase implements Usecase<Either, dynamic> {
   @override
@@ -92,4 +99,10 @@ class SubmitReviewUsecase implements Usecase<Either, dynamic> {
   }
 }
 
-
+class RemoveFromCartUseCase
+    implements Usecase<Either, RemoveFromCartModelParams> {
+  @override
+  Future<Either> call({RemoveFromCartModelParams? params}) async {
+    return sl<ProductsRepository>().removeFromCart(params!);
+  }
+}

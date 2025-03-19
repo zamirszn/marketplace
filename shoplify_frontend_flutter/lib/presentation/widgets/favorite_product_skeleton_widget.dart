@@ -11,10 +11,10 @@ import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/ui/favorite/bloc/favorite_bloc.dart';
+import 'package:shoplify/presentation/pages/favorite/bloc/favorite_bloc.dart';
 import 'package:shoplify/presentation/widgets/blur_background_widget.dart';
 import 'package:shoplify/presentation/widgets/loading_widget.dart';
-import 'package:shoplify/presentation/widgets/new_product_widget.dart';
+import 'package:shoplify/presentation/widgets/new_product_widget/new_product_widget.dart';
 import 'package:shoplify/presentation/widgets/remove_favorite_product/remove_favorite_product_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 

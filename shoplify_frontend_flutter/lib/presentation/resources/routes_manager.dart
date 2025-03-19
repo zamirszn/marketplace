@@ -4,22 +4,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shoplify/data/models/review_param_model.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
-import 'package:shoplify/presentation/ui/auth/account_blocked.dart';
-import 'package:shoplify/presentation/ui/auth/account_verification/account_verification_page.dart';
-import 'package:shoplify/presentation/ui/auth/forgot_password/forgot_password_page.dart';
-import 'package:shoplify/presentation/ui/auth/forgot_password/new_password_page.dart';
-import 'package:shoplify/presentation/ui/auth/splash_page.dart';
-import 'package:shoplify/presentation/ui/bottom_nav/bottom_nav.dart';
-import 'package:shoplify/presentation/ui/home/bloc/product_details/product_details_page.dart';
-import 'package:shoplify/presentation/ui/home/product_image_page.dart';
-import 'package:shoplify/presentation/ui/order/order_page.dart';
-import 'package:shoplify/presentation/ui/review/add_review_page.dart';
-import 'package:shoplify/presentation/ui/review/bloc/review_bloc.dart';
-import 'package:shoplify/presentation/ui/review/review_page.dart';
+import 'package:shoplify/presentation/pages/auth/account_blocked.dart';
+import 'package:shoplify/presentation/pages/auth/account_verification/account_verification_page.dart';
+import 'package:shoplify/presentation/pages/auth/forgot_password/forgot_password_page.dart';
+import 'package:shoplify/presentation/pages/auth/forgot_password/new_password_page.dart';
+import 'package:shoplify/presentation/pages/auth/splash_page.dart';
+import 'package:shoplify/presentation/pages/bottom_nav/bottom_nav.dart';
+import 'package:shoplify/presentation/pages/home/product_details/product_details_page.dart';
+import 'package:shoplify/presentation/pages/home/product_image_page.dart';
+import 'package:shoplify/presentation/pages/order/order_page.dart';
+import 'package:shoplify/presentation/pages/review/add_review_page.dart';
+import 'package:shoplify/presentation/pages/review/bloc/review_bloc.dart';
+import 'package:shoplify/presentation/pages/review/review_page.dart';
+import 'package:shoplify/presentation/pages/search/search_page.dart';
 import 'package:shoplify/presentation/widgets/error_404_page.dart';
-import 'package:shoplify/presentation/ui/auth/login/login_page.dart';
-import 'package:shoplify/presentation/ui/auth/sign_up/sign_up_page.dart';
-import 'package:shoplify/presentation/ui/onboarding/onboarding_screen.dart';
+import 'package:shoplify/presentation/pages/auth/login/login_page.dart';
+import 'package:shoplify/presentation/pages/auth/sign_up/sign_up_page.dart';
+import 'package:shoplify/presentation/pages/onboarding/onboarding_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   //TODO: add onboarding and auth check
@@ -73,6 +74,12 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(
+      path: Routes.searchPage,
+      builder: (context, state) {
+        return const SearchPage();
+      },
+    ),
+    GoRoute(
       path: Routes.addReviewPage,
       builder: (context, state) {
         final ProductModelEntity product = state.extra as ProductModelEntity;
@@ -105,6 +112,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       builder: (context, state) {
         final ProductModelEntity product = state.extra as ProductModelEntity;
+        print("product route is $product");
 
         return BlocProvider<ReviewBloc>(
             create: (context) => ReviewBloc()
@@ -136,6 +144,7 @@ class Routes {
   static const String productImagePage = "/productImagePage";
   static const String accountVerificationPage = "/accountVerificationPage";
   static const String accountBlocked = "/accountBlocked";
+  static const String searchPage = "/searchPage";
 }
 
 Future<void> goPush(BuildContext context, String routeName,
@@ -144,6 +153,10 @@ Future<void> goPush(BuildContext context, String routeName,
     routeName,
     extra: extra,
   );
+}
+
+String? getCurrentRoute(BuildContext context) {
+  return GoRouter.of(context).state?.fullPath;
 }
 
 void goto(BuildContext context, String routeName, {Object? extra}) {

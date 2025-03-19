@@ -6,7 +6,7 @@ import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
-import 'package:shoplify/presentation/ui/auth/account_verification/bloc/account_verification_bloc.dart';
+import 'package:shoplify/presentation/pages/auth/account_verification/bloc/account_verification_bloc.dart';
 import 'package:shoplify/presentation/widgets/count_down_widget/bloc/countdown_bloc.dart';
 import 'package:shoplify/presentation/widgets/snackbar.dart';
 

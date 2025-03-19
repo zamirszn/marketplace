@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
+import 'package:shoplify/core/constants/constant.dart';
+import 'package:shoplify/data/source/secure_storage_data_source.dart';
 import 'package:shoplify/domain/entities/review_entity.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
+import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
+import 'package:shoplify/presentation/service_locator.dart';
 
 num calculateProductAmountByQuantity(num productPrice, int quantity) {
   return productPrice * quantity;
@@ -195,3 +199,18 @@ final FilteringTextInputFormatter textOnlyInputFormatter =
 final errorStyle =
     getRegularStyle(color: ColorManager.white, fontSize: FontSize.s10);
 final cursorColor = ColorManager.white;
+
+void logoutUser(BuildContext context) async {
+  removeAuthToken();
+  goto(context, Routes.loginPage);
+}
+
+void removeAuthToken() async {
+  await sl<SecureStorageDataSource>().delete(
+    Constant.accessToken,
+  );
+}
+
+String? roundToTwoDecimalPlaces(num? number) {
+  return number?.toStringAsFixed(2);
+}

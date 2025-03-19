@@ -164,6 +164,8 @@ class UpdateCartItemSerializer(serializers.ModelSerializer):
 
 class AddCartItemSerializer(serializers.ModelSerializer):
     product_id = serializers.UUIDField()
+    product = ProductSerializer(read_only=True)
+
 
     def validate_product_id(self, value):
         if not Product.objects.filter(pk=value).exists():
@@ -188,7 +190,8 @@ class AddCartItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CartItem
-        fields = ["id", "product_id", "quantity"]
+        fields = ["id", "product", "product_id", "quantity"]
+
 
 
 class OrderItemSerializer(serializers.ModelSerializer):

@@ -43,8 +43,7 @@ class AuthRepositoryImpl extends AuthRepository {
       // save token
 
       sl<DioClient>().setAuthToken(response.data[Constant.accessToken]);
-      await sl<SecureStorageDataSource>()
-          .write(Constant.refreshToken, response.data[Constant.refreshToken]);
+      
       await sl<SecureStorageDataSource>()
           .write(Constant.accessToken, response.data[Constant.accessToken]);
 
@@ -52,19 +51,9 @@ class AuthRepositoryImpl extends AuthRepository {
     });
   }
 
-  @override
-  Future<Either> getUser() async {
-    Either result = await sl<AuthServiceDataSource>().getUser();
-    return result.fold((error) {
-      return Left(error);
-    }, (data) {
-      Response response = data;
-      final UserModel userModel = UserModel.fromMap(response.data);
-      final UserEntity userEntity = userModel.toEntity();
-      return Right(userEntity);
-    });
-  }
 
+
+  // TODO: remove 
   @override
   Future<Either> refresh(String refreshToken) async {
     Either result = await sl<AuthServiceDataSource>().refresh(refreshToken);

@@ -11,10 +11,10 @@ import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/ui/auth/sign_up/sign_up_page.dart';
-import 'package:shoplify/presentation/ui/cart/bloc/cart_bloc.dart';
-import 'package:shoplify/presentation/ui/favorite/bloc/favorite_bloc.dart';
-import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
+import 'package:shoplify/presentation/pages/auth/sign_up/sign_up_page.dart';
+import 'package:shoplify/presentation/pages/cart/bloc/cart_bloc.dart';
+import 'package:shoplify/presentation/pages/favorite/bloc/favorite_bloc.dart';
+import 'package:shoplify/presentation/pages/home/bloc/product_bloc.dart';
 import 'package:shoplify/presentation/widgets/add_to_cart_bottomsheet/bloc/add_to_cart_bottomsheet_bloc.dart';
 import 'package:shoplify/presentation/widgets/back_button.dart';
 import 'package:shoplify/presentation/widgets/loading_widget.dart';
@@ -70,6 +70,11 @@ class AddtoCartBottomSheet extends StatelessWidget {
                 showErrorMessage(context, state.errorMessage!);
               }
             } else if (state.status == AddToCartStatus.success) {
+              if (state.cartItemToAdd != null) {
+                context.read<CartBloc>().add(AddProductToCartPageEvent(
+                    cartItem: state.cartItemToAdd!,
+                    quantityToAdd: state.itemCount));
+              }
               showMessage(context, "${product.name} ${AppStrings.addedToCart}");
               if (bottomSheetCallback != null) {
                 bottomSheetCallback!();
@@ -80,6 +85,7 @@ class AddtoCartBottomSheet extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: AppPadding.p20),
             child: SingleChildScrollView(
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   // title
                   Row(
@@ -198,9 +204,9 @@ class AddtoCartBottomSheet extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               SizedBox(
-                                width: AppSize.s100,
+                                width: AppSize.s70,
                                 child: Text(
-                                  "\$${product.price?.toString() ?? ""}",
+                                  "\$${roundToTwoDecimalPlaces(product.price) ?? ""}",
                                   textAlign: TextAlign.start,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -211,20 +217,16 @@ class AddtoCartBottomSheet extends StatelessWidget {
                               ),
                               if (product.oldPrice != null &&
                                   product.oldPrice != product.price)
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                      left: AppPadding.p10),
-                                  child: Text(
-                                    "${product.oldPrice}",
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        decoration: product.discount != null &&
-                                                product.discount == true
-                                            ? TextDecoration.lineThrough
-                                            : null,
-                                        fontSize: FontSize.s14,
-                                        fontFamily: FontConstants.ojuju),
-                                  ),
+                                Text(
+                                  "${roundToTwoDecimalPlaces(product.oldPrice)}",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      decoration: product.discount != null &&
+                                              product.discount == true
+                                          ? TextDecoration.lineThrough
+                                          : null,
+                                      fontSize: FontSize.s14,
+                                      fontFamily: FontConstants.ojuju),
                                 ),
                             ],
                           ),

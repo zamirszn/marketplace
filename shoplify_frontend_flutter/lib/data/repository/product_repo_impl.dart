@@ -1,7 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shoplify/data/models/add_to_cart_params_model.dart';
+import 'package:shoplify/data/models/cart_model.dart';
 import 'package:shoplify/data/models/product_query_params_model.dart';
+import 'package:shoplify/data/models/search_params_model.dart';
 import 'package:shoplify/data/source/products_service_data_source.dart';
 import 'package:shoplify/domain/repository/products_repo.dart';
 import 'package:shoplify/presentation/service_locator.dart';
@@ -42,9 +44,9 @@ class ProductRepositoryImpl extends ProductsRepository {
   }
 
   @override
-  Future<Either> getAllProducts(ProductQueryParamsModel productParams) async {
+  Future<Either> getAllProducts(ProductQueryParamsModel productQueryParams) async {
     Either result =
-        await sl<ProductsServiceDataSource>().getAllProducts(productParams);
+        await sl<ProductsServiceDataSource>().getAllProducts(productQueryParams);
     return result.fold((error) {
       return Left(error);
     }, (data) async {
@@ -112,6 +114,30 @@ class ProductRepositoryImpl extends ProductsRepository {
   Future<Either> refreshProductDetails(String productId) async {
     Either result =
         await sl<ProductsServiceDataSource>().refreshProductDetails(productId);
+    return result.fold((error) {
+      return Left(error);
+    }, (data) async {
+      Response response = data;
+      return Right(response.data);
+    });
+  }
+  
+  @override
+  Future<Either> removeFromCart(RemoveFromCartModelParams removeFromCartModelParams)async {
+    Either result =
+        await sl<ProductsServiceDataSource>().removeFromCart(removeFromCartModelParams);
+    return result.fold((error) {
+      return Left(error);
+    }, (data) async {
+      Response response = data;
+      return Right(response.data);
+    });
+  }
+
+  @override
+  Future<Either> searchProduct(SearchParamsModel searchParamsModel)async {
+  Either result =
+        await sl<ProductsServiceDataSource>().searchProduct(searchParamsModel);
     return result.fold((error) {
       return Left(error);
     }, (data) async {

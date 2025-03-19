@@ -1,0 +1,16 @@
+part of 'search_bloc.dart';
+
+@immutable
+sealed class SearchEvent {}
+
+final class UpdateSearchText extends SearchEvent {
+  final String text;
+
+  UpdateSearchText({required this.text});
+}
+
+final class SearchProductEvent extends SearchEvent {
+  final SearchParamsModel searchParamsModel;
+
+  SearchProductEvent({required this.searchParamsModel});
+}

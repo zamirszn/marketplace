@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 
+extension PascalCase on String {
+  String toPascalCase() {
+    return this[0].toUpperCase() + substring(1).toLowerCase();
+  }
+}
+
 extension HexColor on Color {
   static Color fromHex(String hexColorString) {
     hexColorString = hexColorString.replaceAll('#', '');

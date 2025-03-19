@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/ui/favorite/bloc/favorite_bloc.dart';
+import 'package:shoplify/presentation/pages/favorite/bloc/favorite_bloc.dart';
 import 'package:shoplify/presentation/widgets/loading_widget.dart';
 import 'package:shoplify/presentation/widgets/remove_favorite_product/bloc/remove_favorite_bloc.dart';
 import 'package:shoplify/presentation/widgets/snackbar.dart';

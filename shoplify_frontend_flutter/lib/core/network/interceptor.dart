@@ -128,12 +128,12 @@ class LoggerInterceptor extends Interceptor {
 
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
-    logger.d(
-      'STATUSCODE: ${response.statusCode} \n '
-      'STATUSMESSAGE: ${response.statusMessage} \n'
-      'HEADERS: ${response.headers} \n'
-      'Data: ${response.data}',
-    );
+    // logger.d(
+    //   'STATUSCODE: ${response.statusCode} \n '
+    //   'STATUSMESSAGE: ${response.statusMessage} \n'
+    //   'HEADERS: ${response.headers} \n'
+    //   'Data: ${response.data}',
+    // );
     handler.next(response);
   }
 }

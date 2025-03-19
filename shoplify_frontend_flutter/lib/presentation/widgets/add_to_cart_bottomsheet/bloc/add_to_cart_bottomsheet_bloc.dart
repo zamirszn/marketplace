@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:shoplify/data/models/add_to_cart_params_model.dart';
+import 'package:shoplify/data/models/cart_model.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/domain/usecases/products_usecase.dart';
 import 'package:shoplify/presentation/service_locator.dart';
@@ -31,13 +32,20 @@ class AddToCartBottomsheetBloc
       emit(
           state.copyWith(status: AddToCartStatus.failure, errorMessage: error));
     }, (data) {
-      emit(state.copyWith(status: AddToCartStatus.success));
+      final CartItem cartItem = CartItem.fromMap(data);
+      emit(state.copyWith(
+          status: AddToCartStatus.success, cartItemToAdd: cartItem));
     });
   }
 
   void _onResetItemCartCount(ResetCartItemCountEvent event,
       Emitter<AddToCartBottomsheetState> emit) async {
-    emit(state.copyWith(selectedProductId: null, itemCount: 1));
+    emit(state.copyWith(
+        selectedProductId: null,
+        itemCount: 1,
+        status: AddToCartStatus.initial,
+        cartItemToAdd: null,
+        errorMessage: null));
   }
 
   void _onSetCartItem(

@@ -14,7 +14,7 @@ import 'package:shoplify/domain/repository/favorite_product_repo.dart';
 import 'package:shoplify/domain/repository/products_repo.dart';
 import 'package:shoplify/domain/repository/review_repo.dart';
 import 'package:shoplify/domain/usecases/auth_usecase.dart';
-import 'package:shoplify/domain/usecases/favorite_products.dart';
+import 'package:shoplify/domain/usecases/favorite_products_usecase.dart';
 import 'package:shoplify/domain/usecases/products_usecase.dart';
 import 'package:shoplify/domain/usecases/user_usecase.dart';
 import 'package:shoplify/data/source/secure_storage_data_source.dart';
@@ -42,7 +42,7 @@ void setupServiceLocator() async {
   // auth usecases
   sl.registerSingleton<SignupUseCase>(SignupUseCase());
   sl.registerSingleton<LogInUseCase>(LogInUseCase());
-  sl.registerSingleton<UserUsecase>(UserUsecase());
+  // sl.registerSingleton<UserUsecase>(UserUsecase());
   sl.registerSingleton<RefreshTokenUsecase>(RefreshTokenUsecase());
   sl.registerSingleton<RequestEmailVerificationOTPUsecase>(
       RequestEmailVerificationOTPUsecase());
@@ -63,6 +63,11 @@ void setupServiceLocator() async {
   sl.registerSingleton<AddtoFavoriteUseCase>(AddtoFavoriteUseCase());
   sl.registerSingleton<RemovefromFavoriteUseCase>(RemovefromFavoriteUseCase());
   sl.registerSingleton<RefreshProductDetails>(RefreshProductDetails());
+  sl.registerSingleton<SearchProductUseCase>(SearchProductUseCase());
+
+  // cart
+  sl.registerSingleton<RemoveFromCartUseCase>(RemoveFromCartUseCase());
+
 
   // review usecase
   sl.registerSingleton<GetReviewsUseCase>(GetReviewsUseCase());

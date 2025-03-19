@@ -14,7 +14,6 @@ from datetime import timedelta
 import os
 from pathlib import Path
 import cloudinary
-import os
 import dj_database_url
 from django.core.management.utils import get_random_secret_key
 from django.urls import reverse_lazy
@@ -174,7 +173,7 @@ USE_TZ = True
 
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"  # <-- Updated!
+STATIC_ROOT = BASE_DIR / "staticfiles" 
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 

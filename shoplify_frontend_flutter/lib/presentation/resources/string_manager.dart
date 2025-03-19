@@ -1,6 +1,16 @@
 class AppStrings {
   static const String noRouteFound = "no_route_found";
   static const String back = "Back";
+  static const String sort = "Sort";
+  static const String sortBy = "Sort By";
+  static const String maximumPrice = "Maximum Price";
+  static const String minimumPrice = "Minimum Price";
+  static const String reset = "Reset";
+  static const String date = "Date";
+  static const String category = "Category";
+  static const String priceRange = "Price Range";
+  static const String filter = "Filter";
+  static const String yourCartIsEmpty = "Your cart is empty";
   static const String invalidImage = "Invalid image";
   static const String inventoryLimitReached = "Inventory limit reached";
   static const String passwordChangedSuccessfully =

@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoplify/core/constants/constant.dart';
-import 'package:shoplify/data/models/favorite_product_params_model.dart';
 import 'package:provider/single_child_widget.dart';
+import 'package:shoplify/presentation/pages/search/bloc/search_bloc.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/core/config/theme/theme_manager.dart';
 import 'package:shoplify/presentation/service_locator.dart';
-import 'package:shoplify/presentation/ui/auth/account_verification/bloc/account_verification_bloc.dart';
-import 'package:shoplify/presentation/ui/auth/forgot_password/bloc/forgot_password_bloc.dart';
-import 'package:shoplify/presentation/ui/auth/login/bloc/login_bloc.dart';
-import 'package:shoplify/presentation/ui/bottom_nav/bloc/bottom_nav_bloc.dart';
-import 'package:shoplify/presentation/ui/cart/bloc/cart_bloc.dart';
-import 'package:shoplify/presentation/ui/favorite/bloc/favorite_bloc.dart';
-import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
-import 'package:shoplify/presentation/ui/home/bloc/product_details/bloc/product_details_bloc.dart';
+import 'package:shoplify/presentation/pages/auth/account_verification/bloc/account_verification_bloc.dart';
+import 'package:shoplify/presentation/pages/auth/forgot_password/bloc/forgot_password_bloc.dart';
+import 'package:shoplify/presentation/pages/auth/login/bloc/login_bloc.dart';
+import 'package:shoplify/presentation/pages/bottom_nav/bloc/bottom_nav_bloc.dart';
+import 'package:shoplify/presentation/pages/cart/bloc/cart_bloc.dart';
+import 'package:shoplify/presentation/pages/favorite/bloc/favorite_bloc.dart';
+import 'package:shoplify/presentation/pages/home/bloc/product_bloc.dart';
+import 'package:shoplify/presentation/pages/home/product_details/bloc/product_details_bloc.dart';
+import 'package:shoplify/presentation/pages/home/filter_bottom_sheet/bloc/filter_bottomsheet_bloc.dart';
 import 'package:shoplify/presentation/widgets/add_to_cart_bottomsheet/bloc/add_to_cart_bottomsheet_bloc.dart';
 import 'package:shoplify/presentation/widgets/count_down_widget/bloc/countdown_bloc.dart';
+import 'package:shoplify/presentation/widgets/product_category/bloc/product_category_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -77,4 +79,10 @@ final List<SingleChildWidget> providers = [
   BlocProvider<ProductDetailsBloc>(
     create: (context) => ProductDetailsBloc(),
   ),
+  BlocProvider<SearchBloc>(
+    create: (context) => SearchBloc(),
+  ),
+  BlocProvider<ProductCategoryBloc>(create: (context) => ProductCategoryBloc()),
+  BlocProvider<FilterBottomsheetBloc>(
+      create: (context) => FilterBottomsheetBloc()),
 ];

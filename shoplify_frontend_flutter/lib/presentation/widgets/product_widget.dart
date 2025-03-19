@@ -12,8 +12,8 @@ import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/ui/home/bloc/product_bloc.dart';
-import 'package:shoplify/presentation/ui/home/bloc/product_details/bloc/product_details_bloc.dart';
+import 'package:shoplify/presentation/pages/home/bloc/product_bloc.dart';
+import 'package:shoplify/presentation/pages/home/product_details/bloc/product_details_bloc.dart';
 import 'package:shoplify/presentation/widgets/add_to_cart_button.dart';
 import 'package:shoplify/presentation/widgets/interactive_3d_effect.dart';
 import 'package:shoplify/presentation/widgets/loading_widget.dart';
@@ -102,7 +102,7 @@ class ProductWidget extends StatelessWidget {
                             constraints:
                                 const BoxConstraints(maxWidth: AppSize.s100),
                             child: Text(
-                              "\$${product.price}",
+                              "\$${roundToTwoDecimalPlaces(product.price)}",
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                   fontSize: FontSize.s18,
@@ -112,7 +112,7 @@ class ProductWidget extends StatelessWidget {
                           ),
                           if (product.discount == true)
                             Text(
-                              "\$${product.oldPrice}",
+                              "\$${roundToTwoDecimalPlaces(product.oldPrice)}",
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   decoration: product.discount != null &&
@@ -133,7 +133,7 @@ class ProductWidget extends StatelessWidget {
                   child: RoundCorner(child: AddToCartWidget(product: product)),
                 ),
                 Positioned(
-                  bottom: 0,
+                  bottom: 2,
                   left: 2,
                   child: StarRatingWidget(rating: product.averageRating ?? 0),
                 ),

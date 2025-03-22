@@ -276,22 +276,21 @@ UNFOLD = {
         "show_all_applications": True,  # Dropdown with all applications and models
         "navigation": [
             {
-                "separator": True,  # Top border
-                "collapsible": False,  # Collapsible group of links
+                "separator": True,  
+                "collapsible": False,  
                 "title": lzy("Home"),
                 "items": [
                     {
                         "icon": "dashboard",
                         "title": lzy("Dashboard"),
                         "link": reverse_lazy("admin:index"),
-                        # "badge": "sample_app.badge_callback",
                         "permission": lambda request: request.user.is_superuser,
                     },
                 ],
             },
             {
-                "separator": True,  # Top border
-                "collapsible": True,  # Collapsible group of links
+                "separator": True,  
+                "collapsible": True,  
                 "title": lzy("Accounts"),
                 "items": [
                     {
@@ -309,30 +308,93 @@ UNFOLD = {
                 ],
             },
             {
-                "separator": True,  # Top border
-                "collapsible": True,  # Collapsible group of links
+                "separator": True,  
+                "collapsible": True,  
                 "title": lzy("Orders"),
                 "items": [
                     {
-                        "icon": "shopping_bag",
+                        "icon": "storefront",
                         "title": lzy("Orders"),
                         "link": reverse_lazy("admin:shoplify_api_order_changelist"),
                         "badge": "shoplify_api.views.badge_callback",
                     },
+                    {
+                        "icon": "local_mall",
+                        "title": lzy("Orders Items"),
+                        "link": reverse_lazy("admin:shoplify_api_orderitem_changelist"),
+                    },
+                    
+                ],
+            },
+             {
+                "separator": True,  
+                "title": lzy("Cart"),
+                "collapsible": True,  
+                "items": [
+                    {
+                        "icon": "shopping_bag",
+                        "title": lzy("Cart"),
+                        "link": reverse_lazy("admin:shoplify_api_cart_changelist"),
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                    {
+                        "icon": "shopping_basket",
+                        "title": lzy("Cart Items"),
+                        "link": reverse_lazy("admin:shoplify_api_cartitem_changelist"),
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                    
+                ],
+            },
+             {
+                "separator": True,  
+                "title": lzy("Product"),
+                "collapsible": True,  
+                "items": [
+                    {
+                        "icon": "sell",
+                        "title": lzy("Products"),
+                        "link": reverse_lazy("admin:shoplify_api_product_changelist"),
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                    {
+                        "icon": "photo",
+                        "title": lzy("Product Images"),
+                        "link": reverse_lazy("admin:shoplify_api_productimage_changelist"),
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                    {
+                        "icon": "category",
+                        "title": lzy("Product Categories"),
+                        "link": reverse_lazy("admin:shoplify_api_category_changelist"),
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                    {
+                        "icon": "favorite",
+                        "title": lzy("Favorite Products"),
+                        "link": reverse_lazy("admin:shoplify_api_favoriteproducts_changelist"),
+                        "permission": lambda request: request.user.is_superuser,
+                    }
+                    
+                ],
+            },
+
+            {
+                "separator": True,  
+                "title": lzy("Review"),
+                "collapsible": True,  
+                "items": [
+                    {
+                        "icon": "reviews",
+                        "title": lzy("Reviews"),
+                        "link": reverse_lazy("admin:shoplify_api_review_changelist"),
+                        "permission": lambda request: request.user.is_superuser,
+                    },
+                    
+                    
                 ],
             },
         ],
     },
-    # "TABS": [
-    #     {
-    #         "models": ["core.User"],
-    #         "items": [
-    #             {
-    #                 "title": lzy("Core"),
-    #                 "icon": "sports_motorsports",
-    #                 "link": reverse_lazy("admin:core_user_changelist"),
-    #             },
-    #         ],
-    #     },
-    # ],
+    
 }

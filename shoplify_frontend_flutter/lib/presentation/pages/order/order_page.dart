@@ -4,7 +4,7 @@ import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
-import 'package:shoplify/presentation/widgets/back_button.dart';
+import 'package:shoplify/presentation/widgets/go_back_button.dart';
 
 class OrderPage extends StatelessWidget {
   const OrderPage({super.key});

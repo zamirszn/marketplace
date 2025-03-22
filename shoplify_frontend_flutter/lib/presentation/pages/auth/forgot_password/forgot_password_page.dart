@@ -13,12 +13,10 @@ import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/pages/auth/account_verification/bloc/account_verification_bloc.dart';
 import 'package:shoplify/presentation/pages/auth/forgot_password/bloc/forgot_password_bloc.dart';
 import 'package:shoplify/presentation/pages/auth/sign_up/sign_up_page.dart';
-import 'package:shoplify/presentation/widgets/back_button.dart';
+import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:shoplify/presentation/widgets/count_down_widget/bloc/countdown_bloc.dart';
-import 'package:shoplify/presentation/widgets/count_down_widget/countdown_widget.dart';
 import 'package:shoplify/presentation/widgets/snackbar.dart';
 
 class ForgotPasswordPage extends StatefulWidget {

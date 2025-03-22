@@ -70,15 +70,16 @@ class RedBox extends StatelessWidget {
 }
 
 class RoundCorner extends StatelessWidget {
-  const RoundCorner({super.key, required this.child, this.borderRadius});
+  const RoundCorner({super.key, required this.child, this.borderRadius, this.color});
   final Widget child;
   final double? borderRadius;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius ?? 10),
-      child: ColoredBox(color: ColorManager.grey.withAlpha(200), child: child),
+      child: ColoredBox(color: color ?? ColorManager.grey.withAlpha(200), child: child),
     );
   }
 }

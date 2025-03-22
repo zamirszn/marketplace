@@ -11,6 +11,9 @@ final class UpdateSearchText extends SearchEvent {
 
 final class SearchProductEvent extends SearchEvent {
   final SearchParamsModel searchParamsModel;
+  final bool useFilterParams;
 
-  SearchProductEvent({required this.searchParamsModel});
+  SearchProductEvent({required this.searchParamsModel, this.useFilterParams = false});
 }
+
+final class ResetSearchEvent extends SearchEvent {}

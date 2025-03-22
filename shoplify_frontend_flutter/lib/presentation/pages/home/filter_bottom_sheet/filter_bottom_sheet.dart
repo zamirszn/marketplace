@@ -4,13 +4,15 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
+import 'package:shoplify/data/models/search_params_model.dart';
+import 'package:shoplify/presentation/pages/search/bloc/search_bloc.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/pages/home/filter_bottom_sheet/bloc/filter_bottomsheet_bloc.dart';
-import 'package:shoplify/presentation/widgets/back_button.dart';
+import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:shoplify/presentation/widgets/product_category/bloc/product_category_bloc.dart';
 
 class FilterBottomSheet extends StatelessWidget {
@@ -18,6 +20,8 @@ class FilterBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final searchBloc = context.read<SearchBloc>();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: AppPadding.p20),
       child: SingleChildScrollView(
@@ -45,6 +49,16 @@ class FilterBottomSheet extends StatelessWidget {
                           context
                               .read<FilterBottomsheetBloc>()
                               .add(ResetFilterEvent());
+
+                          searchBloc.add(ResetSearchEvent());
+
+                          if (searchBloc.state.searchText.isNotEmpty) {
+                            searchBloc.add(SearchProductEvent(
+                                useFilterParams: true,
+                                searchParamsModel: SearchParamsModel(
+                                    searchText: searchBloc.state.searchText,
+                                    page: 1)));
+                          }
                         },
                         icon: const Icon(Iconsax.refresh)))
               ],
@@ -70,8 +84,9 @@ class FilterBottomSheet extends StatelessWidget {
                                         horizontal: AppPadding.p2),
                                     child: ChoiceChip(
                                       label: Text(category.title),
-                                      selected: filterState.selectedCategory ==
-                                          category.title,
+                                      selected:
+                                          filterState.selectedCategoryId ==
+                                              category.categoryId,
                                       elevation: 0,
                                       selectedColor: ColorManager.grey,
                                       shape: RoundedRectangleBorder(
@@ -82,7 +97,7 @@ class FilterBottomSheet extends StatelessWidget {
                                             .read<FilterBottomsheetBloc>()
                                             .add(FilterByCategoryEvent(
                                                 selectedCategory:
-                                                    category.title));
+                                                    category.categoryId));
                                       },
                                     ),
                                   ))
@@ -141,7 +156,7 @@ class FilterBottomSheet extends StatelessWidget {
                 BlocBuilder<FilterBottomsheetBloc, FilterBottomsheetState>(
                   builder: (context, state) {
                     return Text(
-                      "\$${(state.priceRange.start * 1000).ceil()} - \$${(state.priceRange.end * 1000).ceil()}",
+                      "\$${calculateProductRange(state.priceRange.start)} - \$${calculateProductRange(state.priceRange.end)}",
                       style: getBoldStyle(
                           fontSize: FontSize.s16, font: FontConstants.ojuju),
                     );
@@ -192,7 +207,25 @@ class FilterBottomSheet extends StatelessWidget {
                                     );
                                   }
 
-                                  // do search here
+                                  // do filter here
+
+                                  searchBloc.add(ResetSearchEvent());
+
+                                  searchBloc.add(SearchProductEvent(
+                                      useFilterParams: true,
+                                      searchParamsModel: SearchParamsModel(
+                                          priceGreaterThan:
+                                              "${calculateProductRange(state.priceRange.start)}",
+                                          priceLessThan:
+                                              "${calculateProductRange(state.priceRange.end)}",
+                                          categoryId: state.selectedCategoryId,
+                                          discount: state.sortProductBy ==
+                                              SortProductBy.discount,
+                                          flashSale: state.sortProductBy ==
+                                              SortProductBy.flashsale,
+                                          searchText:
+                                              searchBloc.state.searchText,
+                                          page: 1)));
                                 }
                               : null,
                       child: Text(
@@ -214,12 +247,9 @@ class FilterBottomSheet extends StatelessWidget {
 
   IconData? getSortIcon(SortProductBy sort) {
     switch (sort) {
-      case SortProductBy.name:
-        return Icons.sort_by_alpha;
       case SortProductBy.discount:
         return Icons.discount_rounded;
-      case SortProductBy.price:
-        return Icons.price_change_rounded;
+
       case SortProductBy.flashsale:
         return Icons.flash_on;
     }

@@ -6,7 +6,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/core/constants/constant.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/data/models/login_params_model.dart';
-import 'package:shoplify/presentation/resources/asset_manager.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';

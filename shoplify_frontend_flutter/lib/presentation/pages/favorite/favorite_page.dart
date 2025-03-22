@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/data/models/favorite_product_params_model.dart';
-import 'package:shoplify/data/models/product_model.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
-import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/pages/favorite/bloc/favorite_bloc.dart';
 import 'package:shoplify/presentation/widgets/empty_widget.dart';
 import 'package:shoplify/presentation/widgets/error_message_widget.dart';
-import 'package:shoplify/presentation/widgets/favorite_product_skeleton_widget.dart';
+import 'package:shoplify/presentation/widgets/loading_widget.dart';
+import 'package:shoplify/presentation/widgets/product_carousel_skeleton_widget.dart';
 import 'package:shoplify/presentation/widgets/favorite_product_widget.dart';
 import 'package:shoplify/presentation/widgets/product_widget_skeleton.dart';
 
@@ -38,40 +35,36 @@ class _FavoritePageState extends State<FavoritePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar: false,
-      extendBody: false,
-      bottomNavigationBar: const SizedBox(
-        height: kBottomNavigationBarHeight + 10,
-      ),
-      appBar: AppBar(
-        backgroundColor: ColorManager.white,
-        elevation: 0,
-        centerTitle: true,
-        title: Text(
-          AppStrings.favorite,
-          overflow: TextOverflow.ellipsis,
-          style: getSemiBoldStyle(
-            font: FontConstants.ojuju,
-            fontSize: AppSize.s24,
-          ),
+        extendBodyBehindAppBar: false,
+        extendBody: false,
+        bottomNavigationBar: const SizedBox(
+          height: kBottomNavigationBarHeight + 10,
         ),
-        forceMaterialTransparency: true,
-        automaticallyImplyLeading: false,
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.keyboard_arrow_down_outlined),
+        appBar: AppBar(
+          backgroundColor: ColorManager.white,
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            AppStrings.favorite,
+            overflow: TextOverflow.ellipsis,
+            style: getSemiBoldStyle(
+              font: FontConstants.ojuju,
+              fontSize: AppSize.s24,
+            ),
           ),
-          space(
-            w: AppSize.s10,
-          )
-        ],
-      ),
-      body: Builder(builder: (context) {
-        // TODO: remove comment , builder is placed to get the current context
-        //dont remove or bloc throws error saying it cant
-        //find the ancestor provider context for some weird reasons
-        return RefreshIndicator(
+          forceMaterialTransparency: true,
+          automaticallyImplyLeading: false,
+          actions: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.keyboard_arrow_down_outlined),
+            ),
+            space(
+              w: AppSize.s10,
+            )
+          ],
+        ),
+        body: RefreshIndicator(
           triggerMode: RefreshIndicatorTriggerMode.anywhere,
           onRefresh: () async {
             context.read<FavoriteBloc>().add(RefreshFavoriteProductEvent(
@@ -84,7 +77,7 @@ class _FavoritePageState extends State<FavoritePage> {
               horizontal: AppPadding.p10,
             ),
             child: deviceWidth(context) > 400
-                // TODO: fix 
+                // TODO: fix
                 ? GridView.builder(
                     itemCount: 20,
                     gridDelegate:
@@ -101,16 +94,20 @@ class _FavoritePageState extends State<FavoritePage> {
                     builder: (context, state) {
                       switch (state.status) {
                         case FavoriteProductStatus.initial:
-                          return CarouselView.weighted(
-                              scrollDirection: Axis.vertical,
-                              consumeMaxWeight: true,
-                              enableSplash: false,
-                              flexWeights: const [4, 2, 1],
-                              children: List.generate(
-                                5,
-                                (index) =>
-                                    const FavoriteProductSkeletonWidget(),
-                              ));
+                          if (state.isFetching) {
+                            return CarouselView.weighted(
+                                scrollDirection: Axis.vertical,
+                                consumeMaxWeight: true,
+                                enableSplash: false,
+                                flexWeights: const [4, 2, 1],
+                                children: List.generate(
+                                  5,
+                                  (index) =>
+                                      const ProductCarouselSkeletonWidget(),
+                                ));
+                          } else {
+                            return const SizedBox();
+                          }
 
                         case FavoriteProductStatus.failure:
                           return ErrorMessageWidget(
@@ -143,29 +140,44 @@ class _FavoritePageState extends State<FavoritePage> {
                             onNotification: (ScrollNotification scrollInfo) {
                               if (scrollInfo.metrics.pixels >=
                                   scrollInfo.metrics.maxScrollExtent - 50) {
-                                // load more
+                                // Load more items when the user reaches the end of the list
                                 context.read<FavoriteBloc>().add(
-                                    GetFavoriteProductEvent(
-                                        params: FavoriteProductParamsModel()));
+                                      GetFavoriteProductEvent(
+                                        params: FavoriteProductParamsModel(),
+                                      ),
+                                    );
                               }
                               return false;
                             },
                             child: CarouselView.weighted(
-                                enableSplash: false,
-                                scrollDirection: Axis.vertical,
-                                consumeMaxWeight: true,
-                                flexWeights: const [4, 2, 1],
-                                children: state.favoriteProducts
-                                    .map((product) =>
-                                        FavoriteProductWidget(product: product))
-                                    .toList()),
+                              enableSplash: false,
+                              scrollDirection: Axis.vertical,
+                              consumeMaxWeight: true,
+                              flexWeights: const [4, 2, 1],
+                              children: [
+                                // Map the existing favorite products to widgets
+                                ...state.favoriteProducts.map((product) =>
+                                    FavoriteProductWidget(product: product)),
+
+                                // Add a loading widget if more items are being loaded
+                                if (!state.hasReachedMax)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: AppPadding.p20),
+                                    child: Center(
+                                      child: Transform.scale(
+                                        scale: .8,
+                                        child: const LoadingWidget(),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
                           );
                       }
                     },
                   ),
           ),
-        );
-      }),
-    );
+        ));
   }
 }

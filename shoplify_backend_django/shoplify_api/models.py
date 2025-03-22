@@ -16,7 +16,7 @@ class Category(models.Model):
     slug = models.SlugField(default=None)
     featured_product = models.OneToOneField(
         "Product",
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
         related_name="featured_product",
@@ -33,7 +33,7 @@ class Category(models.Model):
 class Review(models.Model):
     product = models.ForeignKey(
         "Product",
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         related_name="reviews",
         null=True,
         default="",
@@ -41,8 +41,9 @@ class Review(models.Model):
 
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         null=True,
+        blank=True
     )
 
     date_created = models.DateTimeField(
@@ -68,8 +69,8 @@ class Review(models.Model):
             self.rating = round(self.rating, 1)
             super().save(**args)
 
-    class Meta:
-        unique_together = ("product", "owner")
+    # class Meta:
+    #     unique_together = ("product", "owner")
 
     def __str__(self):
         return f"Review by {self.owner.email} for {self.product.name} - {self.rating} stars"
@@ -86,8 +87,10 @@ class Cart(models.Model):
         null=True,
     )
 
-    # def __str__(self):
-    #     return self.id
+
+    
+    def __str__(self):
+        return self.owner.email + " - cart - " + str(self.created_at)
 
 
 class Product(models.Model):
@@ -95,7 +98,7 @@ class Product(models.Model):
     description = models.TextField(blank=True, null=True)
     discount = models.BooleanField(default=False)
     old_price = models.FloatField(
-        default=0,
+        default=0, 
     )
     created_at = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(
@@ -126,7 +129,7 @@ class Product(models.Model):
             new_price = self.old_price - ((20 / 100) * self.old_price)
         else:
             new_price = self.old_price
-        return new_price
+        return round(new_price, 2)
 
     def __str__(self):
         return self.slug
@@ -156,8 +159,15 @@ class ProductImage(models.Model):
     #     null=True,
     # )
     product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, related_name="images"
+        Product, on_delete=models.SET_NULL, related_name="images",
+
+        blank=True,
+        null=True,
     )
+
+    class Meta:
+        verbose_name = "Product Image"
+        verbose_name_plural = "Products Images"
 
     def __str__(self):
         return self.product.name
@@ -165,11 +175,11 @@ class ProductImage(models.Model):
 
 class CartItem(models.Model):
     cart = models.ForeignKey(
-        Cart, on_delete=models.CASCADE, related_name="items", null=True, blank=True
+        Cart, on_delete=models.SET_NULL, related_name="items", null=True, blank=True
     )
     product = models.ForeignKey(
         Product,
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         blank=True,
         null=True,
         related_name="cart_items",
@@ -199,7 +209,8 @@ class Order(models.Model):
         choices=PAYMENT_STATUS_CHOICES,
         default=PAYMENT_STATUS_PENDING,
     )
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True,
+        null=True,)
 
     def __str__(self):
         return self.owner.email + " - " + str(self.placed_at)
@@ -213,7 +224,8 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, related_name="items", blank=True,
+        null=True,)
     product = models.ForeignKey(
         Product,
         on_delete=models.PROTECT,
@@ -226,10 +238,11 @@ class OrderItem(models.Model):
 
 class FavoriteProducts(models.Model):
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True,
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True,
         related_name="favorites"
     )
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="favorited_by")
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, related_name="favorited_by", blank=True,
+        null=True,)
     created_at = models.DateTimeField(auto_now_add=True,    blank=True,
         null=True,)
 
@@ -242,3 +255,4 @@ class FavoriteProducts(models.Model):
 
     def __str__(self) -> str:
         return f"{self.owner.email} favorited {self.product.name}"
+    

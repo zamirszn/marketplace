@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shoplify/app/functions.dart';
+import 'package:shoplify/data/models/search_params_model.dart';
+import 'package:shoplify/presentation/pages/home/filter_bottom_sheet/bloc/filter_bottomsheet_bloc.dart';
 import 'package:shoplify/presentation/pages/search/bloc/search_bloc.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
@@ -33,6 +36,9 @@ class _ProductSearchTextFieldState extends State<ProductSearchTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final searchBloc = context.read<SearchBloc>();
+    final filterBloc = context.read<FilterBottomsheetBloc>();
+
     return Expanded(
       child: TextField(
         controller: searchController,
@@ -50,7 +56,30 @@ class _ProductSearchTextFieldState extends State<ProductSearchTextField> {
               Routes.searchPage,
             );
           }
-          // do search here
+          // do search
+
+          searchBloc.add(ResetSearchEvent());
+
+          if (filterBloc.state.isFilterEnabled) {
+            searchBloc.add(SearchProductEvent(
+                useFilterParams: true,
+                searchParamsModel: SearchParamsModel(
+                    priceGreaterThan:
+                        "${calculateProductRange(filterBloc.state.priceRange.start)}",
+                    priceLessThan:
+                        "${calculateProductRange(filterBloc.state.priceRange.end)}",
+                    categoryId: filterBloc.state.selectedCategoryId,
+                    discount: filterBloc.state.sortProductBy ==
+                        SortProductBy.discount,
+                    flashSale: filterBloc.state.sortProductBy ==
+                        SortProductBy.flashsale,
+                    searchText: searchBloc.state.searchText,
+                    page: 1)));
+          }
+
+          searchBloc.add(SearchProductEvent(
+              searchParamsModel: SearchParamsModel(
+                  searchText: searchBloc.state.searchText, page: 1)));
         },
         decoration: const InputDecoration(
             hintText: AppStrings.search,

@@ -2,26 +2,24 @@
 part of 'filter_bottomsheet_bloc.dart';
 
 enum SortProductBy {
-  name,
-  price,
   discount,
   flashsale,
 }
 
 class FilterBottomsheetState extends Equatable {
-  final String? selectedCategory;
+  final String? selectedCategoryId;
   final SortProductBy? sortProductBy;
   final RangeValues priceRange;
   final bool isFilterEnabled;
 
   const FilterBottomsheetState(
       {this.isFilterEnabled = false,
-      this.selectedCategory,
+      this.selectedCategoryId,
       this.sortProductBy,
       this.priceRange = const RangeValues(0, 1)});
 
   @override
-  List<Object?> get props => [selectedCategory, sortProductBy, priceRange];
+  List<Object?> get props => [selectedCategoryId, sortProductBy, priceRange];
 
   FilterBottomsheetState copyWith({
     String? selectedCategory,
@@ -30,7 +28,7 @@ class FilterBottomsheetState extends Equatable {
     bool? isFilterEnabled,
   }) {
     return FilterBottomsheetState(
-      selectedCategory: selectedCategory,
+      selectedCategoryId: selectedCategory,
       sortProductBy: sortProductBy,
       priceRange: priceRange ?? this.priceRange,
       isFilterEnabled: isFilterEnabled ?? this.isFilterEnabled,

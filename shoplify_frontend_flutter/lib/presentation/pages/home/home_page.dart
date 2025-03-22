@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/data/models/product_query_params_model.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
@@ -11,7 +8,6 @@ import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/pages/home/bloc/product_bloc.dart';
-import 'package:shoplify/presentation/pages/home/filter_bottom_sheet/filter_bottom_sheet.dart';
 import 'package:shoplify/presentation/pages/home/popular_products_list_view.dart';
 import 'package:shoplify/presentation/pages/home/product_gridview.dart';
 import 'package:shoplify/presentation/widgets/filter_products_button.dart';

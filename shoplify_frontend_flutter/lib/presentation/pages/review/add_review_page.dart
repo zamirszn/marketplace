@@ -11,7 +11,7 @@ import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/pages/review/bloc/review_bloc.dart';
-import 'package:shoplify/presentation/widgets/back_button.dart';
+import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:shoplify/presentation/widgets/loading_widget.dart';
 import 'package:shoplify/presentation/widgets/snackbar.dart';
 import 'package:shoplify/presentation/widgets/star_rating/interactive_star_rating_widget.dart';

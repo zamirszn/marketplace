@@ -33,14 +33,14 @@ class Command(BaseCommand):
         for _ in range(count):
             product = random.choice(products)
             user = random.choice(users)
-            description = fake.paragraph(nb_sentences=3)
+            review = fake.paragraph(nb_sentences=3)
             rating = round(random.uniform(1, 5), 1)
 
             # Create the review without checking for duplicates
             Review.objects.create(
                 product=product,
                 owner=user,
-                description=description,
+                review=review,
                 rating=rating,
             )
 

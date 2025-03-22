@@ -1,4 +1,4 @@
-{% extends 'unfold/layouts/base_simple.html' %}
+{% comment %} {% extends 'unfold/layouts/base_simple.html' %}
 
 {% load i18n unfold %}
 
@@ -49,7 +49,7 @@
             {% endfor %}
         {% endcomponent %}
         
-        {% trans "Product performance in last 28 days" as title %}
+        {% trans "Products performance in last 28 days" as title %}
         {% component "unfold/components/card.html" with class="mb-8" title=title %}
             {% component "unfold/components/chart/bar.html" with data=chart height=320 %}{% endcomponent %}
         {% endcomponent %}
@@ -100,4 +100,4 @@
             {% endcomponent %}        
         {% endcomponent %}    
     {% endcomponent %}
-{% endblock %}
+{% endblock %} {% endcomment %}

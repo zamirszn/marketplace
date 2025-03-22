@@ -1,25 +1,18 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/pages/cart/bloc/cart_bloc.dart';
-import 'package:shoplify/presentation/pages/favorite/bloc/favorite_bloc.dart';
-import 'package:shoplify/presentation/pages/home/bloc/product_bloc.dart';
 import 'package:shoplify/presentation/pages/home/product_details/bloc/product_details_bloc.dart';
 import 'package:shoplify/presentation/widgets/add_to_cart_bottomsheet/add_to_cart_bottomsheet.dart';
-import 'package:shoplify/presentation/widgets/back_button.dart';
+import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:shoplify/presentation/widgets/coverflow_carousel.dart';
-import 'package:shoplify/presentation/widgets/loading_widget.dart';
-import 'package:shoplify/presentation/widgets/snackbar.dart';
 import 'package:shoplify/presentation/widgets/star_rating/star_rating_widget.dart';
 
 class ProductDetailsPage extends StatelessWidget {

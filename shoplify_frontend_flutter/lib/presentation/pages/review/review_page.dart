@@ -12,11 +12,10 @@ import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/pages/review/bloc/review_bloc.dart';
-import 'package:shoplify/presentation/widgets/back_button.dart';
+import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:shoplify/presentation/widgets/empty_widget.dart';
 import 'package:shoplify/presentation/widgets/error_message_widget.dart';
 import 'package:shoplify/presentation/widgets/loading_widget.dart';
-import 'package:shoplify/presentation/widgets/retry_button.dart';
 import 'package:shoplify/presentation/widgets/star_rating/star_rating_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -271,6 +270,8 @@ class _ReviewPageState extends State<ReviewPage> {
                                 InkWell(
                                   splashColor: Colors.transparent,
                                   hoverColor: Colors.transparent,
+                                  borderRadius:
+                                      BorderRadius.circular(AppSize.s10),
                                   onTap: () {
                                     showBottomSheet(
                                         context: context,
@@ -285,27 +286,32 @@ class _ReviewPageState extends State<ReviewPage> {
                                                 sortOptions: sortOptions,
                                                 product: widget.product));
                                   },
-                                  child: Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.sort_rounded,
-                                        size: AppSize.s18,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: AppPadding.p10,
-                                            vertical: AppPadding.p5),
-                                        child: Text(
-                                          state.selectedOption ?? "Oldest",
-                                          style: getLightStyle(
-                                              fontSize: FontSize.s14),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: AppPadding.p2,
+                                        horizontal: AppPadding.p5),
+                                    child: Row(
+                                      children: [
+                                        const Icon(
+                                          Icons.sort_rounded,
+                                          size: AppSize.s18,
                                         ),
-                                      ),
-                                      const Icon(
-                                        Icons.keyboard_arrow_down_rounded,
-                                        size: AppSize.s20,
-                                      ),
-                                    ],
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: AppPadding.p10,
+                                              vertical: AppPadding.p5),
+                                          child: Text(
+                                            state.selectedOption ?? "Oldest",
+                                            style: getLightStyle(
+                                                fontSize: FontSize.s14),
+                                          ),
+                                        ),
+                                        const Icon(
+                                          Icons.keyboard_arrow_down_rounded,
+                                          size: AppSize.s20,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 )
                               ],

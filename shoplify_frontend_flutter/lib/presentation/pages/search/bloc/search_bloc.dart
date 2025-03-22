@@ -15,22 +15,38 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc() : super(const SearchState()) {
     on<UpdateSearchText>(_onSearchTextUpdate);
     on<SearchProductEvent>(_onSearchProduct);
+    on<ResetSearchEvent>(_resetSearchEvent);
   }
 
-  _onSearchTextUpdate(UpdateSearchText event, Emitter<SearchState> emit) {
+  void _onSearchTextUpdate(UpdateSearchText event, Emitter<SearchState> emit) {
     emit(state.copyWith(searchText: event.text));
   }
 
-  _onSearchProduct(SearchProductEvent event, Emitter<SearchState> emit) async {
+  void _resetSearchEvent(ResetSearchEvent event, Emitter<SearchState> emit) {
+    emit(state.copyWith(
+        errorMessage: null,
+        hasReachedMax: false,
+        isFetching: false,
+        page: 1,
+        searchResultProducts: [],
+        searchStatus: SearchStatus.initial));
+  }
+
+  void _onSearchProduct(
+      SearchProductEvent event, Emitter<SearchState> emit) async {
     if (state.isFetching || state.hasReachedMax) return;
 
     try {
       emit(state.copyWith(isFetching: true));
-      SearchParamsModel searchParamsModel = SearchParamsModel(
-          searchText: event.searchParamsModel.searchText, page: state.page);
 
-      final Either response =
-          await sl<SearchProductUseCase>().call(params: searchParamsModel);
+      final Either response = await sl<SearchProductUseCase>().call(
+          params:
+              // use the params from the filter bottomsheet if true
+              event.useFilterParams
+                  ? event.searchParamsModel
+                  : SearchParamsModel(
+                      searchText: event.searchParamsModel.searchText,
+                      page: state.page));
 
       response.fold((error) {
         emit(state.copyWith(

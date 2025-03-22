@@ -1,13 +1,13 @@
 from django.contrib import admin
+from unfold.admin import StackedInline
 
 from .models import *
 
 from unfold.admin import ModelAdmin
 
 
-class ProductImageAdmin(admin.StackedInline):
+class ProductImageAdmin(StackedInline):
     model = ProductImage
-
 
 @admin.register(Product)
 class ProductAdmin(ModelAdmin):
@@ -17,9 +17,9 @@ class ProductAdmin(ModelAdmin):
     inlines = [ProductImageAdmin]
     list_filter = [
         "discount",
-        "old_price",
         "created_at",
         "category",
+        "flash_sales"
     ]
     list_display = [
         "name",
@@ -27,15 +27,16 @@ class ProductAdmin(ModelAdmin):
         "discount",
         "price",
         "old_price",
+        "average_rating",
+        "inventory",
+        "reviews_length",
         "created_at",
         "category",
     ]
     search_fields = [
         "name",
         "id",
-        "discount",
-        "old_price",
-        "created_at",
+        
         
         
     ]
@@ -90,7 +91,9 @@ class CartAdmin(ModelAdmin):
     search_fields = ["created_at", "id"]
     list_display = [
         "id",
+        "owner",
         "created_at",
+
     ]
 
     list_per_page = 100
@@ -101,8 +104,9 @@ class CartItemAdmin(ModelAdmin):
     class Meta:
         models = CartItem
 
-    list_filter = ["quantity"]
-    list_display = ["id", "quantity"]
+    search_fields = ["quantity",]
+    list_filter = [ "cart",  "product", "quantity",]
+    list_display = ["id", "cart",  "product", "quantity", ]
 
     list_per_page = 100
 
@@ -151,14 +155,19 @@ class OrderItemAdmin(ModelAdmin):
 
     search_fields = [
         "id",
-        "quantity",
+
     ]
     list_display = [
         "id",
+        "order",
+        "product",
         "quantity",
     ]
+   
 
     list_per_page = 100
+
+
 
 
 

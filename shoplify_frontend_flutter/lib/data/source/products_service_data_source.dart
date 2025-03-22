@@ -70,7 +70,7 @@ class ProductServiceImpl extends ProductsServiceDataSource {
   Future<Either> searchProduct(SearchParamsModel searchParamsModel) async {
     try {
       Response response = await sl<DioClient>()
-          .post(ApiUrls.allProducts, data: searchParamsModel.toMap());
+          .get(ApiUrls.allProducts, queryParameters: searchParamsModel.toMap());
       return Right(response);
     } catch (e) {
       return Left(e);

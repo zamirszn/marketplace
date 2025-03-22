@@ -1,25 +1,14 @@
-import 'dart:ui';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/core/constants/api_urls.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/pages/favorite/bloc/favorite_bloc.dart';
-import 'package:shoplify/presentation/widgets/blur_background_widget.dart';
-import 'package:shoplify/presentation/widgets/loading_widget.dart';
-import 'package:shoplify/presentation/widgets/new_product_widget/new_product_widget.dart';
-import 'package:shoplify/presentation/widgets/remove_favorite_product/remove_favorite_product_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class FavoriteProductSkeletonWidget extends StatelessWidget {
-  const FavoriteProductSkeletonWidget({
+class ProductCarouselSkeletonWidget extends StatelessWidget {
+  const ProductCarouselSkeletonWidget({
     super.key,
   });
 

@@ -5,7 +5,6 @@
 
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 
 import 'package:shoplify/data/models/product_model.dart';
 

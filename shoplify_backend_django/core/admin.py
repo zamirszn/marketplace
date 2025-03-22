@@ -9,6 +9,7 @@ from unfold.admin import ModelAdmin
 admin.site.unregister(Group)
 
 
+
 @admin.register(User)
 class UserAdmin(ModelAdmin):
     class Meta:
@@ -54,13 +55,14 @@ class ProfileAdmin(ModelAdmin):
 
     search_fields = [
         "id",
-        "name",
-        "bio",
+        "owner",
+        "phone",
     ]
     list_display = [
         "id",
-        "name",
-        "bio",
+        "owner",
+        "phone",
     ]
 
     list_per_page = 100
+

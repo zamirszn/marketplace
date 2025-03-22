@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/domain/entities/product_entity.dart';
@@ -12,10 +11,6 @@ import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/pages/home/product_details/bloc/product_details_bloc.dart';
 import 'package:shoplify/presentation/widgets/blur_background_widget.dart';
-import 'package:shoplify/presentation/widgets/product_widget.dart';
-import 'package:shoplify/presentation/widgets/add_to_cart_button.dart';
-import 'package:shoplify/presentation/widgets/interactive_3d_effect.dart';
-import 'package:shoplify/presentation/widgets/remove_favorite_product/remove_favorite_product_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class NewProductWidget extends StatelessWidget {

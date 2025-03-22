@@ -1,6 +1,7 @@
 class AppStrings {
   static const String noRouteFound = "no_route_found";
   static const String back = "Back";
+  static const String noResultFound = "No Result Found";
   static const String sort = "Sort";
   static const String sortBy = "Sort By";
   static const String maximumPrice = "Maximum Price";
@@ -44,7 +45,7 @@ class AppStrings {
   static const String outOfStock = "Product out of stock";
   static const String addReview = "Add Review";
   static const String basedOn = "Based on";
-  static const String noReviews = "There are no review yet";
+  static const String noReviews = "There are no review";
   static const String noPopularProducts = "No Popular products";
   static const String noProducts = "No products";
   static const String noNewProducts = "No New products";

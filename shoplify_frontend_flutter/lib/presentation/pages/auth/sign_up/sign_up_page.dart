@@ -8,7 +8,6 @@ import 'package:shoplify/presentation/widgets/loading_widget.dart';
 import 'package:shoplify/core/constants/constant.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/data/models/signup_params_model.dart';
-import 'package:shoplify/presentation/resources/asset_manager.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';

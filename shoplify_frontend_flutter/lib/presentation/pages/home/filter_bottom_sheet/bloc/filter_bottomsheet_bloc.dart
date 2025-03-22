@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 
 part 'filter_bottomsheet_event.dart';
 part 'filter_bottomsheet_state.dart';
@@ -35,7 +34,7 @@ class FilterBottomsheetBloc
       SortProductByEvent event, Emitter<FilterBottomsheetState> emit) {
     emit(state.copyWith(
         sortProductBy: event.sortBy,
-        selectedCategory: state.selectedCategory,
+        selectedCategory: state.selectedCategoryId,
         isFilterEnabled: true));
   }
 

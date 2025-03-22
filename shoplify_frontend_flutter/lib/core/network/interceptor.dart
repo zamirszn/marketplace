@@ -3,7 +3,6 @@ import 'package:logger/logger.dart';
 import 'package:shoplify/core/constants/constant.dart';
 import 'package:shoplify/core/network/dio_client.dart';
 import 'package:shoplify/data/source/secure_storage_data_source.dart';
-import 'package:shoplify/domain/usecases/auth_usecase.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 
 class LoggerInterceptor extends Interceptor {

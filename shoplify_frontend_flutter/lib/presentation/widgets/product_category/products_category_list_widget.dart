@@ -5,7 +5,6 @@ import 'package:shoplify/domain/entities/product_category_entity.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/pages/home/bloc/product_bloc.dart';
 import 'package:shoplify/presentation/widgets/product_category/bloc/product_category_bloc.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 

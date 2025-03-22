@@ -16,7 +16,6 @@ import 'package:shoplify/domain/repository/review_repo.dart';
 import 'package:shoplify/domain/usecases/auth_usecase.dart';
 import 'package:shoplify/domain/usecases/favorite_products_usecase.dart';
 import 'package:shoplify/domain/usecases/products_usecase.dart';
-import 'package:shoplify/domain/usecases/user_usecase.dart';
 import 'package:shoplify/data/source/secure_storage_data_source.dart';
 
 final sl = GetIt.instance;

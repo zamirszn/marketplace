@@ -17,5 +17,5 @@ urlpatterns = [
     path("auth/reset-password/", views.reset_password, name="reset-password"),
     path("auth/", include("djoser.urls")),
     path("auth/", include("djoser.urls.jwt")),
-    path("profile/", views.ProfileView.as_view(), name="user-profile"),
+    path("auth/profile/", views.ProfileView.as_view(), name="user-profile"),
 ]

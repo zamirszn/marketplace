@@ -49,23 +49,13 @@ class _FavoritePageState extends State<FavoritePage> {
             overflow: TextOverflow.ellipsis,
             style: getSemiBoldStyle(
               font: FontConstants.ojuju,
-              fontSize: AppSize.s24,
+              fontSize: AppSize.s20,
             ),
           ),
           forceMaterialTransparency: true,
           automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.keyboard_arrow_down_outlined),
-            ),
-            space(
-              w: AppSize.s10,
-            )
-          ],
         ),
         body: RefreshIndicator(
-          triggerMode: RefreshIndicatorTriggerMode.anywhere,
           onRefresh: () async {
             context.read<FavoriteBloc>().add(RefreshFavoriteProductEvent(
                   params: FavoriteProductParamsModel(
@@ -110,17 +100,20 @@ class _FavoritePageState extends State<FavoritePage> {
                           }
 
                         case FavoriteProductStatus.failure:
-                          return ErrorMessageWidget(
-                            retry: () {
-                              context
-                                  .read<FavoriteBloc>()
-                                  .add(RefreshFavoriteProductEvent(
-                                    params: FavoriteProductParamsModel(
-                                        page: 1,
-                                        ordering: FavoriteProductSort.intial),
-                                  ));
-                            },
-                            message: state.errorMessage,
+                          return Padding(
+                            padding: const EdgeInsets.only(top: AppPadding.p10),
+                            child: ErrorMessageWidget(
+                              retry: () {
+                                context
+                                    .read<FavoriteBloc>()
+                                    .add(RefreshFavoriteProductEvent(
+                                      params: FavoriteProductParamsModel(
+                                          page: 1,
+                                          ordering: FavoriteProductSort.intial),
+                                    ));
+                              },
+                              message: state.errorMessage,
+                            ),
                           );
 
                         case FavoriteProductStatus.success:

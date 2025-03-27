@@ -16,16 +16,18 @@ class ErrorMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(AppSize.s10),
-      child: ColoredBox(
-        color: ColorManager.lightGrey,
-        child: SizedBox(
-          height: deviceHeight(context) / 3,
-          child: Center(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: RetryButton(message: message, retry: () => retry()),
+    return SingleChildScrollView(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppSize.s10),
+        child: ColoredBox(
+          color: ColorManager.lightGrey,
+          child: SizedBox(
+            height: AppSize.s250,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RetryButton(message: message, retry: () => retry()),
+              ),
             ),
           ),
         ),

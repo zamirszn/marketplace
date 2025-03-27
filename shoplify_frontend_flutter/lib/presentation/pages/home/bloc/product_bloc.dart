@@ -15,9 +15,6 @@ part 'product_event.dart';
 part 'product_state.dart';
 
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
-
-
-
   ProductBloc() : super(ProductInitial()) {
     on<GetAllProductsEvent>(_onGetAllProducts);
     on<AddToCartEvent>(_onAddToCart);
@@ -61,7 +58,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     emit(CreateorGetCartLoading());
     Either response = await sl<GetorCreateCartUseCase>().call();
     response.fold((error) {
-      emit(CreateorGetCartFailure(message: error.toString()));
+      emit(CreateorGetCartFailure(errorMessage: error.toString()));
     }, (data) {
       final CartModel cart = CartModel.fromMap(data);
       emit(CreateorGetCartSuccess(cart: cart));

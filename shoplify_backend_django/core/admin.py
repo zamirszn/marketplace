@@ -57,11 +57,14 @@ class ProfileAdmin(ModelAdmin):
         "id",
         "owner",
         "phone",
+        "shipping_address"
     ]
     list_display = [
-        "id",
-        "owner",
-        "phone",
+       "id","phone", "shipping_address", "notifications_enabled",
+    ]
+
+    list_filter = [
+        "notifications_enabled"
     ]
 
     list_per_page = 100

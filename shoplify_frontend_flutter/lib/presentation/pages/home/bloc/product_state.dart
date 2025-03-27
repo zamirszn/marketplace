@@ -9,8 +9,6 @@ sealed class ProductState extends Equatable {
 
 final class ProductInitial extends ProductState {}
 
-
-
 // final class ProductCategoryUpdate extends ProductState {
 //   final String selectedCategory;
 
@@ -19,8 +17,6 @@ final class ProductInitial extends ProductState {}
 //   @override
 //   List<Object?> get props => [selectedCategory];
 // }
-
-
 
 // All Products
 
@@ -73,12 +69,12 @@ final class AddToCartSuccess extends ProductState {
 // create cart
 
 final class CreateorGetCartFailure extends ProductState {
-  final String message;
+  final String errorMessage;
 
-  CreateorGetCartFailure({required this.message});
+  CreateorGetCartFailure({required this.errorMessage});
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [errorMessage];
 }
 
 final class CreateorGetCartLoading extends ProductState {}

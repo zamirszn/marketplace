@@ -43,6 +43,7 @@ class User(AbstractUser, PermissionsMixin):
         blank=True,
         default="",
     )
+    
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now=True)
@@ -80,13 +81,27 @@ class Profile(models.Model):
     owner = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True
     )
+
+    profilePicture = models.ImageField(
+        "profilePicture",
+        blank=True,
+        null=True,
+    )
+
+
+    # profilePicture = CloudinaryField(
+    #     "profilePicture",
+    #     blank=True,
+    #     null=True,
+    # )
+
+
     phone = models.CharField(unique=True, max_length=20, null=True, blank= True)
     shipping_address = models.TextField(null=True, blank= True)
-    billing_address = models.TextField(null=True, blank= True)
     notifications_enabled = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        return self.name
+        return self.owner.email
 
     class Meta:
         verbose_name = "Profile"

@@ -195,12 +195,15 @@ class Order(models.Model):
     PAYMENT_STATUS_COMPLETE = "C"
     PAYMENT_STATUS_FAILED = "F"
     ORDER_DELIVERED = "D"
+    ORDER_CANCELLED = "CA"
 
     PAYMENT_STATUS_CHOICES = [
-        (PAYMENT_STATUS_PENDING, "Pending"),
-        (PAYMENT_STATUS_COMPLETE, "Complete"),
-        (PAYMENT_STATUS_FAILED, "Failed"),
-        (ORDER_DELIVERED, "Delivered"),
+        (PAYMENT_STATUS_FAILED, "Payment Failed"),
+        (ORDER_CANCELLED, "Order Cancelled"),
+        (PAYMENT_STATUS_PENDING, "Pending Payment"),
+        (PAYMENT_STATUS_COMPLETE, "Payment Complete"),
+        (ORDER_DELIVERED, "Order Delivered"),
+   
     ]
 
     placed_at = models.DateTimeField(auto_now_add=True)

@@ -2,37 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/presentation/pages/notification/notification_icon.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/widgets/go_back_button.dart';
 
-class OrderPage extends StatelessWidget {
-  const OrderPage({super.key});
+class NotificationPage extends StatelessWidget {
+  const NotificationPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: false,
+      extendBody: false,
       appBar: AppBar(
-        leading: const Padding(
-          padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          child: GoBackButton(),
-        ),
         backgroundColor: ColorManager.white,
-        forceMaterialTransparency: true,
+        elevation: 0,
+        centerTitle: true,
         title: Text(
-          AppStrings.order,
-          style: getRegularStyle(
-              font: FontConstants.ojuju, fontSize: FontSize.s20),
+          AppStrings.notifications,
+          overflow: TextOverflow.ellipsis,
+          style: getSemiBoldStyle(
+            font: FontConstants.ojuju,
+            fontSize: AppSize.s24,
+          ),
         ),
-        actions: [
-          const NotificationIcon(),
-          space(
-            w: AppSize.s10,
-          )
-        ],
+        forceMaterialTransparency: true,
+        actions: const [],
+        leading: Padding(
+          padding: const EdgeInsets.all(AppPadding.p10),
+          child: GoBackButton(
+            backgroundColor: ColorManager.lightGrey,
+          ),
+        ),
       ),
     );
   }

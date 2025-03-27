@@ -12,7 +12,9 @@ import 'package:shoplify/presentation/pages/auth/splash_page.dart';
 import 'package:shoplify/presentation/pages/bottom_nav/bottom_nav.dart';
 import 'package:shoplify/presentation/pages/home/product_details/product_details_page.dart';
 import 'package:shoplify/presentation/pages/home/product_image_page.dart';
+import 'package:shoplify/presentation/pages/notification/notification_page.dart';
 import 'package:shoplify/presentation/pages/order/order_page.dart';
+import 'package:shoplify/presentation/pages/profile/edit_profile_page.dart';
 import 'package:shoplify/presentation/pages/review/add_review_page.dart';
 import 'package:shoplify/presentation/pages/review/bloc/review_bloc.dart';
 import 'package:shoplify/presentation/pages/review/review_page.dart';
@@ -57,6 +59,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: Routes.accountBlocked,
+      // TODO: work on this page
       builder: (context, state) => const AccountBlocked(),
     ),
     GoRoute(
@@ -77,6 +80,18 @@ final GoRouter appRouter = GoRouter(
       path: Routes.searchPage,
       builder: (context, state) {
         return const SearchPage();
+      },
+    ),
+    GoRoute(
+      path: Routes.editProfilePage,
+      builder: (context, state) {
+        return const EditProfilePage();
+      },
+    ),
+    GoRoute(
+      path: Routes.notificationPage,
+      builder: (context, state) {
+        return const NotificationPage();
       },
     ),
     GoRoute(
@@ -112,7 +127,6 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       builder: (context, state) {
         final ProductModelEntity product = state.extra as ProductModelEntity;
-        print("product route is $product");
 
         return BlocProvider<ReviewBloc>(
             create: (context) => ReviewBloc()
@@ -126,13 +140,16 @@ final GoRouter appRouter = GoRouter(
       path: Routes.productReviewPage,
     ),
   ],
+  // TODO: work on this page too
   errorBuilder: (context, state) => const Error404Page(),
 );
 
 class Routes {
   static const String onboardingPage = "/onboardingPage";
+  static const String notificationPage = "/notificationPage";
   static const String newPasswordPage = "/newPasswordPage";
   static const String forgotPasswordPage = "/forgotPasswordPage";
+  static const String editProfilePage = "/editProfilePage";
   static const String addReviewPage = "/addReviewPage";
   static const String loginPage = "/loginPage";
   static const String splashPage = "/splashPage";

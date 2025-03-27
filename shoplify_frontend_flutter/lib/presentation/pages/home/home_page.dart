@@ -10,6 +10,7 @@ import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/pages/home/bloc/product_bloc.dart';
 import 'package:shoplify/presentation/pages/home/popular_products_list_view.dart';
 import 'package:shoplify/presentation/pages/home/product_gridview.dart';
+import 'package:shoplify/presentation/widgets/error_message_widget.dart';
 import 'package:shoplify/presentation/widgets/filter_products_button.dart';
 import 'package:shoplify/presentation/widgets/new_product_widget/bloc/new_product_bloc.dart';
 import 'package:shoplify/presentation/widgets/new_product_widget/new_products_list_view.dart';
@@ -41,7 +42,7 @@ class HomePage extends StatelessWidget {
           child: BlocListener<ProductBloc, ProductState>(
             listener: (context, state) {
               if (state is CreateorGetCartFailure) {
-                if (state.message.contains("token_not_valid")) {
+                if (state.errorMessage.contains("token_not_valid")) {
                   //TODO: clear auth token or clear user data on logout or use aunauthenticated enum
                   goto(context, Routes.loginPage);
                   showErrorMessage(context, "Please login");
@@ -55,13 +56,16 @@ class HomePage extends StatelessWidget {
                     child: LoadingWidget(),
                   );
                 } else if (state is CreateorGetCartFailure) {
-                  return Center(
-                      child: RetryButton(
-                    message: state.message,
-                    retry: () {
-                      context.read<ProductBloc>().add(GetOrCreateCartEvent());
-                    },
-                  ));
+                  return Padding(
+                    padding: const EdgeInsets.only(
+                        top: 66, left: AppPadding.p10, right: AppPadding.p10),
+                    child: ErrorMessageWidget(
+                      retry: () {
+                        context.read<ProductBloc>().add(GetOrCreateCartEvent());
+                      },
+                      message: state.errorMessage,
+                    ),
+                  );
                 } else if (state is CreateorGetCartSuccess) {
                   return CustomScrollView(
                     slivers: [
@@ -75,6 +79,7 @@ class HomePage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
+                            space(h: AppSize.s20),
                             Text(
                               AppStrings.discoverOurNewItems,
                               style: getSemiBoldStyle(

@@ -1,6 +1,23 @@
 class AppStrings {
   static const String noRouteFound = "no_route_found";
+  static const String pendingPayment = "Pending Payment";
+  static const String changeLanguage = "Change Language";
+  static const String logout = "Log out";
+  static const String preferences = "Preferences";
+  static const String deactivateAccount = "Deactivate Account";
+  static const String phone = "Phone";
+  static const String address = "Address";
+  static const String notifications = "Notifications";
+  static const String changePassword = "Change Password";
+  static const String accountAndSecurity = "Account and Security";
+  static const String customerService = "Customer Service";
+  static const String helpAndSupport = "Help and Support";
+  static const String cancelled = "Cancelled";
   static const String back = "Back";
+  static const String processing = "Processing";
+  static const String delivered = "Delivered";
+  static const String myOrders = "My Orders";
+  static const String editprofile = "Edit Profile";
   static const String noResultFound = "No Result Found";
   static const String sort = "Sort";
   static const String sortBy = "Sort By";

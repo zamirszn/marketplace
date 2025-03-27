@@ -28,6 +28,8 @@ class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      extendBodyBehindAppBar: false,
+      extendBody: false,
       appBar: AppBar(
           backgroundColor: Colors.transparent,
           forceMaterialTransparency: true,

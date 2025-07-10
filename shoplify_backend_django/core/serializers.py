@@ -6,16 +6,18 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import Profile
 
 
-class UserSerializer(UserCreateSerializer):
+class UserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         fields = ["id", "email", "full_name", "password"]
 
 
 
+
 class ProfileSerializer(serializers.ModelSerializer):
+    full_name = serializers.CharField(source='owner.full_name', read_only=True)
     class Meta:
         model = Profile
-        fields = ["id", "phone", "profilePicture", "shipping_address", "notifications_enabled", ]
+        fields = ["id", "phone", "profilePicture", "shipping_address", "notifications_enabled", "full_name", "email" ]
 
 
 

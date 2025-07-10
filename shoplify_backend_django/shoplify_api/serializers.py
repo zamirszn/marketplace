@@ -10,7 +10,7 @@ User = get_user_model()
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ["title", "category_id", "slug"]
+        fields = ["name", "category_id", "slug"]
 
 
 class ProductImageSerializers(serializers.ModelSerializer):
@@ -77,14 +77,14 @@ class ProductSerializer(serializers.ModelSerializer):
         return product
 
 
-class UserSerializer(serializers.ModelSerializer):
+class TrimmedUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "full_name"]
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    owner = UserSerializer(read_only=True)
+    owner = TrimmedUserSerializer(read_only=True)
 
     class Meta:
         model = Review

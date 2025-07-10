@@ -4,12 +4,12 @@ import uuid
 from django.conf import settings
 from cloudinary.models import CloudinaryField
 from django.core.validators import MinValueValidator, MaxValueValidator
-
+from decimal import Decimal
 
 
 
 class Category(models.Model):
-    title = models.CharField(max_length=225)
+    name = models.CharField(max_length=225)
     category_id = models.UUIDField(
         default=uuid.uuid4, editable=False, primary_key=True, unique=True
     )
@@ -23,7 +23,7 @@ class Category(models.Model):
     )
 
     def __str__(self):
-        return self.title
+        return self.name
 
     class Meta:
         verbose_name = "Category"
@@ -55,14 +55,15 @@ class Review(models.Model):
         blank=False,
         null=True,
     )
+    
     rating = models.DecimalField(
-        decimal_places=1,
-        max_digits=2,
-        validators=[MinValueValidator(0), MaxValueValidator(5)],
-        null=True,
-        blank=True,
-        default=0,
-    )
+    decimal_places=1,
+    max_digits=2,
+    validators=[MinValueValidator(Decimal('0')), MaxValueValidator(Decimal('5'))],  # Use Decimal instead of int
+    null=True,
+    blank=True,
+    default=Decimal('0'),  # Also use Decimal for default
+)
 
     def save(self, **args):
         if self.rating is not None:

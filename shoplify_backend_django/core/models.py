@@ -82,6 +82,7 @@ class Profile(models.Model):
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True, null=True
     )
 
+
     profilePicture = models.ImageField(
         "profilePicture",
         blank=True,
@@ -100,8 +101,19 @@ class Profile(models.Model):
     shipping_address = models.TextField(null=True, blank= True)
     notifications_enabled = models.BooleanField(default=True)
 
-    def __str__(self) -> str:
-        return self.owner.email
+    @property
+    def full_name(self):
+        """Dynamically gets the full_name from the related User model."""
+        return self.owner.full_name if self.owner else ""
+    
+    @property
+    def email(self):
+        """Dynamically gets the email from the related User model."""
+        return self.owner.email if self.owner else ""
+
+    def __str__(self):
+        return f"{self.full_name}'s Profile" if self.full_name else f"Profile {self.id}"
+
 
     class Meta:
         verbose_name = "Profile"

@@ -1,14 +1,22 @@
 from decimal import Decimal
-from django_filters.rest_framework import FilterSet, NumberFilter, DateFromToRangeFilter
-from .models import Product, Review
+from django_filters.rest_framework import FilterSet, NumberFilter, DateFromToRangeFilter, CharFilter
+from .models import Category, Product, Review
 
 
 class ProductFilter(FilterSet):
+    category = CharFilter(
+        field_name='category__name',
+        lookup_expr='iexact'
+    )
+    
+   
+
     class Meta:
         model = Product
         fields = {"category_id": ["exact"], "old_price": ["gt", "lt"],
                 "discount": ["exact"],
                 "flash_sales": ["exact"],
+                "category":["exact"],
                   
                   }
 

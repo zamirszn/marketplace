@@ -4,13 +4,19 @@ from unfold.admin import StackedInline
 from .models import *
 
 from unfold.admin import ModelAdmin
+from import_export.admin import ImportExportModelAdmin
+from unfold.contrib.import_export.forms import ExportForm, ImportForm, SelectableFieldsExportForm
 
 
 class ProductImageAdmin(StackedInline):
     model = ProductImage
 
 @admin.register(Product)
-class ProductAdmin(ModelAdmin):
+class ProductAdmin(ModelAdmin, ImportExportModelAdmin):
+    import_form_class = ImportForm
+    export_form_class = ExportForm
+    export_form_class = SelectableFieldsExportForm
+    save_as = True
 
     list_per_page = 100
 
@@ -48,23 +54,31 @@ class ProductAdmin(ModelAdmin):
 
 
 @admin.register(Category)
-class CategoryAdmin(ModelAdmin):
-    prepopulated_fields = {"slug": ("title",)}
+class CategoryAdmin(ModelAdmin, ImportExportModelAdmin):
+    import_form_class = ImportForm
+    export_form_class = ExportForm
+    export_form_class = SelectableFieldsExportForm
+    save_as = True
+    prepopulated_fields = {"slug": ("name",)}
     list_filter = [
-        "title",
+        "name",
     ]
     list_display = [
-        "title",
+        "name",
     ]
     search_fields = [
-        "title",
+        "name",
     ]
 
     class Meta:
         model = Category
 
 @admin.register(FavoriteProducts)
-class FavoriteProductsAdmin(ModelAdmin):
+class FavoriteProductsAdmin(ModelAdmin, ImportExportModelAdmin):
+
+    import_form_class = ImportForm
+    export_form_class = ExportForm
+    export_form_class = SelectableFieldsExportForm
 
     list_display= ["owner", "product", "created_at"]
 
@@ -73,7 +87,12 @@ class FavoriteProductsAdmin(ModelAdmin):
 
 
 @admin.register(ProductImage)
-class ProductImageAdmin(ModelAdmin):
+class ProductImageAdmin(ModelAdmin, ImportExportModelAdmin):
+
+    import_form_class = ImportForm
+    export_form_class = ExportForm
+    export_form_class = SelectableFieldsExportForm
+
     class Meta:
         model = ProductImage
 
@@ -83,7 +102,12 @@ class ProductImageAdmin(ModelAdmin):
 
 
 @admin.register(Cart)
-class CartAdmin(ModelAdmin):
+class CartAdmin(ModelAdmin, ImportExportModelAdmin):
+
+    import_form_class = ImportForm
+    export_form_class = ExportForm
+    export_form_class = SelectableFieldsExportForm
+
     class Meta:
         model = Cart
 
@@ -100,7 +124,12 @@ class CartAdmin(ModelAdmin):
 
 
 @admin.register(CartItem)
-class CartItemAdmin(ModelAdmin):
+class CartItemAdmin(ModelAdmin, ImportExportModelAdmin):
+
+    import_form_class = ImportForm
+    export_form_class = ExportForm
+    export_form_class = SelectableFieldsExportForm
+
     class Meta:
         models = CartItem
 
@@ -112,7 +141,12 @@ class CartItemAdmin(ModelAdmin):
 
 
 @admin.register(Order)
-class OrderAdmin(ModelAdmin):
+class OrderAdmin(ModelAdmin, ImportExportModelAdmin):
+
+    import_form_class = ImportForm
+    export_form_class = ExportForm
+    export_form_class = SelectableFieldsExportForm
+
     class Meta:
         models = Order
 
@@ -124,7 +158,12 @@ class OrderAdmin(ModelAdmin):
 
 
 @admin.register(Review)
-class ReviewAdmin(ModelAdmin):
+class ReviewAdmin(ModelAdmin, ImportExportModelAdmin):
+
+    import_form_class = ImportForm
+    export_form_class = ExportForm
+    export_form_class = SelectableFieldsExportForm
+
     class Meta:
         models = Review
 
@@ -149,7 +188,12 @@ class ReviewAdmin(ModelAdmin):
 
 
 @admin.register(OrderItem)
-class OrderItemAdmin(ModelAdmin):
+class OrderItemAdmin(ModelAdmin, ImportExportModelAdmin):
+
+    import_form_class = ImportForm
+    export_form_class = ExportForm
+    export_form_class = SelectableFieldsExportForm
+
     class Meta:
         models = OrderItem
 

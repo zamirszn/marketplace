@@ -66,9 +66,9 @@ INSTALLED_APPS = [
     "unfold.contrib.filters",  # optional, if special filters are needed
     "unfold.contrib.forms",  # optional, if special form elements are needed
     "unfold.contrib.inlines",  # optional, if special inlines are needed
-    # "unfold.contrib.import_export",  # optional, if django-import-export package is used
+    "unfold.contrib.import_export",  # optional, if django-import-export package is used
     # "unfold.contrib.guardian",  # optional, if django-guardian package is used
-    # "unfold.contrib.simple_history",  # optional, if django-simple-history package is used
+    # "unfold.contrib.simple_history" ,  # optional, if django-simple-history package is used
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -82,8 +82,11 @@ INSTALLED_APPS = [
     "django_filters",
     "rest_framework",
     "djoser",
-    "rest_framework_swagger",
+    "drf_yasg",
+    "import_export",
 ]
+
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -196,7 +199,7 @@ AUTH_USER_MODEL = "core.User"
 
 REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 50,
+    "PAGE_SIZE":5,
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
@@ -210,7 +213,7 @@ SIMPLE_JWT = {
 
 DJOSER = {
     "SERIALIZERS": {
-        "user_create": "core.serializers.UserSerializer",
+        "user_create": "core.serializers.UserCreateSerializer",
         "token_obtain_pair": "core.serializers.CustomJWTSerializer", 
     },
     "SEND_ACTIVATION_EMAIL": True,
@@ -222,6 +225,13 @@ DJOSER = {
         "activation": "djoser.email.ActivationEmail",
     },
 }
+
+# SWAGGER_SETTINGS = {
+#     'DEFAULT_AUTO_SCHEMA_CLASS': 'core.schema.CustomAutoSchema',
+#     'DEFAULT_FILTER_INSPECTORS': [
+#         'drf_yasg.inspectors.CoreAPICompatInspector',
+#     ],
+# }
 
 
 cloudinary.config(

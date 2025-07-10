@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.core.mail import send_mail, BadHeaderError
 from smtplib import SMTPException
 from django.conf import settings
-from .serializers import CustomJWTSerializer, ProfileSerializer, UserSerializer
+from .serializers import CustomJWTSerializer, ProfileSerializer, UserCreateSerializer
 from django.utils import timezone
 from .models import *
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -115,7 +115,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 class UserCreateView(APIView):
     def post(self, request, *args, **kwargs):
-        serializer = UserSerializer(data=request.data)
+        serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
             user.is_active=True
@@ -208,20 +208,21 @@ def verify_email(request):
     else:
         return Response({"error": "Invalid or expired OTP"}, status=status.HTTP_400_BAD_REQUEST)
 
-
 class ProfileView(APIView):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
+    http_method_names = ["post", "patch", "put", "get"]  # Added "put"
 
     def get(self, request, *args, **kwargs):
-        profile = Profile.objects.filter(owner=request.user).first()  # Get the user's profile
+        profile = Profile.objects.filter(owner=request.user).first()
         if not profile:
             return Response({"detail": "Profile not found."}, status=status.HTTP_404_NOT_FOUND)
         profile_serializer = ProfileSerializer(profile)
         return Response(profile_serializer.data)
 
     def post(self, request, *args, **kwargs):
+        print(f'user is {request.user}')  # Fixed the f-string syntax
         profile = Profile.objects.filter(owner=request.user).first()
         if profile:
             # Update existing profile
@@ -233,4 +234,26 @@ class ProfileView(APIView):
         if serializer.is_valid():
             serializer.save(owner=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED if not profile else status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, *args, **kwargs):
+        profile = Profile.objects.filter(owner=request.user).first()
+        if not profile:
+            return Response({"detail": "Profile not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = self.serializer_class(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request, *args, **kwargs):
+        profile = Profile.objects.filter(owner=request.user).first()
+        if not profile:
+            return Response({"detail": "Profile not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = self.serializer_class(profile, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

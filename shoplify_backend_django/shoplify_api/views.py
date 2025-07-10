@@ -90,6 +90,9 @@ class ReviewViewSet(ModelViewSet):
         return [IsAuthenticated()]
 
     def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return Review.objects.none()
+        
         product_pk = self.kwargs.get("product_pk")
         if product_pk is None:
             raise ValueError("Product primary key is missing.")
@@ -151,6 +154,8 @@ class CartViewSet(ModelViewSet):
     http_method_names = ["post", "patch", "delete"]
 
     def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return Review.objects.none()
         return Cart.objects.filter(owner=self.request.user)
 
     def create(self, request, *args, **kwargs):
@@ -182,6 +187,8 @@ class CartItemViewset(ModelViewSet):
     http_method_names = ["get", "post", "patch", "delete"]
 
     def get_queryset(self):
+        if getattr(self, 'swagger_fake_view', False):
+            return Review.objects.none()
         return CartItem.objects.filter(cart_id=self.kwargs["cart_pk"])
 
     def get_serializer_class(self):

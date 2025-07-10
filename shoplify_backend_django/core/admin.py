@@ -4,6 +4,9 @@ from .models import Profile, User
 from django.contrib.auth.models import Group
 
 from unfold.admin import ModelAdmin
+from import_export.admin import ImportExportModelAdmin
+from unfold.contrib.import_export.forms import ExportForm, ImportForm, SelectableFieldsExportForm
+
 
 
 admin.site.unregister(Group)
@@ -11,7 +14,12 @@ admin.site.unregister(Group)
 
 
 @admin.register(User)
-class UserAdmin(ModelAdmin):
+class UserAdmin(ModelAdmin, ImportExportModelAdmin):
+
+    import_form_class = ImportForm
+    export_form_class = ExportForm
+    export_form_class = SelectableFieldsExportForm
+
     class Meta:
         models = User
 
@@ -49,7 +57,13 @@ class UserAdmin(ModelAdmin):
     ]
 
 @admin.register(Profile)
-class ProfileAdmin(ModelAdmin):
+class ProfileAdmin(ModelAdmin, ImportExportModelAdmin):
+
+    import_form_class = ImportForm
+    export_form_class = ExportForm
+    export_form_class = SelectableFieldsExportForm
+
+
     class Meta:
         models = Profile
 
@@ -60,7 +74,7 @@ class ProfileAdmin(ModelAdmin):
         "shipping_address"
     ]
     list_display = [
-       "id","phone", "shipping_address", "notifications_enabled",
+    "owner","id","phone", "shipping_address", "notifications_enabled",
     ]
 
     list_filter = [

@@ -1,9 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
+import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/data/models/review_model.dart';
-import 'package:shoplify/data/models/review_param_model.dart';
-import 'package:shoplify/domain/entities/review_entity.dart';
 import 'package:shoplify/domain/usecases/products_usecase.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 import 'package:meta/meta.dart';
@@ -80,10 +79,10 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
       },
       (data) {
         // if the page index doesnt exist
-        final List<ReviewModelEntity> fetchedReviews =
-            List.from(data["results"])
-                .map((e) => ReviewModel.fromMap(e).toEntity())
-                .toList();
+                  // TODO: use model properly
+
+        final List<Review> fetchedReviews =
+            List.from(data["results"]).map((e) => Review.fromMap(e)).toList();
 
         // If no reviews are fetched, stop pagination
         if (fetchedReviews.isEmpty) {
@@ -150,11 +149,10 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
           // if the page index doesnt exist
 
           final String? nextPage = data["next"];
+          // TODO: use model properly
 
-          final List<ReviewModelEntity> fetchedReviews =
-              List.from(data["results"])
-                  .map((e) => ReviewModel.fromMap(e).toEntity())
-                  .toList();
+          final List<Review> fetchedReviews =
+              List.from(data["results"]).map((e) => Review.fromMap(e)).toList();
 
           if (state.selectedOption != null) {
             // for sorted list

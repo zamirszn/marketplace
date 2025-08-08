@@ -1,9 +1,8 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
+import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
@@ -14,7 +13,7 @@ import 'package:shoplify/presentation/widgets/remove_favorite_product/remove_fav
 
 class FavoriteProductWidget extends StatelessWidget {
   const FavoriteProductWidget({super.key, required this.product});
-  final ProductModelEntity product;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,6 @@ class FavoriteProductWidget extends StatelessWidget {
                 extra: {'heroTag': '${product.id}_favorite'});
           },
           child: Hero(
-            
             tag: '${product.id}_favorite',
             child: SizedBox(
               height: 400,
@@ -41,14 +39,14 @@ class FavoriteProductWidget extends StatelessWidget {
                 errorWidget: (context, url, error) => Container(
                   height: AppSize.s100,
                   width: AppSize.s100,
-                  color: ColorManager.darkBlue,
+                  color: ColorManager.blue,
                 ),
                 placeholder: (
                   context,
                   url,
                 ) =>
                     Container(
-                  color: ColorManager.darkBlue,
+                  color: ColorManager.blue,
                   height: AppSize.s100,
                   width: AppSize.s100,
                 ),
@@ -72,10 +70,8 @@ class FavoriteProductWidget extends StatelessWidget {
                 child: Text(
                   "\$${product.price?.toString() ?? ""}",
                   overflow: TextOverflow.ellipsis,
-                  style: getSemiBoldStyle(
-                      color: ColorManager.white,
-                      fontSize: FontSize.s23,
-                      font: FontConstants.ojuju),
+                  style: getSemiBoldStyle(context,
+                      fontSize: FontSize.s23, font: FontConstants.ojuju),
                 ),
               )),
         if (product.name != null)
@@ -88,10 +84,8 @@ class FavoriteProductWidget extends StatelessWidget {
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: getSemiBoldStyle(
-                    color: ColorManager.white,
-                    fontSize: FontSize.s18,
-                    font: FontConstants.ojuju),
+                style: getSemiBoldStyle(context,
+                    fontSize: FontSize.s18, font: FontConstants.ojuju),
               ),
             ),
           ),

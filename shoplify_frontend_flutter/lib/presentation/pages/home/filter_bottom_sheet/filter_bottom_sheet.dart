@@ -4,14 +4,15 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/data/models/search_params_model.dart';
+import 'package:shoplify/data/models/params_models.dart';
+import 'package:shoplify/data/models/product_category_model.dart';
+import 'package:shoplify/presentation/pages/home/filter_bottom_sheet/bloc/filter_bottomsheet_bloc.dart';
 import 'package:shoplify/presentation/pages/search/bloc/search_bloc.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/pages/home/filter_bottom_sheet/bloc/filter_bottomsheet_bloc.dart';
 import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:shoplify/presentation/widgets/product_category/bloc/product_category_bloc.dart';
 
@@ -39,7 +40,7 @@ class FilterBottomSheet extends StatelessWidget {
                 Text(
                   AppStrings.filter,
                   textAlign: TextAlign.center,
-                  style: getSemiBoldStyle(
+                  style: getSemiBoldStyle(context,
                       font: FontConstants.ojuju, fontSize: FontSize.s30),
                 ),
                 RoundCorner(
@@ -66,24 +67,25 @@ class FilterBottomSheet extends StatelessWidget {
             space(h: AppSize.s36),
             Text(
               AppStrings.category,
-              style: getMediumStyle(fontSize: FontSize.s16),
+              style: getMediumStyle(context, fontSize: FontSize.s16),
             ),
             space(h: AppSize.s20),
             BlocBuilder<ProductCategoryBloc, ProductCategoryState>(
               builder: (context, productState) {
                 if (productState is ProductCategorySuccess) {
-                  final categories = productState.productCategories;
+                  final List<ProductCategory> categories =
+                      productState.productCategories;
                   return BlocBuilder<FilterBottomsheetBloc,
                       FilterBottomsheetState>(
                     builder: (context, filterState) {
                       return Wrap(
                           children: categories
-                              .map((category) => Padding(
+                              .map((ProductCategory category) => Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: AppPadding.p2,
                                         horizontal: AppPadding.p2),
                                     child: ChoiceChip(
-                                      label: Text(category.title),
+                                      label: Text(category.name),
                                       selected:
                                           filterState.selectedCategoryId ==
                                               category.categoryId,
@@ -112,7 +114,7 @@ class FilterBottomSheet extends StatelessWidget {
             space(h: AppSize.s36),
             Text(
               AppStrings.sortBy,
-              style: getMediumStyle(fontSize: FontSize.s16),
+              style: getMediumStyle(context, fontSize: FontSize.s16),
             ),
             space(h: AppSize.s20),
             BlocBuilder<FilterBottomsheetBloc, FilterBottomsheetState>(
@@ -151,13 +153,13 @@ class FilterBottomSheet extends StatelessWidget {
               children: [
                 Text(
                   AppStrings.priceRange,
-                  style: getMediumStyle(fontSize: FontSize.s16),
+                  style: getMediumStyle(context, fontSize: FontSize.s16),
                 ),
                 BlocBuilder<FilterBottomsheetBloc, FilterBottomsheetState>(
                   builder: (context, state) {
                     return Text(
                       "\$${calculateProductRange(state.priceRange.start)} - \$${calculateProductRange(state.priceRange.end)}",
-                      style: getBoldStyle(
+                      style: getBoldStyle(context,
                           fontSize: FontSize.s16, font: FontConstants.ojuju),
                     );
                   },
@@ -190,8 +192,6 @@ class FilterBottomSheet extends StatelessWidget {
               child: BlocBuilder<FilterBottomsheetBloc, FilterBottomsheetState>(
                 builder: (context, state) {
                   return ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          elevation: 0, backgroundColor: ColorManager.black),
                       onPressed:
                           // if there is no filter disable the button
                           state.isFilterEnabled
@@ -231,14 +231,15 @@ class FilterBottomSheet extends StatelessWidget {
                       child: Text(
                         AppStrings.apply,
                         style: getSemiBoldStyle(
-                            font: FontConstants.ojuju,
-                            fontSize: FontSize.s20,
-                            color: ColorManager.white),
+                          context,
+                          font: FontConstants.ojuju,
+                          fontSize: FontSize.s20,
+                        ),
                       ));
                 },
               ),
             ),
-            space(h: AppSize.s10),
+            space(h: AppSize.s40),
           ],
         ),
       ),

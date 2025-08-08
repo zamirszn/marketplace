@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:shoplify/app/functions.dart';
-import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
+import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -87,13 +87,11 @@ class _CoverFlowCarouselViewState extends State<CoverFlowCarouselView> {
         duration: const Duration(milliseconds: 1300),
         curve: Curves.linear,
       );
-      try {
-        await _pageController?.animateToPage(
-          0,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.linear,
-        );
-      } catch (e) {}
+      await _pageController?.animateToPage(
+        0,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.linear,
+      );
     }
   }
 
@@ -122,15 +120,20 @@ class _CoverFlowCarouselViewState extends State<CoverFlowCarouselView> {
             child: Stack(
               children: widget.productImages.asMap().entries.map((item) {
                 final currentIndex = _currentPageIndex - item.key;
-                return _CoverFlowPositionedItem(
-                  imagePath: item.value.image,
-                  index: currentIndex,
-                  absIndex: currentIndex.abs(),
-                  size: Size(screenWidth, _maxHeight),
-                  minItemWidth: _minItemWidth,
-                  maxItemWidth: screenWidth / 2,
-                  spacing: _spacing,
-                  style: widget.style,
+                return Positioned(
+                  left: _getItemPosition(currentIndex, screenWidth) +
+                      (_spacing / 2),
+                  top: 0,
+                  child: _CoverFlowPositionedItem(
+                    imagePath: item.value.image,
+                    index: currentIndex,
+                    absIndex: currentIndex.abs(),
+                    size: Size(screenWidth, _maxHeight),
+                    minItemWidth: _minItemWidth,
+                    maxItemWidth: screenWidth / 2,
+                    spacing: _spacing,
+                    style: widget.style,
+                  ),
                 );
               }).toList(),
             ),
@@ -139,16 +142,34 @@ class _CoverFlowCarouselViewState extends State<CoverFlowCarouselView> {
             hitTestBehavior: HitTestBehavior.translucent,
             scrollDirection: Axis.horizontal,
             controller: _pageController,
-            itemBuilder: (context, index) => GestureDetector(
-                onTap: () {
-                  print("hit from builder");
-                },
-                child: const SizedBox.shrink()),
+            itemBuilder: (context, index) => const SizedBox.shrink(),
             itemCount: widget.productImages.length,
           ),
         ],
       ),
     );
+  }
+
+  double _getItemPosition(double index, double screenWidth) {
+    final centerPosition = screenWidth / 2;
+    final maxItemWidth = screenWidth / 2;
+    final mainPosition = centerPosition - (maxItemWidth / 2);
+    if (index == 0) return mainPosition;
+
+    final absIndex = index.abs();
+    final diffPosition = absIndex <= 1.0
+        ? ((index > 0 ? _minItemWidth : maxItemWidth) * absIndex)
+        : ((index > 0 ? (absIndex - 1) : (absIndex - 2)) * _minItemWidth);
+
+    final leftPosition =
+        absIndex <= 1 ? mainPosition : (mainPosition - _minItemWidth);
+    final rightPosition = absIndex <= 1
+        ? mainPosition
+        : mainPosition + (maxItemWidth + _minItemWidth);
+
+    return index > 0
+        ? leftPosition - diffPosition
+        : rightPosition + diffPosition;
   }
 }
 
@@ -172,13 +193,6 @@ class _CoverFlowPositionedItem extends StatelessWidget {
   final double spacing;
   final CoverFlowStyle style;
 
-  double get _getItemPosition {
-    final centerPosition = size.width / 2;
-    final mainPosition = centerPosition - (maxItemWidth / 2);
-    if (index == 0) return mainPosition;
-    return _calculateNewMainPosition(mainPosition);
-  }
-
   double get _calculateItemWidth {
     final diffWidth = maxItemWidth - minItemWidth;
     final newMaxItemWidth = maxItemWidth - (diffWidth * absIndex);
@@ -199,6 +213,7 @@ class _CoverFlowPositionedItem extends StatelessWidget {
         width: _calculateItemWidth,
         height: size.height,
         child: GestureDetector(
+          behavior: HitTestBehavior.translucent,
           onTap: () {
             if (imagePath != null) {
               goPush(context, Routes.productImagePage, extra: imagePath);
@@ -215,7 +230,7 @@ class _CoverFlowPositionedItem extends StatelessWidget {
               width: AppSize.s100,
             )),
             errorWidget: (context, url, error) => Container(
-              color: ColorManager.darkBlue,
+              color: ColorManager.blue,
               height: AppSize.s100,
               width: AppSize.s100,
             ),
@@ -238,36 +253,7 @@ class _CoverFlowPositionedItem extends StatelessWidget {
       child: child,
     );
 
-    return Padding(
-      padding: EdgeInsets.only(left: spacing / 2),
-      child: Transform.translate(
-        offset: Offset(_getItemPosition, 0),
-        child: child,
-      ),
-    );
-  }
-
-  double _calculateLeftPosition(double mainPosition) {
-    return absIndex <= 1 ? mainPosition : (mainPosition - minItemWidth);
-  }
-
-  double _calculateRightPosition(double mainPosition) {
-    final totalItemWidth = maxItemWidth + minItemWidth;
-    return absIndex <= 1 ? mainPosition : mainPosition + totalItemWidth;
-  }
-
-  double _calculateRightAndLeftDiffPosition() {
-    return absIndex <= 1.0
-        ? ((index > 0 ? minItemWidth : maxItemWidth) * absIndex)
-        : ((index > 0 ? (absIndex - 1) : (absIndex - 2)) * minItemWidth);
-  }
-
-  double _calculateNewMainPosition(double mainPosition) {
-    final diffPosition = _calculateRightAndLeftDiffPosition();
-    final leftPosition = _calculateLeftPosition(mainPosition);
-    final rightPosition = _calculateRightPosition(mainPosition);
-    return index > 0
-        ? leftPosition - diffPosition
-        : rightPosition + diffPosition;
+    // Remove all positioning logic - just return the child
+    return child;
   }
 }

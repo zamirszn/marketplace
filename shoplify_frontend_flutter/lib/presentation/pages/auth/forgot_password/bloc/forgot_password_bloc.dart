@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:shoplify/core/constants/constant.dart';
-import 'package:shoplify/data/models/reset_password_params.dart';
+import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/domain/usecases/auth_usecase.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 

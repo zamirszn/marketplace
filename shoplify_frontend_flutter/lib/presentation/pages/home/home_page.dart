@@ -1,43 +1,70 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoplify/app/functions.dart';
-import 'package:shoplify/data/models/product_query_params_model.dart';
+import 'package:shoplify/data/models/params_models.dart';
+import 'package:shoplify/presentation/all_products/all_product_gridview.dart';
+import 'package:shoplify/presentation/all_products/bloc/all_products_bloc.dart';
+import 'package:shoplify/presentation/pages/home/bloc/product_bloc.dart';
+import 'package:shoplify/presentation/pages/home/popular_products_list_view.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/pages/home/bloc/product_bloc.dart';
-import 'package:shoplify/presentation/pages/home/popular_products_list_view.dart';
-import 'package:shoplify/presentation/pages/home/product_gridview.dart';
 import 'package:shoplify/presentation/widgets/error_message_widget.dart';
 import 'package:shoplify/presentation/widgets/filter_products_button.dart';
+import 'package:shoplify/presentation/widgets/loading/loading_widget.dart';
 import 'package:shoplify/presentation/widgets/new_product_widget/bloc/new_product_bloc.dart';
 import 'package:shoplify/presentation/widgets/new_product_widget/new_products_list_view.dart';
+import 'package:shoplify/presentation/widgets/popular_product_widget/bloc/popular_product_bloc.dart';
 import 'package:shoplify/presentation/widgets/product_category/bloc/product_category_bloc.dart';
 import 'package:shoplify/presentation/widgets/product_category/products_category_list_widget.dart';
-import 'package:shoplify/presentation/widgets/loading_widget.dart';
-import 'package:shoplify/presentation/widgets/popular_product_widget/bloc/popular_product_bloc.dart';
 import 'package:shoplify/presentation/widgets/product_search_text_field.dart';
 import 'package:shoplify/presentation/widgets/retry_button.dart';
 import 'package:shoplify/presentation/widgets/snackbar.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    context.read<ProductBloc>().add(GetOrCreateCartEvent());
+
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProductBloc()..add(GetOrCreateCartEvent()),
-      child: Scaffold(
-        body: RefreshIndicator(
-          onRefresh: () async {
-            context.read<ProductBloc>().add(GetOrCreateCartEvent());
-            context.read<ProductCategoryBloc>().add(GetProductCategoryEvent());
-            context.read<NewProductBloc>().add(GetNewProductsEvent());
-            context.read<PopularProductBloc>().add(GetPopularProductsEvent());
-            context.read<ProductBloc>().add(
-                GetAllProductsEvent(params: ProductQueryParamsModel(page: 1)));
+    final allProductsBloc = context.read<AllProductsBloc>();
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Scaffold(
+      backgroundColor: colorScheme.surface,
+      body: RefreshIndicator(
+        onRefresh: () async {
+          context.read<ProductBloc>().add(GetOrCreateCartEvent());
+          context.read<ProductCategoryBloc>().add(GetProductCategoryEvent());
+          context.read<NewProductBloc>().add(GetNewProductsEvent());
+          context.read<PopularProductBloc>().add(GetPopularProductsEvent());
+          context.read<AllProductsBloc>().add(ResetAllProductListEvent());
+          context.read<AllProductsBloc>().add(
+              GetAllProductsEvent(params: ProductQueryParamsModel(page: 1)));
+        },
+        child: NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification scrollInfo) {
+            if (scrollInfo.metrics.pixels >=
+                scrollInfo.metrics.maxScrollExtent - 60) {
+              // Load more items when the user reaches the end of the list
+              allProductsBloc.add(GetAllProductsEvent(
+                  params: ProductQueryParamsModel(
+                      page: allProductsBloc.state.page)));
+            }
+            return false;
           },
           child: BlocListener<ProductBloc, ProductState>(
             listener: (context, state) {
@@ -56,15 +83,11 @@ class HomePage extends StatelessWidget {
                     child: LoadingWidget(),
                   );
                 } else if (state is CreateorGetCartFailure) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                        top: 66, left: AppPadding.p10, right: AppPadding.p10),
-                    child: ErrorMessageWidget(
-                      retry: () {
-                        context.read<ProductBloc>().add(GetOrCreateCartEvent());
-                      },
-                      message: state.errorMessage,
-                    ),
+                  return ErrorMessageWidget(
+                    retry: () {
+                      context.read<ProductBloc>().add(GetOrCreateCartEvent());
+                    },
+                    message: state.errorMessage,
                   );
                 } else if (state is CreateorGetCartSuccess) {
                   return CustomScrollView(
@@ -83,6 +106,7 @@ class HomePage extends StatelessWidget {
                             Text(
                               AppStrings.discoverOurNewItems,
                               style: getSemiBoldStyle(
+                                context,
                                 font: FontConstants.ojuju,
                                 fontSize: AppSize.s24,
                               ),
@@ -121,6 +145,7 @@ class HomePage extends StatelessWidget {
                               AppStrings.popularProducts,
                               overflow: TextOverflow.ellipsis,
                               style: getSemiBoldStyle(
+                                context,
                                 font: FontConstants.ojuju,
                                 fontSize: AppSize.s24,
                               ),
@@ -147,6 +172,7 @@ class HomePage extends StatelessWidget {
                               AppStrings.discoverProducts,
                               overflow: TextOverflow.ellipsis,
                               style: getSemiBoldStyle(
+                                context,
                                 font: FontConstants.ojuju,
                                 fontSize: AppSize.s24,
                               ),
@@ -157,6 +183,7 @@ class HomePage extends StatelessWidget {
                                   AppStrings.viewAll,
                                   overflow: TextOverflow.ellipsis,
                                   style: getLightStyle(
+                                    context,
                                     font: FontConstants.poppins,
                                     fontSize: AppSize.s14,
                                   ),
@@ -171,7 +198,7 @@ class HomePage extends StatelessWidget {
                       const SliverPadding(
                           padding:
                               EdgeInsets.symmetric(horizontal: AppPadding.p7),
-                          sliver: ProductGridView()),
+                          sliver: AllProductGridView()),
                       sliverSpace(h: AppSize.s50),
                     ],
                   );

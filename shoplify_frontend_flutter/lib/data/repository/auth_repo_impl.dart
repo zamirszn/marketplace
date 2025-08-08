@@ -1,15 +1,12 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:shoplify/data/models/login_params_model.dart';
-import 'package:shoplify/data/models/reset_password_params.dart';
-import 'package:shoplify/data/models/signup_params_model.dart';
-import 'package:shoplify/data/models/verify_otp_params.dart';
+import "package:shoplify/core/constants/constant.dart";
+import 'package:shoplify/core/network/dio_client.dart';
+import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/data/source/auth_service_data_source.dart';
 import 'package:shoplify/data/source/secure_storage_data_source.dart';
 import 'package:shoplify/domain/repository/auth_repo.dart';
 import 'package:shoplify/presentation/service_locator.dart';
-import "package:shoplify/core/constants/constant.dart";
-import 'package:shoplify/core/network/dio_client.dart';
 
 class AuthRepositoryImpl extends AuthRepository {
   @override
@@ -20,7 +17,7 @@ class AuthRepositoryImpl extends AuthRepository {
       return Left(error);
     }, (data) async {
       Response response = data;
-      return Right(response);
+      return Right(response.data);
     });
   }
 
@@ -41,7 +38,7 @@ class AuthRepositoryImpl extends AuthRepository {
       // save token
 
       sl<DioClient>().setAuthToken(response.data[Constant.accessToken]);
-      
+
       await sl<SecureStorageDataSource>()
           .write(Constant.accessToken, response.data[Constant.accessToken]);
 
@@ -49,9 +46,7 @@ class AuthRepositoryImpl extends AuthRepository {
     });
   }
 
-
-
-  // TODO: remove 
+  // TODO: remove
   @override
   Future<Either> refresh(String refreshToken) async {
     Either result = await sl<AuthServiceDataSource>().refresh(refreshToken);
@@ -78,7 +73,7 @@ class AuthRepositoryImpl extends AuthRepository {
       return Left(error);
     }, (data) async {
       Response response = data;
-      return Right(response);
+      return Right(response.data);
     });
   }
 
@@ -92,7 +87,7 @@ class AuthRepositoryImpl extends AuthRepository {
       return Left(error);
     }, (data) async {
       Response response = data;
-      return Right(response);
+      return Right(response.data);
     });
   }
 
@@ -105,7 +100,7 @@ class AuthRepositoryImpl extends AuthRepository {
       return Left(error);
     }, (data) async {
       Response response = data;
-      return Right(response);
+      return Right(response.data);
     });
   }
 
@@ -117,7 +112,18 @@ class AuthRepositoryImpl extends AuthRepository {
       return Left(error);
     }, (data) async {
       Response response = data;
-      return Right(response);
+      return Right(response.data);
+    });
+  }
+
+  @override
+  Future<Either> getProfile() async {
+    Either result = await sl<AuthServiceDataSource>().getProfile();
+    return result.fold((error) {
+      return Left(error);
+    }, (data) async {
+      Response response = data;
+      return Right(response.data);
     });
   }
 }

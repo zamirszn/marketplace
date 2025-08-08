@@ -7,10 +7,10 @@ class ApiUrls {
   static const String reviews = "reviews";
   static const String cart = "cart";
   static const String items = "items";
+  static const String getProfile = "profile/";
   static const String register = "$auth/signup/";
-  static const String login = "$auth/jwt/create/";
+  static const String login = "$auth/login/";
   static const String refreshToken = "$auth/jwt/refresh";
-  static const String userProfile = "$auth/users";
   static const String categories = "$api/categories";
   static const String newProducts = "$api/$products/new-products";
   static const String popularProducts = "$api/$products/popular-products";

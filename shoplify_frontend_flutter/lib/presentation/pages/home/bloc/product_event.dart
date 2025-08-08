@@ -4,11 +4,6 @@ part of 'product_bloc.dart';
 sealed class ProductEvent {}
 
 
-class GetAllProductsEvent extends ProductEvent {
-  final ProductQueryParamsModel params;
-
-  GetAllProductsEvent({required this.params});
-}
 
 class AddToCartEvent extends ProductEvent {
   final AddToCartParamsModel params;

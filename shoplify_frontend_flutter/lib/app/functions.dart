@@ -3,14 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/core/constants/constant.dart';
+import 'package:shoplify/data/models/review_model.dart';
 import 'package:shoplify/data/source/secure_storage_data_source.dart';
-import 'package:shoplify/domain/entities/review_entity.dart';
-import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
-import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/service_locator.dart';
+
 
 num calculateProductRange(num range) {
   return (range * 1000).ceil();
@@ -20,7 +19,7 @@ num calculateProductAmountByQuantity(num productPrice, int quantity) {
   return productPrice * quantity;
 }
 
-int calculateRatingPercentage(List<ReviewModelEntity> reviews, num rating) {
+int calculateRatingPercentage(List<Review> reviews, num rating) {
   if (reviews.isEmpty) return 0;
   int countMatch =
       reviews.where((review) => review.rating?.floor() == rating).length;
@@ -78,10 +77,6 @@ class FadeRoute<T> extends MaterialPageRoute<T> {
   }
 }
 
-bool validateUsername(String username) {
-  return username.isNotEmpty && username.contains('@');
-}
-
 bool validateFullName(String fullName) {
   return fullName.isNotEmpty; // Adjust validation as needed
 }
@@ -122,7 +117,7 @@ String? passwordValidator(String? value) {
   return null;
 }
 
-String? emailNameValidator(
+String? emailValidator(
   String? value,
 ) {
   if (value!.isEmpty) {
@@ -200,8 +195,6 @@ final FilteringTextInputFormatter textWithSpaceInputFormatter =
 final FilteringTextInputFormatter textOnlyInputFormatter =
     FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'));
 
-final errorStyle =
-    getRegularStyle(color: ColorManager.white, fontSize: FontSize.s10);
 final cursorColor = ColorManager.white;
 
 void logoutUser(BuildContext context) async {

@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/data/models/review_param_model.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
-import 'package:shoplify/domain/entities/review_entity.dart';
+import 'package:shoplify/data/models/params_models.dart';
+import 'package:shoplify/data/models/product_model.dart';
+import 'package:shoplify/data/models/review_model.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
@@ -15,13 +15,13 @@ import 'package:shoplify/presentation/pages/review/bloc/review_bloc.dart';
 import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:shoplify/presentation/widgets/empty_widget.dart';
 import 'package:shoplify/presentation/widgets/error_message_widget.dart';
-import 'package:shoplify/presentation/widgets/loading_widget.dart';
+import 'package:shoplify/presentation/widgets/loading/loading_widget.dart';
 import 'package:shoplify/presentation/widgets/star_rating/star_rating_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ReviewPage extends StatefulWidget {
   const ReviewPage({super.key, required this.product});
-  final ProductModelEntity product;
+  final Product product;
 
   @override
   State<ReviewPage> createState() => _ReviewPageState();
@@ -81,6 +81,7 @@ class _ReviewPageState extends State<ReviewPage> {
           title: Text(
             AppStrings.reviews,
             style: getRegularStyle(
+                                 context,
                 font: FontConstants.ojuju, fontSize: FontSize.s20),
           ),
         ),
@@ -129,6 +130,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                                 child: Text(
                                                   AppStrings.reviews,
                                                   style: getMediumStyle(
+                                 context,
                                                       fontSize: FontSize.s14),
                                                 ),
                                               ),
@@ -144,6 +146,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                                           ?.toString() ??
                                                       "0",
                                                   style: getRegularStyle(
+                                 context,
                                                       fontSize: FontSize.s30,
                                                       font:
                                                           FontConstants.ojuju),
@@ -155,6 +158,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                                   child: Text(
                                                     "/5",
                                                     style: getRegularStyle(
+                                 context,
                                                         fontSize: FontSize.s16,
                                                         font: FontConstants
                                                             .ojuju),
@@ -166,8 +170,9 @@ class _ReviewPageState extends State<ReviewPage> {
                                             Text(
                                               "${AppStrings.basedOn} ${widget.product.reviewsLength} ${AppStrings.reviews}",
                                               style: getLightStyle(
+                                 context,
                                                   fontSize: FontSize.s12,
-                                                  color: ColorManager.darkBlue,
+                                                  color: ColorManager.blue,
                                                   font: FontConstants.poppins),
                                             ),
                                             space(h: AppSize.s12),
@@ -264,7 +269,8 @@ class _ReviewPageState extends State<ReviewPage> {
                               children: [
                                 Text(
                                   AppStrings.reviews,
-                                  style: getMediumStyle(fontSize: FontSize.s14),
+                                  style: getMediumStyle(
+                                 context,fontSize: FontSize.s14),
                                 ),
                                 const Expanded(child: SizedBox()),
                                 InkWell(
@@ -303,6 +309,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                           child: Text(
                                             state.selectedOption ?? "Oldest",
                                             style: getLightStyle(
+                                 context,
                                                 fontSize: FontSize.s14),
                                           ),
                                         ),
@@ -398,8 +405,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                       ),
                                     );
                                   } else {
-                                    ReviewModelEntity productReview =
-                                        state.reviews[index];
+                                    Review productReview = state.reviews[index];
 
                                     return Column(
                                       children: [
@@ -423,13 +429,15 @@ class _ReviewPageState extends State<ReviewPage> {
                                                               ?.fullName ??
                                                           "",
                                                       style: getMediumStyle(
+                                 context,
                                                           fontSize:
                                                               FontSize.s14),
                                                     ),
                                                     Text(
                                                       productReview.review ??
                                                           "",
-                                                      style: getRegularStyle(),
+                                                      style: getRegularStyle(
+                                 context,),
                                                     ),
                                                     space(h: AppSize.s8),
                                                     Text(
@@ -439,6 +447,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                                             DateTime.now(),
                                                       )}",
                                                       style: getLightStyle(
+                                 context,
                                                           fontSize:
                                                               FontSize.s10),
                                                     ),
@@ -461,6 +470,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                                             ?.toString() ??
                                                         "0",
                                                     style: getRegularStyle(
+                                 context,
                                                         fontSize: FontSize.s20,
                                                         font: FontConstants
                                                             .ojuju),
@@ -481,7 +491,7 @@ class _ReviewPageState extends State<ReviewPage> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: AppPadding.p20),
                                             child: Divider(
-                                              color: ColorManager.darkBlue,
+                                              color: ColorManager.blue,
                                               thickness: AppSize.s1,
                                             ),
                                           )
@@ -511,7 +521,7 @@ class ReviewSortBottomSheet extends StatelessWidget {
   });
 
   final List<String> sortOptions;
-  final ProductModelEntity product;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -535,6 +545,7 @@ class ReviewSortBottomSheet extends StatelessWidget {
                     child: Text('Sort',
                         textAlign: TextAlign.center,
                         style: getMediumStyle(
+                                 context,
                             font: FontConstants.ojuju, fontSize: FontSize.s20)),
                   ),
                   space(w: AppSize.s36)
@@ -543,10 +554,11 @@ class ReviewSortBottomSheet extends StatelessWidget {
               space(h: AppSize.s20),
               ...sortOptions.map((option) => RadioListTile<String>(
                     contentPadding: const EdgeInsets.only(left: AppPadding.p2),
-                    activeColor: ColorManager.darkBlue,
+                    activeColor: ColorManager.blue,
                     title: Text(
                       option,
-                      style: getRegularStyle(fontSize: FontSize.s14),
+                      style: getRegularStyle(
+                                 context,fontSize: FontSize.s14),
                     ),
                     value: option,
                     selected: option == reviewBloc.state.selectedOption,
@@ -566,14 +578,7 @@ class ReviewSortBottomSheet extends StatelessWidget {
                 height: AppSize.s50,
                 width: double.infinity,
                 child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(AppSize.s20)),
-                      shadowColor: Colors.transparent,
-                      foregroundColor: ColorManager.black,
-                      backgroundColor: ColorManager.grey,
-                    ),
+                   
                     onPressed: () {
                       reviewBloc.add(ShowLoadingReviewEvent());
 
@@ -592,6 +597,7 @@ class ReviewSortBottomSheet extends StatelessWidget {
                     child: Text(
                       AppStrings.done,
                       style: getRegularStyle(
+                                 context,
                           font: FontConstants.ojuju, fontSize: FontSize.s18),
                     )),
               ),
@@ -625,7 +631,8 @@ class RatingBar extends StatelessWidget {
           child: Text(
             "$ratingText star",
             textAlign: TextAlign.end,
-            style: getLightStyle(fontSize: FontSize.s14),
+            style: getLightStyle(
+                                 context,fontSize: FontSize.s14),
           ),
         ),
         space(w: AppSize.s8),
@@ -644,7 +651,7 @@ class RatingBar extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(AppSize.s10),
-                color: ColorManager.darkBlue,
+                color: ColorManager.blue,
               ),
               height: AppSize.s8,
               width: deviceWidth(context) * .2 * percentage / 100,
@@ -705,26 +712,30 @@ class ReviewWidgetSkeleton extends StatelessWidget {
                     Skeletonizer(
                       child: Text(
                         "**********",
-                        style: getMediumStyle(fontSize: FontSize.s14),
+                        style: getMediumStyle(
+                                 context,fontSize: FontSize.s14),
                       ),
                     ),
                     Skeletonizer(
                       child: Text(
                         "*************************",
-                        style: getRegularStyle(),
+                        style: getRegularStyle(
+                                 context,),
                       ),
                     ),
                     Skeletonizer(
                       child: Text(
                         "********************",
-                        style: getRegularStyle(),
+                        style: getRegularStyle(
+                                 context
                       ),
-                    ),
+                    ),),
                     space(h: AppSize.s8),
                     Skeletonizer(
                       child: Text(
                         "*********************",
-                        style: getLightStyle(fontSize: FontSize.s10),
+                        style: getLightStyle(
+                                 context,fontSize: FontSize.s10),
                       ),
                     ),
                   ],
@@ -743,6 +754,7 @@ class ReviewWidgetSkeleton extends StatelessWidget {
                     child: Text(
                       "**",
                       style: getRegularStyle(
+                                 context,
                           fontSize: FontSize.s20, font: FontConstants.ojuju),
                     ),
                   ),

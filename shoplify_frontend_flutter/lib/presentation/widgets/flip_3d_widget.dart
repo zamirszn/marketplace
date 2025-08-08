@@ -43,10 +43,10 @@ class Flip3DPage extends StatefulWidget {
   });
 
   @override
-  _Flip3DPageState createState() => _Flip3DPageState();
+  Flip3DPageState createState() => Flip3DPageState();
 }
 
-class _Flip3DPageState extends State<Flip3DPage>
+class Flip3DPageState extends State<Flip3DPage>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;

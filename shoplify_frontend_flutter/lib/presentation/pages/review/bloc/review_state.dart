@@ -5,7 +5,7 @@ enum ReviewStatus { initial, success, failure }
 final class ReviewState extends Equatable {
   const ReviewState(
       {this.status = ReviewStatus.initial,
-      this.reviews = const <ReviewModelEntity>[],
+      this.reviews = const <Review>[],
       this.hasReachedMax = false,
       this.isFetching = false,
       this.page = 1,
@@ -14,7 +14,7 @@ final class ReviewState extends Equatable {
       this.selectedOption});
 
   final ReviewStatus status;
-  final List<ReviewModelEntity> reviews;
+  final List<Review> reviews;
   final bool hasReachedMax;
   final String? errorMessage;
   final bool isFetching;
@@ -23,7 +23,7 @@ final class ReviewState extends Equatable {
 
   ReviewState copyWith({
     ReviewStatus? status,
-    List<ReviewModelEntity>? reviews,
+    List<Review>? reviews,
     bool? hasReachedMax,
     String? errorMessage,
     bool? isFetching,

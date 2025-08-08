@@ -3,7 +3,6 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:shoplify/data/models/product_model.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/domain/usecases/products_usecase.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 
@@ -31,8 +30,7 @@ class ProductDetailsBloc
         // do nothing
       },
       (data) {
-        final ProductModelEntity product =
-            ProductModel.fromMap(data).toEntity();
+        final Product product = Product.fromMap(data);
         emit(state.copyWith(
             selectedProduct: product, status: ProductDetailsStatus.success));
         print("refreshing");

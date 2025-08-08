@@ -13,6 +13,8 @@ class GoBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Tooltip(
       message: AppStrings.back,
       child: ClipRRect(
@@ -20,15 +22,17 @@ class GoBackButton extends StatelessWidget {
         child: Material(
           color: Colors.transparent,
           child: ColoredBox(
-            color: backgroundColor ?? ColorManager.grey,
+            color: backgroundColor ?? colorScheme.onPrimary,
             child: InkWell(
+              hoverColor: Colors.transparent,
+              splashColor: Colors.transparent,
               borderRadius: BorderRadius.circular(10),
               onTap: () => goPopRoute(context),
               child: Padding(
                 padding: padding ?? const EdgeInsets.all(0),
                 child: Icon(
                   Icons.arrow_back_ios_new_rounded,
-                  color: color ?? ColorManager.black,
+                  color: color ?? colorScheme.secondary,
                   size: AppSize.s20,
                 ),
               ),

@@ -25,11 +25,7 @@ class BlurBackgroundWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(
                   AppSize.s10,
                 )),
-            padding: const EdgeInsets.symmetric(
-                vertical: AppPadding.p5, horizontal: AppPadding.p10),
-            child: ConstrainedBox(
-                constraints: BoxConstraints.tightFor(width: width ?? 90),
-                child: child),
+            child: child,
           ),
         ));
   }

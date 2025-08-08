@@ -37,7 +37,7 @@ class LiquidSwipeState extends State<LiquidSwipe>
 
     final velocity = (pixelsPerSecond.dx / size.width).abs();
 
-    const spring = SpringDescription(mass: 15, stiffness: 1, damping: 1);
+    const spring = SpringDescription(mass: 1, stiffness: 1, damping: 1);
     final simulation = SpringSimulation(spring, 0.0, 1.0, velocity * 0.7);
 
     final flungLeft = unitsPerSecond.dx < -4.0;

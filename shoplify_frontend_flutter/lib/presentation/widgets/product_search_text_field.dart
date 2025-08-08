@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/functions.dart';
-import 'package:shoplify/data/models/search_params_model.dart';
+import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/presentation/pages/home/filter_bottom_sheet/bloc/filter_bottomsheet_bloc.dart';
 import 'package:shoplify/presentation/pages/search/bloc/search_bloc.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';

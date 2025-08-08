@@ -2,20 +2,19 @@ import 'dart:convert';
 
 import 'package:shoplify/core/constants/api_urls.dart';
 import 'package:shoplify/data/models/product_category_model.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
 
-List<ProductModel> productModelFromJson(String str) => List<ProductModel>.from(
-    json.decode(str).map((x) => ProductModel.fromMap(x)));
+List<Product> productModelFromJson(String str) =>
+    List<Product>.from(json.decode(str).map((x) => Product.fromMap(x)));
 
-String productModelToJson(List<ProductModel> data) =>
+String productModelToJson(List<Product> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toMap())));
 
-class ProductModel {
+class Product {
   final String? id;
   final String? name;
   final String? description;
   final bool? discount;
-  final ProductCategoryModel? category;
+  final ProductCategory? category;
   final double? oldPrice;
   final double? price;
   final String? slug;
@@ -26,7 +25,7 @@ class ProductModel {
 
   final List<ProductImage> images;
 
-  ProductModel({
+  Product({
     this.id,
     this.name,
     this.description,
@@ -42,11 +41,11 @@ class ProductModel {
     required this.images,
   });
 
-  ProductModel copyWith({
+  Product copyWith({
     String? id,
     String? name,
     String? description,
-    ProductCategoryModel? category,
+    ProductCategory? category,
     double? oldPrice,
     double? price,
     bool? discount,
@@ -57,7 +56,7 @@ class ProductModel {
     List<ProductImage>? images,
     bool? isFavorite,
   }) =>
-      ProductModel(
+      Product(
         id: id ?? this.id,
         name: name ?? this.name,
         description: description ?? this.description,
@@ -73,14 +72,14 @@ class ProductModel {
         isFavorite: isFavorite ?? this.isFavorite,
       );
 
-  factory ProductModel.fromMap(Map<String, dynamic> json) => ProductModel(
+  factory Product.fromMap(Map<String, dynamic> json) => Product(
         id: json["id"],
         name: json["name"],
         description: json["description"],
         discount: json["discount"],
         category: json["category"] == null
             ? null
-            : ProductCategoryModel.fromMap(json["category"]),
+            : ProductCategory.fromMap(json["category"]),
         oldPrice: json["old_price"]?.toDouble(),
         price: json["price"]?.toDouble(),
         slug: json["slug"],
@@ -144,24 +143,4 @@ class ProductImage {
         "image": image,
         "product": product,
       };
-}
-
-extension ProductModelXModel on ProductModel {
-  ProductModelEntity toEntity() {
-    return ProductModelEntity(
-        category: category,
-        description: description,
-        id: id,
-        discount: discount,
-        images: images,
-        inventory: inventory,
-        name: name,
-        oldPrice: oldPrice,
-        price: price,
-        averageRating: averageRating,
-        reviewsLength: reviewsLength,
-        isFavorite: isFavorite,
-      
-        slug: slug);
-  }
 }

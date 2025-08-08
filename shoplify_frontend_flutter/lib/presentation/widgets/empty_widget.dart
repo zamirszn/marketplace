@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
@@ -26,8 +25,7 @@ class EmptyWidget extends StatelessWidget {
         ),
         Text(
           message ?? AppStrings.emptyMessage,
-          style: getRegularStyle(
-              color: ColorManager.black, fontSize: FontSize.s16),
+          style: getRegularStyle(context, fontSize: FontSize.s16),
         )
       ],
     );

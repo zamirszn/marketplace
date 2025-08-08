@@ -5,7 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:shoplify/core/constants/constant.dart';
 import 'package:shoplify/core/network/dio_client.dart';
-import 'package:shoplify/data/models/verify_otp_params.dart';
+import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/data/source/secure_storage_data_source.dart';
 import 'package:shoplify/domain/usecases/auth_usecase.dart';
 import 'package:shoplify/presentation/service_locator.dart';

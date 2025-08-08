@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
+import 'package:shoplify/presentation/resources/font_manager.dart';
+import 'package:shoplify/presentation/resources/values_manager.dart';
 
 extension PascalCase on String {
   String toPascalCase() {
@@ -70,7 +73,8 @@ class RedBox extends StatelessWidget {
 }
 
 class RoundCorner extends StatelessWidget {
-  const RoundCorner({super.key, required this.child, this.borderRadius, this.color});
+  const RoundCorner(
+      {super.key, required this.child, this.borderRadius, this.color});
   final Widget child;
   final double? borderRadius;
   final Color? color;
@@ -79,7 +83,28 @@ class RoundCorner extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius ?? 10),
-      child: ColoredBox(color: color ?? ColorManager.grey.withAlpha(200), child: child),
+      child: ColoredBox(
+          color: color ?? ColorManager.grey.withAlpha(200), child: child),
+    );
+  }
+}
+
+class Required extends StatelessWidget {
+  const Required({super.key, required this.child});
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        child,
+        space(w: AppSize.s2),
+        Text(
+          "*",
+          style: TextStyle(color: ColorManager.red, fontSize: FontSize.s20),
+        )
+      ],
     );
   }
 }

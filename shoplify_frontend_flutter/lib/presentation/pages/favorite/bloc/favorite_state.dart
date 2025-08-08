@@ -15,7 +15,7 @@ final class FavoriteState extends Equatable {
   final bool isFetching;
   final bool hasReachedMax;
   final int page;
-  final List<ProductModelEntity> favoriteProducts;
+  final List<Product> favoriteProducts;
 
   const FavoriteState(
       {this.favoriteProductSort = FavoriteProductSort.intial,
@@ -24,7 +24,7 @@ final class FavoriteState extends Equatable {
       this.isFetching = false,
       this.hasReachedMax = false,
       this.page = 1,
-      this.favoriteProducts = const <ProductModelEntity>[]});
+      this.favoriteProducts = const <Product>[]});
 
   @override
   List<Object?> get props => [
@@ -43,7 +43,7 @@ final class FavoriteState extends Equatable {
     bool? isFetching,
     bool? hasReachedMax,
     int? page,
-    List<ProductModelEntity>? favoriteProducts,
+    List<Product>? favoriteProducts,
   }) {
     return FavoriteState(
         favoriteProductSort: favoriteProductSort ?? this.favoriteProductSort,

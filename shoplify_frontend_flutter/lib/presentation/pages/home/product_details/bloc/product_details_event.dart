@@ -10,7 +10,7 @@ final class RefreshProductDetailsEvent extends ProductDetailsEvent {
 }
 
 final class SetProductDetailsEvent extends ProductDetailsEvent {
-  final ProductModelEntity product;
+  final Product product;
 
   SetProductDetailsEvent({required this.product});
 }

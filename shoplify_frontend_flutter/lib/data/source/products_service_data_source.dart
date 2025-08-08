@@ -2,10 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shoplify/core/constants/api_urls.dart';
 import 'package:shoplify/core/network/dio_client.dart';
-import 'package:shoplify/data/models/add_to_cart_params_model.dart';
-import 'package:shoplify/data/models/cart_model.dart';
-import 'package:shoplify/data/models/product_query_params_model.dart';
-import 'package:shoplify/data/models/search_params_model.dart';
+import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/domain/usecases/products_usecase.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 

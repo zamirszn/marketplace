@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/constants/constant.dart';
 import 'package:shoplify/data/source/shared_pref_service_impl.dart';
+import 'package:shoplify/presentation/pages/onboarding/liquid_card_swipe.dart';
+import 'package:shoplify/presentation/pages/onboarding/liquid_swipe_view.dart';
 import 'package:shoplify/presentation/resources/asset_manager.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/service_locator.dart';
-import 'package:shoplify/presentation/pages/onboarding/liquid_card_swipe.dart';
-import 'package:shoplify/presentation/pages/onboarding/liquid_swipe_view.dart';
 import 'package:shoplify/presentation/widgets/move_bounce_animation.dart';
 
 class LiquidSwipeOnboarding extends StatefulWidget {
@@ -24,22 +24,15 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
   LiquidSwipeState? get liquidSwipeController => _key.currentState;
 
   @override
-  void initState() {
-    resetAnimation();
-    super.initState();
-  }
-
-  resetAnimation() async {
-    Future.delayed(const Duration(milliseconds: 50)).then(
-      (value) => liquidSwipeController?.previous(),
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        systemNavigationBarColor: theme.scaffoldBackgroundColor));
+
     return Scaffold(
-      backgroundColor: ColorManager.lemon,
       extendBodyBehindAppBar: true,
+      extendBody: true,
       appBar: AppBar(
         toolbarHeight: 0,
         forceMaterialTransparency: true,
@@ -57,9 +50,7 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
                   child: Transform.scale(
                     scale: .6,
                     child: MoveAndBounceAnimation(
-                      child: Image.asset(
-                        ImageAsset.cart,
-                      ),
+                      child: Image.asset(ImageAsset.cart),
                     ),
                   ),
                 ),
@@ -74,12 +65,15 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
                 title: AppStrings.shop,
                 subtitle: AppStrings.discoverGreatDeals,
                 body: AppStrings.exploreVast,
-                buttonColor: ColorManager.black,
-                titleColor: ColorManager.black,
-                subtitleColor: ColorManager.white,
-                bodyColor: ColorManager.black,
+                buttonColor: colorScheme.secondary,
+                titleColor: colorScheme.secondary,
+                subtitleColor: colorScheme.primary,
+                bodyColor: colorScheme.onSurface,
                 gradient: LinearGradient(
-                  colors: [ColorManager.lemon, ColorManager.lemon],
+                  colors: [
+                    theme.scaffoldBackgroundColor,
+                    theme.scaffoldBackgroundColor,
+                  ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
                 ),
@@ -92,9 +86,7 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
                   child: MoveAndBounceAnimation(
                     child: Transform.scale(
                       scale: .9,
-                      child: Image.asset(
-                        ImageAsset.paperbag,
-                      ),
+                      child: Image.asset(ImageAsset.paperbag),
                     ),
                   ),
                 ),
@@ -109,14 +101,14 @@ class _LiquidSwipeOnboardingState extends State<LiquidSwipeOnboarding> {
                 title: AppStrings.browse,
                 subtitle: AppStrings.exploreAWideSelection,
                 body: AppStrings.findExactly,
-                buttonColor: ColorManager.black,
-                titleColor: ColorManager.white,
-                subtitleColor: ColorManager.black,
-                bodyColor: ColorManager.darkBlue,
+                buttonColor: colorScheme.onSecondary,
+                titleColor: colorScheme.inversePrimary,
+                subtitleColor: colorScheme.onSecondary,
+                bodyColor: colorScheme.onSecondary,
                 gradient: LinearGradient(
                   colors: [
-                    ColorManager.cyan,
-                    ColorManager.cyan,
+                    colorScheme.primary,
+                    colorScheme.primary,
                   ],
                   begin: Alignment.topRight,
                   end: Alignment.bottomLeft,

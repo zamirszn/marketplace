@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/pages/home/filter_bottom_sheet/bloc/filter_bottomsheet_bloc.dart';
 import 'package:shoplify/presentation/pages/home/filter_bottom_sheet/filter_bottom_sheet.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
@@ -14,12 +13,14 @@ class FilterProductsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return BlocBuilder<FilterBottomsheetBloc, FilterBottomsheetState>(
       builder: (context, state) {
         return Badge(
           smallSize: AppSize.s12,
           alignment: const AlignmentDirectional(1, -1.3),
-          backgroundColor: ColorManager.darkBlue,
+          backgroundColor: colorScheme.tertiary,
           isLabelVisible: state.isFilterEnabled,
           child: const RoundFilterProductsButton(),
         );

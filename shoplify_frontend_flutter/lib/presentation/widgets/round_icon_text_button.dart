@@ -27,8 +27,7 @@ class RoundIconTextButton extends StatelessWidget {
       children: [
         ElevatedButton.icon(
             iconAlignment: iconAlignment ?? IconAlignment.start,
-            style: ElevatedButton.styleFrom(
-                backgroundColor: bgColor ?? ColorManager.black),
+
             icon: const SizedBox(
               height: 50,
               width: 50,
@@ -36,7 +35,7 @@ class RoundIconTextButton extends StatelessWidget {
             onPressed: onPressed,
             label: Text(
               text,
-              style: getRegularStyle(
+              style: getRegularStyle(context,
                   color: textColor ?? ColorManager.white,
                   font: FontConstants.ojuju,
                   fontSize: FontSize.s16),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:shoplify/core/constants/api_urls.dart';
 import 'package:shoplify/core/network/interceptor.dart';
@@ -210,6 +212,10 @@ class DioClient {
       return _formatErrorMessages(e.response!);
     }
 
+    if (e.error is HttpException) {
+      return AppStrings.connectionError;
+    }
+
     if (e.type == DioExceptionType.connectionError) {
       return AppStrings.connectionError;
     } else if (e.type == DioExceptionType.connectionTimeout ||
@@ -218,6 +224,6 @@ class DioClient {
       return AppStrings.connectionTimedOut;
     }
 
-    return e.message;
+    return AppStrings.somethingWentWrong;
   }
 }

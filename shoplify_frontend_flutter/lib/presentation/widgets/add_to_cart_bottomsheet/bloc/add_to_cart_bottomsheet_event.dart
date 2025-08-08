@@ -6,13 +6,12 @@ sealed class AddToCartBottomsheetEvent {}
 final class IncreaseCartItemCountEvent extends AddToCartBottomsheetEvent {}
 
 final class DecreaseCartItemCountEvent extends AddToCartBottomsheetEvent {}
-final class ResetCartItemCountEvent extends AddToCartBottomsheetEvent {}
-final class AddItemToCartEvent extends AddToCartBottomsheetEvent {
 
-}
+final class ResetCartItemCountEvent extends AddToCartBottomsheetEvent {}
+
+final class AddItemToCartEvent extends AddToCartBottomsheetEvent {}
+
 final class SetCartItem extends AddToCartBottomsheetEvent {
-  final ProductModelEntity product;
+  final Product product;
   SetCartItem({required this.product});
 }
-
-

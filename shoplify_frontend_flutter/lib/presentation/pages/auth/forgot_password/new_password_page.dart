@@ -8,7 +8,7 @@ import 'package:pinput/pinput.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/core/constants/constant.dart';
-import 'package:shoplify/data/models/reset_password_params.dart';
+import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
@@ -17,7 +17,7 @@ import 'package:shoplify/presentation/pages/auth/forgot_password/bloc/forgot_pas
 import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:shoplify/presentation/widgets/count_down_widget/bloc/countdown_bloc.dart';
 import 'package:shoplify/presentation/widgets/count_down_widget/countdown_widget.dart';
-import 'package:shoplify/presentation/widgets/loading_widget.dart';
+import 'package:shoplify/presentation/widgets/loading/loading_widget.dart';
 
 class NewPasswordPage extends StatefulWidget {
   const NewPasswordPage({super.key, required this.emailToSendOTP});
@@ -78,24 +78,20 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                       Text(
                         AppStrings.enterYourNewPassword,
                         textAlign: TextAlign.start,
-                        style: getBoldStyle(
-                            color: ColorManager.black,
-                            font: FontConstants.poppins,
-                            fontSize: AppSize.s50),
+                        style: getBoldStyle(context,
+                            font: FontConstants.poppins, fontSize: AppSize.s50),
                       ),
                       space(h: AppSize.s60),
                       Text(
                         AppStrings.newPassword,
-                        style: getSemiBoldStyle(
-                            color: ColorManager.black,
+                        style: getSemiBoldStyle(context,
                             font: FontConstants.poppins,
                             fontSize: FontSize.s16),
                       ),
                       space(h: AppSize.s10),
                       TextFormField(
                           cursorColor: cursorColor,
-                          style: getRegularStyle(
-                              color: ColorManager.black,
+                          style: getRegularStyle(context,
                               fontSize: FontSize.s20),
                           obscureText:
                               state.passwordVisibility == PasswordVisibility.on
@@ -111,7 +107,6 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                                 Constant.passwordLength),
                           ],
                           decoration: InputDecoration(
-                            errorStyle: errorStyle,
                             prefixIcon: Icon(
                               Iconsax.lock,
                               color: ColorManager.black,
@@ -154,16 +149,15 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                       space(h: AppSize.s20),
                       Text(
                         AppStrings.confirmPassword,
-                        style: getSemiBoldStyle(
-                            color: ColorManager.black,
+                        style: getSemiBoldStyle(context,
                             font: FontConstants.poppins,
                             fontSize: FontSize.s16),
                       ),
                       space(h: AppSize.s10),
                       TextFormField(
                         cursorColor: cursorColor,
-                        style: getRegularStyle(
-                            color: ColorManager.black, fontSize: FontSize.s20),
+                        style: getRegularStyle(context,
+                            fontSize: FontSize.s20),
                         obscureText:
                             state.passwordVisibility == PasswordVisibility.on
                                 ? false
@@ -182,7 +176,6 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                               Constant.passwordLength),
                         ],
                         decoration: InputDecoration(
-                          errorStyle: errorStyle,
                           prefixIcon: Icon(
                             Iconsax.password_check,
                             color: ColorManager.black,
@@ -231,9 +224,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                                   maxHeight: AppSize.s50,
                                   maxWidth: AppSize.s400),
                               child: ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      elevation: 0,
-                                      backgroundColor: ColorManager.white),
+                                  
                                   onPressed: () {
                                     if (formKey.currentState?.validate() ??
                                         false) {
@@ -257,9 +248,10 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                                   child: Text(
                                     AppStrings.continue_,
                                     style: getSemiBoldStyle(
-                                        font: FontConstants.ojuju,
-                                        fontSize: FontSize.s20,
-                                        color: ColorManager.black),
+                                      context,
+                                      font: FontConstants.ojuju,
+                                      fontSize: FontSize.s20,
+                                    ),
                                   )))),
                       space(h: AppSize.s40),
                     ],
@@ -331,9 +323,10 @@ class _ResetPasswordOTPBottomSheetState
                       AppStrings.enterCodeSent,
                       textAlign: TextAlign.center,
                       style: getLightStyle(
-                          font: FontConstants.poppins,
-                          fontSize: FontSize.s12,
-                          color: ColorManager.grey),
+                        context,
+                        font: FontConstants.poppins,
+                        fontSize: FontSize.s12,
+                      ),
                     ),
                   ),
                   space(h: AppSize.s20),
@@ -357,9 +350,7 @@ class _ResetPasswordOTPBottomSheetState
                                   child: Transform.scale(
                                       scale: .8, child: const LoadingWidget()))
                               : ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      elevation: 0,
-                                      backgroundColor: ColorManager.black),
+                                  
                                   onPressed: () {
                                     if (state.otpCode != null) {
                                       context.read<ForgotPasswordBloc>().add(
@@ -377,9 +368,10 @@ class _ResetPasswordOTPBottomSheetState
                                   child: Text(
                                     AppStrings.continue_,
                                     style: getSemiBoldStyle(
-                                        font: FontConstants.ojuju,
-                                        fontSize: FontSize.s20,
-                                        color: ColorManager.white),
+                                      context,
+                                      font: FontConstants.ojuju,
+                                      fontSize: FontSize.s20,
+                                    ),
                                   )))),
                   space(h: AppSize.s20),
                   if (state.isRequestingOTP)
@@ -388,8 +380,7 @@ class _ResetPasswordOTPBottomSheetState
                       children: [
                         Text(
                           AppStrings.requestAgainIn,
-                          style: getRegularStyle(
-                              color: ColorManager.black,
+                          style: getRegularStyle(context,
                               fontSize: FontSize.s14),
                         ),
                         space(w: AppSize.s4),
@@ -417,16 +408,16 @@ class _ResetPasswordOTPBottomSheetState
                         children: [
                           Text(
                             AppStrings.didntRecieveOTP,
-                            style: getRegularStyle(
-                                color: ColorManager.black,
+                            style: getRegularStyle(context,
                                 fontSize: FontSize.s14),
                           ),
                           space(w: AppSize.s4),
                           Text(
                             AppStrings.resendCode,
                             style: getSemiBoldStyle(
-                                fontSize: FontSize.s14,
-                                color: ColorManager.black),
+                              context,
+                              fontSize: FontSize.s14,
+                            ),
                           ),
                         ],
                       ),
@@ -500,10 +491,8 @@ class ResetPasswordFilledInputState extends State<ResetPasswordFilledInput> {
               defaultPinTheme: PinTheme(
                 width: AppSize.s70,
                 height: AppSize.s65,
-                textStyle: getSemiBoldStyle(
-                    color: ColorManager.black,
-                    font: FontConstants.ojuju,
-                    fontSize: FontSize.s20),
+                textStyle: getSemiBoldStyle(context,
+                    font: FontConstants.ojuju, fontSize: FontSize.s20),
                 decoration: BoxDecoration(
                     color: state.otpComplete == OTPComplete.complete
                         ? ColorManager.green
@@ -513,10 +502,8 @@ class ResetPasswordFilledInputState extends State<ResetPasswordFilledInput> {
               focusedPinTheme: PinTheme(
                 width: AppSize.s70,
                 height: AppSize.s65,
-                textStyle: getSemiBoldStyle(
-                    color: ColorManager.black,
-                    font: FontConstants.ojuju,
-                    fontSize: FontSize.s20),
+                textStyle: getSemiBoldStyle(context,
+                    font: FontConstants.ojuju, fontSize: FontSize.s20),
                 decoration: BoxDecoration(color: ColorManager.black),
               ),
             ));

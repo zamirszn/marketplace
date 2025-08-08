@@ -17,7 +17,7 @@ final class PopularProductFailure extends PopularProductState {
 final class PopularProductEmpty extends PopularProductState {}
 
 final class PopularProductSuccess extends PopularProductState {
-  final List<ProductModelEntity> popularProducts;
+  final List<Product> popularProducts;
 
   PopularProductSuccess({required this.popularProducts});
 }

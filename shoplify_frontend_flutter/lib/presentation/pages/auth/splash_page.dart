@@ -5,7 +5,7 @@ import 'package:shoplify/data/source/secure_storage_data_source.dart';
 import 'package:shoplify/data/source/shared_pref_service_impl.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/service_locator.dart';
-import 'package:shoplify/presentation/widgets/loading_widget.dart';
+import 'package:shoplify/presentation/widgets/loading/loading_widget.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

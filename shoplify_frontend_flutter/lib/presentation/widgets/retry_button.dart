@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/functions.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
@@ -18,28 +17,33 @@ class RetryButton extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        ElevatedButton.icon(
-          icon: const Icon(Iconsax.link),
-          onPressed: () {
-            if (retry != null) {
-              retry!();
-            }
-          },
-          label: Text(
-            AppStrings.retry,
-            style: getRegularStyle(
-                color: ColorManager.black, font: FontConstants.poppins),
-          ),
-        ),
-        space(h: AppSize.s20),
         Text(
           message ?? AppStrings.somethingWentWrong,
           textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: getRegularStyle(
-              color: ColorManager.black, font: FontConstants.poppins),
-        )
+          style: getRegularStyle(context,
+              font: FontConstants.poppins, fontSize: FontSize.s20),
+        ),
+        space(h: AppSize.s40),
+        SizedBox(
+          width: double.infinity,
+          height: AppSize.s40,
+          child: OutlinedButton.icon(
+            icon: const Icon(
+              Iconsax.link,
+              size: AppSize.s28,
+            ),
+            onPressed: () {
+              if (retry != null) {
+                retry!();
+              }
+            },
+            label: Text(
+              AppStrings.retry,
+              style: getMediumStyle(context,
+                  font: FontConstants.ojuju, fontSize: FontSize.s16),
+            ),
+          ),
+        ),
       ],
     );
   }

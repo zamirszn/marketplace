@@ -4,14 +4,13 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
+import 'package:shoplify/presentation/pages/home/product_details/bloc/product_details_bloc.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/pages/home/product_details/bloc/product_details_bloc.dart';
 import 'package:shoplify/presentation/widgets/add_to_cart_bottomsheet/add_to_cart_bottomsheet.dart';
-import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:shoplify/presentation/widgets/coverflow_carousel.dart';
 import 'package:shoplify/presentation/widgets/star_rating/star_rating_widget.dart';
 
@@ -48,55 +47,6 @@ class ProductDetailsPage extends StatelessWidget {
                         color: Colors.transparent,
                         child: Column(
                           children: [
-                            Container(
-                              height: AppSize.s100,
-                              width: deviceWidth(context),
-                              decoration: BoxDecoration(
-                                  color: ColorManager.lightGrey,
-                                  borderRadius: const BorderRadius.only(
-                                    bottomLeft: Radius.circular(AppSize.s20),
-                                    bottomRight: Radius.circular(AppSize.s20),
-                                  )),
-                              padding: const EdgeInsets.only(
-                                  right: AppPadding.p12,
-                                  left: AppPadding.p12,
-                                  top: 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const SizedBox(
-                                      height: AppSize.s40,
-                                      width: AppSize.s40,
-                                      child: GoBackButton()),
-                                  Text(
-                                    AppStrings.product,
-                                    style: getRegularStyle(
-                                        font: FontConstants.ojuju,
-                                        fontSize: FontSize.s20),
-                                  ),
-                                  SizedBox(
-                                    height: AppSize.s40,
-                                    width: AppSize.s40,
-                                    child: RoundCorner(
-                                      child: Center(
-                                        child: GestureDetector(
-                                            onTap: () {},
-                                            child: Badge(
-                                                label: const Text("3"),
-                                                backgroundColor:
-                                                    ColorManager.darkBlue,
-                                                textColor: ColorManager.white,
-                                                textStyle: getRegularStyle(
-                                                    font: FontConstants.ojuju),
-                                                child: const Icon(
-                                                    Iconsax.shopping_cart))),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
                             space(h: AppSize.s3),
                             ClipRRect(
                                 borderRadius:
@@ -140,16 +90,17 @@ class ProductDetailsPage extends StatelessWidget {
                                               child: Text(
                                                 state.selectedProduct?.name ??
                                                     "",
-                                                style: getRegularStyle(
+                                                style: getSemiBoldStyle(
+                                                  context,
                                                   fontSize: FontSize.s16,
                                                 ),
                                               ),
                                             ),
                                             Expanded(
                                               child: Text(
-                                                "Price: \$${roundToTwoDecimalPlaces(state.selectedProduct?.price) ?? ""}",
+                                                "${AppStrings.price}: \$${roundToTwoDecimalPlaces(state.selectedProduct?.price) ?? ""}",
                                                 textAlign: TextAlign.end,
-                                                style: getSemiBoldStyle(
+                                                style: getSemiBoldStyle(context,
                                                     fontSize: FontSize.s16,
                                                     font: FontConstants.ojuju),
                                               ),
@@ -159,14 +110,14 @@ class ProductDetailsPage extends StatelessWidget {
                                         space(h: AppSize.s28),
                                         Text(
                                           AppStrings.productInfo,
-                                          style: getRegularStyle(
+                                          style: getRegularStyle(context,
                                               fontSize: FontSize.s16),
                                         ),
                                         space(h: AppSize.s4),
                                         Text(
                                           state.selectedProduct?.description ??
                                               "",
-                                          style: getLightStyle(
+                                          style: getLightStyle(context,
                                               fontSize: FontSize.s14),
                                         ),
                                         space(h: AppSize.s20),
@@ -195,6 +146,7 @@ class ProductDetailsPage extends StatelessWidget {
                                                       child: Text(
                                                         "${state.selectedProduct?.inventory} available in stock",
                                                         style: getRegularStyle(
+                                                            context,
                                                             color: ColorManager
                                                                 .white,
                                                             fontSize:
@@ -206,10 +158,8 @@ class ProductDetailsPage extends StatelessWidget {
                                               ),
                                             space(w: AppSize.s10),
                                             if (state.selectedProduct?.category
-                                                        ?.title !=
-                                                    null &&
-                                                state.selectedProduct!.category!
-                                                    .title.isNotEmpty)
+                                                    ?.name !=
+                                                null)
                                               RoundCorner(
                                                 child: Padding(
                                                     padding:
@@ -219,9 +169,10 @@ class ProductDetailsPage extends StatelessWidget {
                                                       state
                                                               .selectedProduct
                                                               ?.category
-                                                              ?.title ??
+                                                              ?.name ??
                                                           "",
                                                       style: getRegularStyle(
+                                                          context,
                                                           fontSize:
                                                               FontSize.s12,
                                                           font: FontConstants
@@ -261,7 +212,7 @@ class ProductDetailsPage extends StatelessWidget {
                                               children: [
                                                 Text(
                                                   AppStrings.reviews,
-                                                  style: getMediumStyle(
+                                                  style: getMediumStyle(context,
                                                       fontSize: FontSize.s14),
                                                 ),
                                                 const Icon(Iconsax.arrow_right)
@@ -279,6 +230,7 @@ class ProductDetailsPage extends StatelessWidget {
                                                           ?.toString() ??
                                                       "0",
                                                   style: getRegularStyle(
+                                                      context,
                                                       fontSize: FontSize.s30,
                                                       font:
                                                           FontConstants.ojuju),
@@ -290,6 +242,7 @@ class ProductDetailsPage extends StatelessWidget {
                                                   child: Text(
                                                     "/5",
                                                     style: getRegularStyle(
+                                                        context,
                                                         fontSize: FontSize.s16,
                                                         font: FontConstants
                                                             .ojuju),
@@ -300,7 +253,7 @@ class ProductDetailsPage extends StatelessWidget {
                                             space(h: AppSize.s4),
                                             Text(
                                               "${AppStrings.basedOn} ${state.selectedProduct?.reviewsLength} ${AppStrings.reviews}",
-                                              style: getLightStyle(
+                                              style: getLightStyle(context,
                                                   fontSize: FontSize.s14,
                                                   color: ColorManager.lightGrey,
                                                   font: FontConstants.poppins),
@@ -332,15 +285,7 @@ class ProductDetailsPage extends StatelessWidget {
                                 height: AppSize.s70,
                                 width: double.infinity,
                                 child: ElevatedButton(
-                                    style: ElevatedButton.styleFrom(
-                                      elevation: 0,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                              AppSize.s20)),
-                                      shadowColor: Colors.transparent,
-                                      foregroundColor: ColorManager.black,
-                                      backgroundColor: ColorManager.grey,
-                                    ),
+                                   
                                     onPressed: () {
                                       showModalBottomSheet(
                                         context: context,
@@ -356,15 +301,20 @@ class ProductDetailsPage extends StatelessWidget {
                                           child: Scaffold(
                                             backgroundColor: Colors.transparent,
                                             body: AddtoCartBottomSheet(
-                                              product: state.selectedProduct!,
+                                              product: state.selectedProduct,
                                               bottomSheetCallback: () {
                                                 // get the product latest data from the server
-                                                context
-                                                    .read<ProductDetailsBloc>()
-                                                    .add(RefreshProductDetailsEvent(
-                                                        productId: state
-                                                            .selectedProduct!
-                                                            .id!));
+
+                                                if (state.selectedProduct?.id !=
+                                                    null) {
+                                                  context
+                                                      .read<
+                                                          ProductDetailsBloc>()
+                                                      .add(RefreshProductDetailsEvent(
+                                                          productId: state
+                                                              .selectedProduct!
+                                                              .id!));
+                                                }
                                               },
                                             ),
                                           ),
@@ -373,7 +323,7 @@ class ProductDetailsPage extends StatelessWidget {
                                     },
                                     child: Text(
                                       AppStrings.addToCart,
-                                      style: getRegularStyle(
+                                      style: getRegularStyle(context,
                                           font: FontConstants.ojuju,
                                           fontSize: FontSize.s18),
                                     )),

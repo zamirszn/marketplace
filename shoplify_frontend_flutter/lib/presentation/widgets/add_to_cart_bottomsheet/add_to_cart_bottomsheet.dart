@@ -5,7 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
+import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
@@ -16,14 +16,14 @@ import 'package:shoplify/presentation/pages/favorite/bloc/favorite_bloc.dart';
 import 'package:shoplify/presentation/pages/home/bloc/product_bloc.dart';
 import 'package:shoplify/presentation/widgets/add_to_cart_bottomsheet/bloc/add_to_cart_bottomsheet_bloc.dart';
 import 'package:shoplify/presentation/widgets/go_back_button.dart';
-import 'package:shoplify/presentation/widgets/loading_widget.dart';
+import 'package:shoplify/presentation/widgets/loading/loading_widget.dart';
 import 'package:shoplify/presentation/widgets/snackbar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class AddtoCartBottomSheet extends StatelessWidget {
   const AddtoCartBottomSheet(
       {super.key, required this.product, this.bottomSheetCallback});
-  final ProductModelEntity product;
+  final Product? product;
 
   /// use this callback to get the latest product data from the server
   /// when the a product is added to cart and `AddtoCartBottomSheet` is closed
@@ -33,7 +33,10 @@ class AddtoCartBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     AddToCartBottomsheetBloc cartBottomsheetBloc =
         context.read<AddToCartBottomsheetBloc>();
-    cartBottomsheetBloc.add(SetCartItem(product: product));
+
+    if (product != null) {
+      cartBottomsheetBloc.add(SetCartItem(product: product!));
+    }
 
     return PopScope(
       onPopInvokedWithResult: (didPop, result) {
@@ -51,9 +54,11 @@ class AddtoCartBottomSheet extends StatelessWidget {
             // add the object to favorite product page
             // server returns null if the
 
-            ctx
-                .read<FavoriteBloc>()
-                .add(AddToFavoritePageEvent(product: productState.product!));
+            if (product != null) {
+              ctx
+                  .read<FavoriteBloc>()
+                  .add(AddToFavoritePageEvent(product: productState.product!));
+            }
           } else if (productState is ToggleFavoriteRemoveSuccess) {
             if (productState.message != null) {
               showMessage(context, productState.message!);
@@ -73,7 +78,8 @@ class AddtoCartBottomSheet extends StatelessWidget {
                     cartItem: state.cartItemToAdd!,
                     quantityToAdd: state.itemCount));
               }
-              showMessage(context, "${product.name} ${AppStrings.addedToCart}");
+              showMessage(
+                  context, "${product?.name} ${AppStrings.addedToCart}");
               if (bottomSheetCallback != null) {
                 bottomSheetCallback!();
               }
@@ -97,11 +103,11 @@ class AddtoCartBottomSheet extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               horizontal: AppPadding.p20),
                           child: Center(
-                            child: Text(product.name ?? "",
+                            child: Text(product?.name ?? "",
                                 textAlign: TextAlign.center,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 2,
-                                style: getRegularStyle(
+                                style: getRegularStyle(context,
                                     font: FontConstants.ojuju,
                                     fontSize: FontSize.s18)),
                           ),
@@ -113,7 +119,7 @@ class AddtoCartBottomSheet extends StatelessWidget {
                         child: BlocBuilder<ProductBloc, ProductState>(
                           builder: (context, state) {
                             bool currentFavoritedState =
-                                product.isFavorite ?? false;
+                                product?.isFavorite ?? false;
 
                             if (state is AddToFavoriteLoading) {
                               return Transform.scale(
@@ -124,33 +130,37 @@ class AddtoCartBottomSheet extends StatelessWidget {
                                 state.isFavorited == true) {
                               return IconButton(
                                   onPressed: () {
-                                    context.read<ProductBloc>().add(
-                                          ToggleFavoriteEvent(
-                                            productId: product.id!,
-                                            isCurrentlyFavorited:
-                                                currentFavoritedState,
-                                          ),
-                                        );
+                                    if (product?.id != null) {
+                                      context.read<ProductBloc>().add(
+                                            ToggleFavoriteEvent(
+                                              productId: product!.id!,
+                                              isCurrentlyFavorited:
+                                                  currentFavoritedState,
+                                            ),
+                                          );
+                                    }
                                   },
                                   icon: Icon(
                                     Iconsax.heart5,
-                                    color: ColorManager.darkBlue,
+                                    color: ColorManager.blue,
                                     size: AppSize.s28,
                                   ));
                             } else {
                               return IconButton(
                                   onPressed: () {
-                                    context.read<ProductBloc>().add(
-                                          ToggleFavoriteEvent(
-                                            productId: product.id!,
-                                            isCurrentlyFavorited:
-                                                currentFavoritedState,
-                                          ),
-                                        );
+                                    if (product?.id != null) {
+                                      context.read<ProductBloc>().add(
+                                            ToggleFavoriteEvent(
+                                              productId: product!.id!,
+                                              isCurrentlyFavorited:
+                                                  currentFavoritedState,
+                                            ),
+                                          );
+                                    }
                                   },
                                   icon: Icon(
                                     Iconsax.heart,
-                                    color: ColorManager.darkBlue,
+                                    color: ColorManager.blue,
                                     size: AppSize.s28,
                                   ));
                             }
@@ -163,27 +173,29 @@ class AddtoCartBottomSheet extends StatelessWidget {
                   space(h: AppSize.s20),
                   // image
                   RoundCorner(
-                    child: CachedNetworkImage(
-                      imageUrl: product.images.isNotEmpty
-                          ? product.images.first.image!
-                          : "",
-                      height: 310,
-                      width: 310,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => SizedBox(
-                        child: Container(
-                          color: ColorManager.white,
-                          height: 310,
-                          width: 310,
-                        ),
-                      ),
-                      errorWidget: (context, url, error) => Skeletonizer(
-                          child: Container(
-                        color: ColorManager.white,
-                        height: 310,
-                        width: 310,
-                      )),
-                    ),
+                    child: product?.images == null
+                        ? const SizedBox()
+                        : CachedNetworkImage(
+                            imageUrl: product!.images.isNotEmpty
+                                ? product!.images.first.image!
+                                : "",
+                            height: 310,
+                            width: 310,
+                            fit: BoxFit.cover,
+                            placeholder: (context, url) => SizedBox(
+                              child: Container(
+                                color: ColorManager.white,
+                                height: 310,
+                                width: 310,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) => Skeletonizer(
+                                child: Container(
+                              color: ColorManager.white,
+                              height: 310,
+                              width: 310,
+                            )),
+                          ),
                   ),
                   space(h: AppSize.s20),
                   Row(
@@ -194,7 +206,9 @@ class AddtoCartBottomSheet extends StatelessWidget {
                         children: [
                           Text(
                             AppStrings.unitPrice,
-                            style: getRegularStyle(),
+                            style: getRegularStyle(
+                              context,
+                            ),
                           ),
                           space(h: AppSize.s10),
                           Row(
@@ -204,23 +218,23 @@ class AddtoCartBottomSheet extends StatelessWidget {
                               SizedBox(
                                 width: AppSize.s70,
                                 child: Text(
-                                  "\$${roundToTwoDecimalPlaces(product.price) ?? ""}",
+                                  "\$${roundToTwoDecimalPlaces(product?.price) ?? ""}",
                                   textAlign: TextAlign.start,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
-                                  style: getBoldStyle(
+                                  style: getBoldStyle(context,
                                       fontSize: FontSize.s18,
                                       font: FontConstants.ojuju),
                                 ),
                               ),
-                              if (product.oldPrice != null &&
-                                  product.oldPrice != product.price)
+                              if (product?.oldPrice != null &&
+                                  product?.oldPrice != product?.price)
                                 Text(
-                                  "${roundToTwoDecimalPlaces(product.oldPrice)}",
+                                  "${roundToTwoDecimalPlaces(product?.oldPrice)}",
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      decoration: product.discount != null &&
-                                              product.discount == true
+                                      decoration: product?.discount != null &&
+                                              product?.discount == true
                                           ? TextDecoration.lineThrough
                                           : null,
                                       fontSize: FontSize.s14,
@@ -237,7 +251,9 @@ class AddtoCartBottomSheet extends StatelessWidget {
                             child: Text(
                               AppStrings.quantity,
                               textAlign: TextAlign.center,
-                              style: getRegularStyle(),
+                              style: getRegularStyle(
+                                context,
+                              ),
                             ),
                           ),
                           space(h: AppSize.s10),
@@ -264,7 +280,7 @@ class AddtoCartBottomSheet extends StatelessWidget {
                                       // amount should be more than whats in inventory
                                       "${state.itemCount}",
                                       textAlign: TextAlign.center,
-                                      style: getSemiBoldStyle(
+                                      style: getSemiBoldStyle(context,
                                           font: FontConstants.ojuju,
                                           fontSize: FontSize.s16),
                                     );
@@ -273,8 +289,8 @@ class AddtoCartBottomSheet extends StatelessWidget {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  if (product.inventory != null) {
-                                    if (product.inventory! <=
+                                  if (product?.inventory != null) {
+                                    if (product!.inventory! <=
                                         cartBottomsheetBloc.state.itemCount) {
                                       showErrorMessage(context,
                                           AppStrings.inventoryLimitReached);
@@ -298,7 +314,7 @@ class AddtoCartBottomSheet extends StatelessWidget {
                   ),
                   space(h: AppSize.s36),
                   // add to cart
-                  if (product.inventory != null && product.inventory! > 0)
+                  if ((product?.inventory ?? 0) > 0)
                     BlocBuilder<AddToCartBottomsheetBloc,
                         AddToCartBottomsheetState>(
                       builder: (context, state) {
@@ -314,15 +330,7 @@ class AddtoCartBottomSheet extends StatelessWidget {
                             height: AppSize.s60,
                             width: double.infinity,
                             child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(AppSize.s20)),
-                                  shadowColor: Colors.transparent,
-                                  foregroundColor: ColorManager.black,
-                                  backgroundColor: ColorManager.grey,
-                                ),
+                              
                                 onPressed: () {
                                   context
                                       .read<AddToCartBottomsheetBloc>()
@@ -336,10 +344,10 @@ class AddtoCartBottomSheet extends StatelessWidget {
                                       flex: 2,
                                       child: Text(
                                         getTotalPrice(
-                                            product.price, state.itemCount),
+                                            product?.price, state.itemCount),
                                         overflow: TextOverflow.ellipsis,
                                         textAlign: TextAlign.center,
-                                        style: getRegularStyle(
+                                        style: getRegularStyle(context,
                                             font: FontConstants.ojuju,
                                             fontSize: FontSize.s18),
                                       ),
@@ -350,7 +358,7 @@ class AddtoCartBottomSheet extends StatelessWidget {
                                       child: Text(
                                         AppStrings.addToCart,
                                         textAlign: TextAlign.center,
-                                        style: getRegularStyle(
+                                        style: getRegularStyle(context,
                                             font: FontConstants.ojuju,
                                             fontSize: FontSize.s18),
                                       ),

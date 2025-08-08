@@ -12,9 +12,9 @@ class NotificationIcon extends StatelessWidget {
     return Badge(
       label: const Text("3"),
       alignment: const AlignmentDirectional(.7, -.8),
-      backgroundColor: ColorManager.darkBlue,
+      backgroundColor: ColorManager.blue,
       textColor: ColorManager.white,
-      textStyle: getRegularStyle(font: FontConstants.ojuju),
+      textStyle: getRegularStyle(context, font: FontConstants.ojuju),
       child: IconButton(
         onPressed: () {},
         icon: const Icon(Iconsax.notification),

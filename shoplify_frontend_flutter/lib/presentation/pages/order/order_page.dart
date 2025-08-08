@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/pages/notification/notification_icon.dart';
@@ -24,7 +23,7 @@ class OrderPage extends StatelessWidget {
         forceMaterialTransparency: true,
         title: Text(
           AppStrings.order,
-          style: getRegularStyle(
+          style: getRegularStyle(context,
               font: FontConstants.ojuju, fontSize: FontSize.s20),
         ),
         actions: [

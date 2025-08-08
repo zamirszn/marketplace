@@ -11,7 +11,7 @@ final class NewProductLoading extends NewProductState {}
 final class NewProductEmpty extends NewProductState {}
 
 final class NewProductSuccess extends NewProductState {
-  final List<ProductModelEntity> newProducts;
+  final List<Product> newProducts;
 
   NewProductSuccess({required this.newProducts});
 }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shoplify/app/functions.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/widgets/retry_button.dart';
 
@@ -16,18 +14,15 @@ class ErrorMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppSize.s10),
-        child: ColoredBox(
-          color: ColorManager.lightGrey,
-          child: SizedBox(
-            height: AppSize.s250,
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: RetryButton(message: message, retry: () => retry()),
-              ),
+    return Padding(
+      padding: const EdgeInsets.all(AppPadding.p40),
+      child: Center(
+        child: SizedBox(
+          height: AppSize.s250,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12),
+              child: RetryButton(message: message, retry: () => retry()),
             ),
           ),
         ),

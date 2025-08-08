@@ -26,7 +26,7 @@ class RemoveFromFavoritePageEvent extends FavoriteEvent {
 
 /// event adds product object to the `FavoritePage` list
 final class AddToFavoritePageEvent extends FavoriteEvent {
-  final ProductModelEntity product;
+  final Product product;
 
   AddToFavoritePageEvent({required this.product});
 }

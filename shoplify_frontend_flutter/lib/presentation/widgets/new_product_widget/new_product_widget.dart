@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
+import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
@@ -18,7 +18,7 @@ class NewProductWidget extends StatelessWidget {
     super.key,
     required this.product,
   });
-  final ProductModelEntity product;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
@@ -47,14 +47,14 @@ class NewProductWidget extends StatelessWidget {
                 errorWidget: (context, url, error) => Container(
                   height: AppSize.s100,
                   width: AppSize.s100,
-                  color: ColorManager.darkBlue,
+                  color: ColorManager.blue,
                 ),
                 placeholder: (
                   context,
                   url,
                 ) =>
                     Container(
-                  color: ColorManager.darkBlue,
+                  color: ColorManager.blue,
                   height: AppSize.s100,
                   width: AppSize.s100,
                 ),
@@ -68,7 +68,7 @@ class NewProductWidget extends StatelessWidget {
                     child: Text(
                       "\$${roundToTwoDecimalPlaces(product.price) ?? ""}",
                       overflow: TextOverflow.ellipsis,
-                      style: getSemiBoldStyle(
+                      style: getSemiBoldStyle(context,
                           color: ColorManager.white,
                           fontSize: FontSize.s23,
                           font: FontConstants.ojuju),
@@ -84,7 +84,7 @@ class NewProductWidget extends StatelessWidget {
                     textAlign: TextAlign.center,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: getSemiBoldStyle(
+                    style: getSemiBoldStyle(context,
                         color: ColorManager.white,
                         fontSize: FontSize.s18,
                         font: FontConstants.ojuju),
@@ -107,53 +107,13 @@ class NewProductWidgetSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppSize.s20),
-      child: Stack(children: [
-        Skeletonizer(
-          containersColor: Colors.red,
-          child: Container(
-            color: Colors.white,
-            height: 400,
-            width: 220,
-          ),
+      child: Skeletonizer(
+        child: Container(
+          color: Colors.white,
+          height: 400,
+          width: 220,
         ),
-        const Positioned(
-          bottom: AppPadding.p20,
-          right: AppPadding.p30,
-          child: Skeletonizer(
-              effect: PulseEffect(),
-              child: Icon(
-                Iconsax.save_minus,
-                size: AppSize.s36,
-              )),
-        ),
-        Positioned(
-            bottom: AppPadding.p20,
-            left: AppPadding.p10,
-            child: Skeletonizer(
-              effect: const PulseEffect(),
-              child: Text(
-                "*******",
-                overflow: TextOverflow.ellipsis,
-                style: getSemiBoldStyle(
-                    fontSize: FontSize.s23, font: FontConstants.ojuju),
-              ),
-            )),
-        Positioned(
-          top: AppPadding.p20,
-          right: AppPadding.p30,
-          child: Skeletonizer(
-            effect: const PulseEffect(),
-            child: Text(
-              "*******",
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: getSemiBoldStyle(
-                  fontSize: FontSize.s18, font: FontConstants.ojuju),
-            ),
-          ),
-        )
-      ]),
+      ),
     );
   }
 }

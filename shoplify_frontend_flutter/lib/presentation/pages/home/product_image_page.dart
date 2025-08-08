@@ -48,8 +48,6 @@ class _ProductImagePageState extends State<ProductImagePage>
     duration: const Duration(milliseconds: 100),
   );
 
-  late final Animation<double> _aniHidePercent =
-      Tween<double>(begin: 1.0, end: 0.0).animate(_hidePercentController);
   final bool _isTapScreen = false;
 
   @override
@@ -81,14 +79,6 @@ class _ProductImagePageState extends State<ProductImagePage>
         _delayHideMenu();
       }
     });
-  }
-
-  _checkShowBar() {
-    if (_aniHidePercent.value <= 0) {
-      _hidePercentController.reverse();
-    } else {
-      _hidePercentController.forward();
-    }
   }
 
   Future _delayHideMenu() async {
@@ -231,14 +221,14 @@ class _ProductImagePageState extends State<ProductImagePage>
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: Colors.transparent,
+        backgroundColor: ColorManager.white,
         leading: const Padding(
           padding: EdgeInsets.all(AppPadding.p10),
           child: GoBackButton(),
         ),
         title: Text(
           "Image",
-          style: getRegularStyle(
+          style: getRegularStyle(context,
               font: FontConstants.ojuju, fontSize: FontSize.s20),
         ),
       ),

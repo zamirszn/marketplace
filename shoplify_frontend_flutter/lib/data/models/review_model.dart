@@ -1,16 +1,15 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:shoplify/domain/entities/review_entity.dart';
 
-class ReviewModel {
+class Review {
   final int? id;
   final DateTime? dateCreated;
   final String? review;
   final Owner? owner;
   final double? rating;
 
-  ReviewModel({
+  Review({
     this.id,
     this.dateCreated,
     this.review,
@@ -18,14 +17,14 @@ class ReviewModel {
     this.rating,
   });
 
-  ReviewModel copyWith({
+  Review copyWith({
     int? id,
     DateTime? dateCreated,
     String? review,
     Owner? owner,
     double? rating,
   }) =>
-      ReviewModel(
+      Review(
         id: id ?? this.id,
         dateCreated: dateCreated ?? this.dateCreated,
         review: review ?? this.review,
@@ -33,7 +32,7 @@ class ReviewModel {
         rating: rating ?? this.rating,
       );
 
-  factory ReviewModel.fromMap(Map<String, dynamic> json) => ReviewModel(
+  factory Review.fromMap(Map<String, dynamic> json) => Review(
         id: json["id"],
         dateCreated: json["date_created"] == null
             ? null
@@ -79,17 +78,6 @@ class Owner {
         "id": id,
         "full_name": fullName,
       };
-}
-
-extension ReviewModelXModel on ReviewModel {
-  ReviewModelEntity toEntity() {
-    return ReviewModelEntity(
-        dateCreated: dateCreated,
-        review: review,
-        id: id,
-        owner: owner,
-        rating: rating);
-  }
 }
 
 class SubmitReviewModel {

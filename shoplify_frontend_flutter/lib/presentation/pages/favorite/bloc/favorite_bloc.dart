@@ -3,9 +3,8 @@ import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:shoplify/data/models/favorite_product_model.dart';
-import 'package:shoplify/data/models/favorite_product_params_model.dart';
+import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/data/models/product_model.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/domain/usecases/favorite_products_usecase.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 
@@ -22,7 +21,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
 
   void _addToFavorite(
       AddToFavoritePageEvent event, Emitter<FavoriteState> emit) {
-    final List<ProductModelEntity> updatedFavorites =
+    final List<Product> updatedFavorites =
         List.from(state.favoriteProducts)..add(event.product);
 
     emit(state.copyWith(
@@ -32,7 +31,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
 
   void _removeFavoriteByIdEvent(
       RemoveFromFavoritePageEvent event, Emitter<FavoriteState> emit) {
-    List<ProductModelEntity> updatedFavoriteList =
+    List<Product> updatedFavoriteList =
         List.from(state.favoriteProducts)
           ..removeWhere((product) => product.id == event.productId);
 
@@ -67,9 +66,10 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
 
       // stop fetching
     }, (data) {
-      final List<ProductModelEntity> fetchedFavoriteProducts =
+      // TODO: do proper model
+      final List<Product> fetchedFavoriteProducts =
           List.from(data["results"])
-              .map((e) => FavoriteProductResult.fromMap(e).product!.toEntity())
+              .map((e) => FavoriteProductResult.fromMap(e).product!)
               .toList();
 
       // if the data is empty
@@ -118,9 +118,9 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
       }, (data) {
         final String? nextPage = data["next"];
 
-        final List<ProductModelEntity> fetchedFavoriteProducts = List.from(
+        final List<Product> fetchedFavoriteProducts = List.from(
                 data["results"])
-            .map((e) => FavoriteProductResult.fromMap(e).product!.toEntity())
+            .map((e) => FavoriteProductResult.fromMap(e).product!)
             .toList();
         // fix null here TODO:
 

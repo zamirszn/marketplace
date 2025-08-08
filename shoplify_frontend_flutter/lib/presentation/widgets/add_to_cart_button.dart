@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/data/models/add_to_cart_params_model.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
+import 'package:shoplify/data/models/params_models.dart';
+import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/pages/cart/bloc/cart_bloc.dart';
 import 'package:shoplify/presentation/pages/home/bloc/product_bloc.dart';
-import 'package:shoplify/presentation/widgets/loading_widget.dart';
+import 'package:shoplify/presentation/widgets/loading/loading_widget.dart';
 import 'package:shoplify/presentation/widgets/snackbar.dart';
 
 class AddToCartWidget extends StatelessWidget {
@@ -16,7 +16,7 @@ class AddToCartWidget extends StatelessWidget {
     required this.product,
   });
 
-  final ProductModelEntity product;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {

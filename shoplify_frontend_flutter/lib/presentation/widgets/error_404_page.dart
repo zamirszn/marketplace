@@ -31,16 +31,14 @@ class Error404Page extends StatelessWidget {
           Text(
             "404",
             textAlign: TextAlign.center,
-            style: getBoldStyle(
-                color: ColorManager.black,
-                font: FontConstants.ojuju,
-                fontSize: FontSize.s35),
+            style: getBoldStyle(context,
+                font: FontConstants.ojuju, fontSize: FontSize.s35),
           ),
           space(h: AppSize.s20),
           Text(
             AppStrings.pageNotFound,
             textAlign: TextAlign.center,
-            style: getLightStyle(
+            style: getLightStyle(context,
                 color: ColorManager.black,
                 font: FontConstants.poppins,
                 fontSize: FontSize.s23),

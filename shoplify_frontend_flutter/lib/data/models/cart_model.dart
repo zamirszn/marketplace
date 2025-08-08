@@ -5,7 +5,6 @@
 
 import 'dart:convert';
 
-
 import 'package:shoplify/data/models/product_model.dart';
 
 CartModel cartModelFromMap(String str) => CartModel.fromMap(json.decode(str));
@@ -55,7 +54,7 @@ class CartModel {
 class CartItem {
   final int? id;
   final String? cart;
-  final ProductModel? product;
+  final Product? product;
   int? quantity;
   final double? subTotal;
 
@@ -70,7 +69,7 @@ class CartItem {
   CartItem copyWith({
     int? id,
     String? cart,
-    ProductModel? product,
+    Product? product,
     int? quantity,
     double? subTotal,
   }) =>
@@ -85,9 +84,8 @@ class CartItem {
   factory CartItem.fromMap(Map<String, dynamic> json) => CartItem(
         id: json["id"],
         cart: json["cart"],
-        product: json["product"] == null
-            ? null
-            : ProductModel.fromMap(json["product"]),
+        product:
+            json["product"] == null ? null : Product.fromMap(json["product"]),
         quantity: json["quantity"],
         subTotal: json["sub_total"]?.toDouble(),
       );
@@ -99,57 +97,4 @@ class CartItem {
         "quantity": quantity,
         "sub_total": subTotal,
       };
-}
-
-class RemoveFromCartModelParams {
-  final int cartItemId;
-  final String cartId;
-  RemoveFromCartModelParams({
-    required this.cartItemId,
-    required this.cartId,
-  });
-
-  RemoveFromCartModelParams copyWith({
-    int? cartItemId,
-    String? cartId,
-  }) {
-    return RemoveFromCartModelParams(
-      cartItemId: cartItemId ?? this.cartItemId,
-      cartId: cartId ?? this.cartId,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'cartItemId': cartItemId,
-      'cartId': cartId,
-    };
-  }
-
-  factory RemoveFromCartModelParams.fromMap(Map<String, dynamic> map) {
-    return RemoveFromCartModelParams(
-      cartItemId: map['cartItemId'] as int,
-      cartId: map['cartId'] as String,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory RemoveFromCartModelParams.fromJson(String source) =>
-      RemoveFromCartModelParams.fromMap(
-          json.decode(source) as Map<String, dynamic>);
-
-  @override
-  String toString() =>
-      'RemoveFromCartModelParams(cartItemId: $cartItemId, cartId: $cartId)';
-
-  @override
-  bool operator ==(covariant RemoveFromCartModelParams other) {
-    if (identical(this, other)) return true;
-
-    return other.cartItemId == cartItemId && other.cartId == cartId;
-  }
-
-  @override
-  int get hashCode => cartItemId.hashCode ^ cartId.hashCode;
 }

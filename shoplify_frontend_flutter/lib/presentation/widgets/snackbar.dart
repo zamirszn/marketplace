@@ -8,7 +8,7 @@ void showMessage(
 ) {
   final snackBar = SnackBar(
     content: Text(message),
-    backgroundColor: ColorManager.darkBlue,
+    backgroundColor: ColorManager.blue,
     behavior: SnackBarBehavior.floating,
     dismissDirection: DismissDirection.horizontal,
     shape: RoundedRectangleBorder(

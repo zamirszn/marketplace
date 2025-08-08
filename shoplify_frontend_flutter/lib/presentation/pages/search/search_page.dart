@@ -2,19 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/functions.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/data/models/search_params_model.dart';
+import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/presentation/pages/search/bloc/search_bloc.dart';
 import 'package:shoplify/presentation/pages/search/search_product_widget.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:shoplify/presentation/widgets/empty_widget.dart';
 import 'package:shoplify/presentation/widgets/error_message_widget.dart';
 import 'package:shoplify/presentation/widgets/filter_products_button.dart';
-import 'package:shoplify/presentation/widgets/loading_widget.dart';
+import 'package:shoplify/presentation/widgets/go_back_button.dart';
+import 'package:shoplify/presentation/widgets/loading/loading_widget.dart';
 import 'package:shoplify/presentation/widgets/product_carousel_skeleton_widget.dart';
 import 'package:shoplify/presentation/widgets/product_search_text_field.dart';
 import 'package:shoplify/presentation/widgets/product_widget_skeleton.dart';
@@ -32,21 +31,21 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     final searchBloc = context.read<SearchBloc>();
+    final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+        backgroundColor: colorScheme.surface,
         appBar: AppBar(
           forceMaterialTransparency: true,
           elevation: 0,
-          backgroundColor: Colors.transparent,
-          leading: Padding(
-            padding: const EdgeInsets.all(AppPadding.p10),
-            child: GoBackButton(
-              backgroundColor: ColorManager.lightGrey,
-            ),
+          backgroundColor: colorScheme.surface,
+          leading: const Padding(
+            padding: EdgeInsets.all(AppPadding.p10),
+            child: GoBackButton(),
           ),
           title: Text(
             AppStrings.search,
-            style: getRegularStyle(
+            style: getRegularStyle(context,
                 font: FontConstants.ojuju, fontSize: FontSize.s20),
           ),
         ),

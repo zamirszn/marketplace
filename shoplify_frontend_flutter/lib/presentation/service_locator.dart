@@ -50,6 +50,8 @@ void setupServiceLocator() async {
       RequestNewPasswordOTPUsecase());
   sl.registerSingleton<ResetPasswordUsecase>(
       ResetPasswordUsecase());
+  sl.registerSingleton<GetProfileUseCase>(
+      GetProfileUseCase());
 
   //product usecases
   sl.registerSingleton<GetProductCategoryUsecase>(GetProductCategoryUsecase());

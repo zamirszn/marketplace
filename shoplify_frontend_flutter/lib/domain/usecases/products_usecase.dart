@@ -1,9 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:shoplify/core/usecase/usecase.dart';
-import 'package:shoplify/data/models/add_to_cart_params_model.dart';
-import 'package:shoplify/data/models/cart_model.dart';
-import 'package:shoplify/data/models/product_query_params_model.dart';
-import 'package:shoplify/data/models/search_params_model.dart';
+import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/domain/repository/products_repo.dart';
 import 'package:shoplify/domain/repository/review_repo.dart';
 import 'package:shoplify/presentation/service_locator.dart';

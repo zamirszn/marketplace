@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
@@ -41,7 +40,7 @@ class ProductCarouselSkeletonWidget extends StatelessWidget {
               child: Text(
                 "*******",
                 overflow: TextOverflow.ellipsis,
-                style: getSemiBoldStyle(
+                style: getSemiBoldStyle(context,
                     fontSize: FontSize.s23, font: FontConstants.ojuju),
               ),
             )),
@@ -55,7 +54,7 @@ class ProductCarouselSkeletonWidget extends StatelessWidget {
               textAlign: TextAlign.center,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: getSemiBoldStyle(
+              style: getSemiBoldStyle(context,
                   fontSize: FontSize.s18, font: FontConstants.ojuju),
             ),
           ),

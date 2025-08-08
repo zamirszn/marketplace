@@ -1,9 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:shoplify/core/usecase/usecase.dart';
-import 'package:shoplify/data/models/login_params_model.dart';
-import 'package:shoplify/data/models/reset_password_params.dart';
-import 'package:shoplify/data/models/signup_params_model.dart';
-import 'package:shoplify/data/models/verify_otp_params.dart';
+import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/domain/repository/auth_repo.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 
@@ -55,3 +52,11 @@ class ResetPasswordUsecase implements Usecase<Either, ResetPasswordParams> {
     return sl<AuthRepository>().resetPassword(params!);
   }
 }
+class GetProfileUseCase implements Usecase<Either, dynamic> {
+  @override
+  Future<Either> call({dynamic params}) async {
+    return sl<AuthRepository>().getProfile();
+  }
+}
+
+

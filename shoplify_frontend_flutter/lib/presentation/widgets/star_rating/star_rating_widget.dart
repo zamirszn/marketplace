@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 
 class StarRatingWidget extends StatelessWidget {
@@ -12,19 +11,21 @@ class StarRatingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     List<Widget> stars = [];
     for (int i = 0; i < 5; i++) {
       if (i < rating.floor()) {
         stars.add(Icon(
           Iconsax.star1,
           size: AppSize.s16,
-          color: ColorManager.darkBlue,
+          color: colorScheme.tertiary,
         ));
       } else if (i < rating && rating - i >= .5) {
         stars.add(Icon(
           Iconsax.star_11,
           size: AppSize.s12,
-          color: ColorManager.darkBlue,
+          color: colorScheme.tertiary,
         ));
       } else {
         stars.add(Padding(
@@ -32,7 +33,7 @@ class StarRatingWidget extends StatelessWidget {
           child: Icon(
             Iconsax.star,
             size: AppSize.s12,
-            color: ColorManager.black.withOpacity(.7),
+            color: colorScheme.primary,
           ),
         ));
       }

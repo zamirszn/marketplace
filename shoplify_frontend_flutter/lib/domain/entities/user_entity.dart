@@ -1,6 +1,6 @@
-class UserEntity {
-  final String email;
-  final String fullName;
+// class UserEntity {
+//   final String email;
+//   final String fullName;
 
-  UserEntity({required this.email, required this.fullName});
-}
+//   UserEntity({required this.email, required this.fullName});
+// }

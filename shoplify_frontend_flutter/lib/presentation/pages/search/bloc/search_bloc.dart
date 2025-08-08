@@ -2,9 +2,8 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/data/models/product_model.dart';
-import 'package:shoplify/data/models/search_params_model.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/domain/usecases/products_usecase.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 
@@ -23,13 +22,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   void _resetSearchEvent(ResetSearchEvent event, Emitter<SearchState> emit) {
-    emit(state.copyWith(
-        errorMessage: null,
-        hasReachedMax: false,
-        isFetching: false,
-        page: 1,
-        searchResultProducts: [],
-        searchStatus: SearchStatus.initial));
+    emit(const SearchState());
   }
 
   void _onSearchProduct(
@@ -56,10 +49,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
             searchStatus: SearchStatus.failure));
       }, (data) {
         final String? nextPage = data["next"];
-        final List<ProductModelEntity> searchProductResult =
-            List.from(data["results"])
-                .map((e) => ProductModel.fromMap(e).toEntity())
-                .toList();
+        final List<Product> searchProductResult =
+            List.from(data["results"]).map((e) => Product.fromMap(e)).toList();
 
         if (searchProductResult.isEmpty) {
           emit(state.copyWith(

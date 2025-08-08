@@ -2,14 +2,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shoplify/data/models/review_param_model.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
+import 'package:shoplify/data/models/params_models.dart';
+import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/presentation/pages/auth/account_blocked.dart';
 import 'package:shoplify/presentation/pages/auth/account_verification/account_verification_page.dart';
 import 'package:shoplify/presentation/pages/auth/forgot_password/forgot_password_page.dart';
 import 'package:shoplify/presentation/pages/auth/forgot_password/new_password_page.dart';
 import 'package:shoplify/presentation/pages/auth/splash_page.dart';
 import 'package:shoplify/presentation/pages/bottom_nav/bottom_nav.dart';
+import 'package:shoplify/presentation/pages/cart/cart_page.dart';
 import 'package:shoplify/presentation/pages/home/product_details/product_details_page.dart';
 import 'package:shoplify/presentation/pages/home/product_image_page.dart';
 import 'package:shoplify/presentation/pages/notification/notification_page.dart';
@@ -25,7 +26,6 @@ import 'package:shoplify/presentation/pages/auth/sign_up/sign_up_page.dart';
 import 'package:shoplify/presentation/pages/onboarding/onboarding_screen.dart';
 
 final GoRouter appRouter = GoRouter(
-  //TODO: add onboarding and auth check
   initialLocation: Routes.splashPage,
   debugLogDiagnostics: kDebugMode,
   routes: [
@@ -56,6 +56,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: Routes.orderPage,
       builder: (context, state) => const OrderPage(),
+    ),
+    GoRoute(
+      path: Routes.cartPage,
+      builder: (context, state) => const CartPage(),
     ),
     GoRoute(
       path: Routes.accountBlocked,
@@ -97,7 +101,8 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: Routes.addReviewPage,
       builder: (context, state) {
-        final ProductModelEntity product = state.extra as ProductModelEntity;
+        // TODO : select from bloc dont pass it here
+        final Product product = state.extra as Product;
 
         return AddReviewPage(product: product);
       },
@@ -116,6 +121,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       builder: (context, state) {
+        // TODO: use bloc
         final String image = state.extra as String;
 
         return ProductImagePage(
@@ -126,7 +132,7 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       builder: (context, state) {
-        final ProductModelEntity product = state.extra as ProductModelEntity;
+        final Product product = state.extra as Product;
 
         return BlocProvider<ReviewBloc>(
             create: (context) => ReviewBloc()
@@ -146,6 +152,7 @@ final GoRouter appRouter = GoRouter(
 
 class Routes {
   static const String onboardingPage = "/onboardingPage";
+  static const String cartPage = "/cartPage";
   static const String notificationPage = "/notificationPage";
   static const String newPasswordPage = "/newPasswordPage";
   static const String forgotPasswordPage = "/forgotPasswordPage";

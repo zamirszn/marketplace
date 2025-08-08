@@ -10,12 +10,12 @@ class SearchState extends Equatable {
   final bool isFetching;
   final bool hasReachedMax;
   final int page;
-  final List<ProductModelEntity> searchResultProducts;
+  final List<Product> searchResultProducts;
 
   const SearchState({
     this.searchText = "",
     this.searchStatus = SearchStatus.initial,
-    this.searchResultProducts = const <ProductModelEntity>[],
+    this.searchResultProducts = const <Product>[],
     this.errorMessage,
     this.isFetching = false,
     this.hasReachedMax = false,
@@ -33,8 +33,6 @@ class SearchState extends Equatable {
         page
       ];
 
-  
-
   SearchState copyWith({
     String? searchText,
     SearchStatus? searchStatus,
@@ -42,7 +40,7 @@ class SearchState extends Equatable {
     bool? isFetching,
     bool? hasReachedMax,
     int? page,
-    List<ProductModelEntity>? searchResultProducts,
+    List<Product>? searchResultProducts,
   }) {
     return SearchState(
       searchText: searchText ?? this.searchText,

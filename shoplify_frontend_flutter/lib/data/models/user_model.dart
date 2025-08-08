@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:shoplify/domain/entities/user_entity.dart';
 
 class UserModel {
   final String email;
@@ -52,10 +51,4 @@ class UserModel {
 
   @override
   int get hashCode => email.hashCode ^ fullName.hashCode;
-}
-
-extension UserXModel on UserModel {
-  UserEntity toEntity() {
-    return UserEntity(email: email, fullName: fullName);
-  }
 }

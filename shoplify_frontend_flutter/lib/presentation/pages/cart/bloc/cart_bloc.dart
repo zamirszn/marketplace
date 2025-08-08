@@ -25,7 +25,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     for (var cartItem in state.cart!.items!) {
       if (cartItem.product?.id == event.cartItem.product?.id) {
-        print("object exists");
 
         // if product exist in cart List get the index of the item
         int index = state.cart!.items!.indexWhere(

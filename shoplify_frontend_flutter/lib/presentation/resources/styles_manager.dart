@@ -1,61 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
-
 import 'font_manager.dart';
 
 TextStyle _getTextStyle(
     double fontSize, String fontFamily, FontWeight fontWeight, Color color) {
   return TextStyle(
-      fontSize: fontSize,
-      fontFamily: fontFamily,
-      color: color,
-      fontWeight: fontWeight);
+    fontSize: fontSize,
+    fontFamily: fontFamily,
+    color: color,
+    fontWeight: fontWeight,
+  );
 }
 
 // regular style
-
 TextStyle getRegularStyle(
-    {double fontSize = FontSize.s12,
-    Color? color,
-    String font = FontConstants.poppins}) {
+  BuildContext context, {
+  double fontSize = FontSize.s12,
+  Color? color,
+  String font = FontConstants.poppins,
+}) {
+  final resolvedColor = color ?? Theme.of(context).colorScheme.onSurface;
   return _getTextStyle(
-      fontSize, font, FontWeightManager.regular, color ?? ColorManager.black);
+      fontSize, font, FontWeightManager.regular, resolvedColor);
 }
-// light text style
 
+// light style
 TextStyle getLightStyle(
-    {double fontSize = FontSize.s12,
-    Color? color,
-    String font = FontConstants.poppins}) {
-  return _getTextStyle(fontSize, FontConstants.poppins, FontWeightManager.light,
-      color ?? ColorManager.black);
+  BuildContext context, {
+  double fontSize = FontSize.s12,
+  Color? color,
+  String font = FontConstants.poppins,
+}) {
+  final resolvedColor = color ?? Theme.of(context).colorScheme.onSurface;
+  return _getTextStyle(fontSize, font, FontWeightManager.light, resolvedColor);
 }
-// bold text style
 
+// bold style
 TextStyle getBoldStyle(
-    {double fontSize = FontSize.s12,
-    Color? color,
-    String font = FontConstants.poppins}) {
-  return _getTextStyle(
-      fontSize, font, FontWeightManager.bold, color ?? ColorManager.black);
+  BuildContext context, {
+  double fontSize = FontSize.s12,
+  Color? color,
+  String font = FontConstants.poppins,
+}) {
+  final resolvedColor = color ?? Theme.of(context).colorScheme.onSurface;
+  return _getTextStyle(fontSize, font, FontWeightManager.bold, resolvedColor);
 }
 
-// semi bold text style
-
+// semi bold style
 TextStyle getSemiBoldStyle(
-    {double fontSize = FontSize.s12,
-    Color? color,
-    String font = FontConstants.poppins}) {
+  BuildContext context, {
+  double fontSize = FontSize.s12,
+  Color? color,
+  String font = FontConstants.poppins,
+}) {
+  final resolvedColor = color ?? Theme.of(context).colorScheme.onSurface;
   return _getTextStyle(
-      fontSize, font, FontWeightManager.semiBold, color ?? ColorManager.black);
+      fontSize, font, FontWeightManager.semiBold, resolvedColor);
 }
 
-// medium text style
-
+// medium style
 TextStyle getMediumStyle(
-    {double fontSize = FontSize.s12,
-    Color? color,
-    String font = FontConstants.poppins}) {
-  return _getTextStyle(
-      fontSize, font, FontWeightManager.medium, color ?? ColorManager.black);
+  BuildContext context, {
+  double fontSize = FontSize.s12,
+  Color? color,
+  String font = FontConstants.poppins,
+}) {
+  final resolvedColor = color ?? Theme.of(context).colorScheme.onSurface;
+  return _getTextStyle(fontSize, font, FontWeightManager.medium, resolvedColor);
 }

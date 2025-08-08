@@ -4,9 +4,11 @@ class AppStrings {
   static const String changeLanguage = "Change Language";
   static const String logout = "Log out";
   static const String preferences = "Preferences";
+  static const String price = "Price";
   static const String deactivateAccount = "Deactivate Account";
   static const String phone = "Phone";
   static const String address = "Address";
+  static const String shippingAddress = "Shipping Address";
   static const String notifications = "Notifications";
   static const String changePassword = "Change Password";
   static const String accountAndSecurity = "Account and Security";
@@ -62,7 +64,7 @@ class AppStrings {
   static const String outOfStock = "Product out of stock";
   static const String addReview = "Add Review";
   static const String basedOn = "Based on";
-  static const String noReviews = "There are no review";
+  static const String noReviews = "There are no reviews";
   static const String noPopularProducts = "No Popular products";
   static const String noProducts = "No products";
   static const String noNewProducts = "No New products";

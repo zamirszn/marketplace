@@ -4,7 +4,7 @@ part of 'product_details_bloc.dart';
 enum ProductDetailsStatus { initial, loading, failure, success }
 
 class ProductDetailsState extends Equatable {
-  final ProductModelEntity? selectedProduct;
+  final Product? selectedProduct;
   final String? errorMessage;
   final ProductDetailsStatus status;
 
@@ -18,7 +18,7 @@ class ProductDetailsState extends Equatable {
   List<Object?> get props => [selectedProduct, errorMessage, status];
 
   ProductDetailsState copyWith({
-    ProductModelEntity? selectedProduct,
+    Product? selectedProduct,
     String? errorMessage,
     ProductDetailsStatus? status,
   }) {

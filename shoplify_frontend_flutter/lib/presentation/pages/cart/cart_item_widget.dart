@@ -5,7 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
+import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
@@ -15,7 +15,7 @@ import 'package:skeletonizer/skeletonizer.dart';
 
 class CartItemWidget extends StatelessWidget {
   const CartItemWidget({super.key, required this.product, required this.index});
-  final ProductModelEntity product;
+  final Product product;
   final int index;
 
   @override
@@ -66,7 +66,7 @@ class CartItemWidget extends StatelessWidget {
                   product.name ?? "",
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: getRegularStyle(fontSize: FontSize.s17),
+                  style: getRegularStyle(context, fontSize: FontSize.s17),
                 ),
                 space(h: AppSize.s20),
                 Text(
@@ -116,7 +116,7 @@ class CartItemWidget extends StatelessWidget {
                               horizontal: AppSize.s4),
                           child: Text(
                             "${state.cart?.items?[index].quantity}",
-                            style: getRegularStyle(
+                            style: getRegularStyle(context,
                                 font: FontConstants.ojuju,
                                 fontSize: FontSize.s16),
                           ),
@@ -180,7 +180,7 @@ class CartItemSkeletonWidget extends StatelessWidget {
                     "*********",
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: getRegularStyle(fontSize: FontSize.s17),
+                    style: getRegularStyle(context, fontSize: FontSize.s17),
                   ),
                   space(h: AppSize.s20),
                   const Text(
@@ -203,29 +203,11 @@ class CartItemSkeletonWidget extends StatelessWidget {
                     icon: const Icon(
                       Iconsax.close_circle,
                     )),
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Iconsax.minus_cirlce,
-                        )),
-                    Padding(
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: AppSize.s4),
-                      child: Text(
-                        "*",
-                        style: getRegularStyle(
-                            font: FontConstants.ojuju, fontSize: FontSize.s16),
-                      ),
-                    ),
-                    IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Iconsax.add_circle5,
-                        )),
-                  ],
-                ),
+                IconButton(
+                    onPressed: () {},
+                    icon: const Icon(
+                      Iconsax.minus_cirlce,
+                    )),
               ],
             )
           ],

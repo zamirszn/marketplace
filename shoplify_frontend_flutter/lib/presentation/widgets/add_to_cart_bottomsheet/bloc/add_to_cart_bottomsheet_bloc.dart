@@ -2,9 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:shoplify/data/models/add_to_cart_params_model.dart';
 import 'package:shoplify/data/models/cart_model.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
+import 'package:shoplify/data/models/params_models.dart';
+import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/domain/usecases/products_usecase.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 

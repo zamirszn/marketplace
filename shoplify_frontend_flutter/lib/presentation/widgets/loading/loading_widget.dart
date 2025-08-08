@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
+import 'package:shoplify/presentation/widgets/loading/loading_indicator.dart';
 
 class LoadingWidget extends StatelessWidget {
   const LoadingWidget({super.key, this.color});
@@ -7,8 +7,8 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircularProgressIndicator(
-      color: color ?? ColorManager.black,
+    return LoadingIndicator.contained(
+      
     );
   }
 }

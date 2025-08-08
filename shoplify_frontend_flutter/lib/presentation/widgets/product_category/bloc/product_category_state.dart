@@ -11,7 +11,7 @@ final class ProductCategoryLoading extends ProductCategoryState {}
 final class ProductCategoryFailure extends ProductCategoryState {}
 
 final class ProductCategorySuccess extends ProductCategoryState {
-  final List<ProductCategoryEntity> productCategories;
+  final List<ProductCategory> productCategories;
 
   ProductCategorySuccess({required this.productCategories});
 }

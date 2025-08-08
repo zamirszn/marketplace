@@ -1,6 +1,6 @@
-class ProductCategoryEntity {
-  final String title;
-  final String categoryId;
+// class ProductCategoryEntity {
+//   final String name;
+//   final String categoryId;
 
-  ProductCategoryEntity({required this.title, required this.categoryId});
-}
+//   ProductCategoryEntity({required this.name, required this.categoryId});
+// }

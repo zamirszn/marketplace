@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:shoplify/app/extensions.dart';
 
 class ColorManager {
-  static Color darkBlue = HexColor.fromHex("#102542");
   static Color lightBlue = HexColor.fromHex("#97F5FD");
   static Color lightYellow = HexColor.fromHex("#F8FFE5");
   static Color yellow = HexColor.fromHex("#FFF000");
@@ -15,7 +14,6 @@ class ColorManager {
   static Color grey = HexColor.fromHex("#ACACAC");
   static Color lightGrey = HexColor.fromHex("#F5F5F5");
   static Color lightGreen = HexColor.fromHex("#BDFFA7");
-  static Color lemon = HexColor.fromHex("#E5FF46");
   static Color cyan = HexColor.fromHex("#00E1B5");
   static Color accent = HexColor.fromHex("#00E3B8");
   static Color orange = HexColor.fromHex("#FFB502");

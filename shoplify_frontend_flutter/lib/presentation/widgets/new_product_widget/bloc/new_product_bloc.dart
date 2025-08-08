@@ -2,7 +2,6 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 import 'package:shoplify/data/models/product_model.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/domain/usecases/products_usecase.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 
@@ -21,9 +20,8 @@ class NewProductBloc extends Bloc<NewProductEvent, NewProductState> {
     response.fold((error) {
       emit(NewProductFailure(message: error.toString()));
     }, (data) {
-      List<ProductModelEntity> newProducts = List.from(data)
-          .map((e) => ProductModel.fromMap(e).toEntity())
-          .toList();
+      List<Product> newProducts =
+          List.from(data).map((e) => Product.fromMap(e)).toList();
       if (newProducts.isEmpty) {
         emit(NewProductEmpty());
       } else {

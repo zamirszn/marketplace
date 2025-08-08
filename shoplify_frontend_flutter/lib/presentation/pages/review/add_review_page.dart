@@ -4,22 +4,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
+import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/data/models/review_model.dart';
-import 'package:shoplify/domain/entities/product_entity.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/pages/review/bloc/review_bloc.dart';
 import 'package:shoplify/presentation/widgets/go_back_button.dart';
-import 'package:shoplify/presentation/widgets/loading_widget.dart';
+import 'package:shoplify/presentation/widgets/loading/loading_widget.dart';
 import 'package:shoplify/presentation/widgets/snackbar.dart';
 import 'package:shoplify/presentation/widgets/star_rating/interactive_star_rating_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class AddReviewPage extends StatefulWidget {
   const AddReviewPage({super.key, required this.product});
-  final ProductModelEntity product;
+  final Product product;
 
   @override
   State<AddReviewPage> createState() => _AddReviewPageState();
@@ -56,7 +56,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
             ),
             title: Text(
               AppStrings.addReview,
-              style: getRegularStyle(
+              style: getRegularStyle(context,
                   font: FontConstants.ojuju, fontSize: FontSize.s20),
             ),
           ),
@@ -101,14 +101,18 @@ class _AddReviewPageState extends State<AddReviewPage> {
                               widget.product.name ?? "",
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: getMediumStyle(),
+                              style: getMediumStyle(
+                                context,
+                              ),
                             ),
                             space(h: AppSize.s20),
                             Text(
                               widget.product.description ?? "",
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
-                              style: getLightStyle(),
+                              style: getLightStyle(
+                                context,
+                              ),
                             ),
                           ],
                         ),
@@ -123,6 +127,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                   Text(
                     AppStrings.leaveARating,
                     style: getLightStyle(
+                      context,
                       fontSize: FontSize.s14,
                     ),
                   ),
@@ -144,6 +149,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                       child: Text(
                         AppStrings.yourReview,
                         style: getRegularStyle(
+                          context,
                           fontSize: FontSize.s14,
                         ),
                       )),
@@ -160,12 +166,16 @@ class _AddReviewPageState extends State<AddReviewPage> {
                       maxLines: 6,
                       minLines: 2,
                       style: getRegularStyle(
+                        context,
                         fontSize: FontSize.s12,
                       ),
                       decoration: InputDecoration(
                         hintText: AppStrings.leaveAYourReview,
-                        counterStyle: getMediumStyle(font: FontConstants.ojuju),
-                        hintStyle: getLightStyle(),
+                        counterStyle:
+                            getMediumStyle(context, font: FontConstants.ojuju),
+                        hintStyle: getLightStyle(
+                          context,
+                        ),
                       )),
                   space(h: AppSize.s80),
                 ],
@@ -195,29 +205,13 @@ class _AddReviewPageState extends State<AddReviewPage> {
                       if (state is SubmitReviewLoadingState) {
                         return ElevatedButton(
                           onPressed: null,
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(AppSize.s20)),
-                            shadowColor: Colors.transparent,
-                            foregroundColor: ColorManager.black,
-                            backgroundColor: ColorManager.grey,
-                          ),
+                         
                           child: Transform.scale(
                               scale: .85, child: const LoadingWidget()),
                         );
                       }
                       return ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(AppSize.s20)),
-                            shadowColor: Colors.transparent,
-                            foregroundColor: ColorManager.black,
-                            backgroundColor: ColorManager.grey,
-                          ),
+                         
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
                               context.read<ReviewBloc>().add(SubmitReviewEvent(
@@ -230,7 +224,7 @@ class _AddReviewPageState extends State<AddReviewPage> {
                           },
                           child: Text(
                             AppStrings.submitReview,
-                            style: getRegularStyle(
+                            style: getRegularStyle(context,
                                 font: FontConstants.ojuju,
                                 fontSize: FontSize.s18),
                           ));

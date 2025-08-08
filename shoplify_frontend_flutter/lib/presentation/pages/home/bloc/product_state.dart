@@ -20,7 +20,6 @@ final class ProductInitial extends ProductState {}
 
 // All Products
 
-final class AllProductLoading extends ProductState {}
 
 final class AllProductFailure extends ProductState {
   final String message;
@@ -32,31 +31,8 @@ final class AllProductFailure extends ProductState {
 
 final class AllProductEmpty extends ProductState {}
 
-final class AllProductSuccess extends ProductState {
-  final List<ProductModelEntity> products;
-  final bool hasReachedMax;
-
-  AllProductSuccess({
-    required this.products,
-    required this.hasReachedMax,
-  });
-
-  @override
-  List<Object?> get props => [products, hasReachedMax];
-
-  AllProductSuccess copyWith({
-    List<ProductModelEntity>? products,
-    bool? hasReachedMax,
-  }) {
-    return AllProductSuccess(
-      products: products ?? this.products,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-    );
-  }
-}
 
 // add to cart
-
 final class AddToCartLoading extends ProductState {}
 
 final class AddToCartFailure extends ProductState {}
@@ -115,7 +91,7 @@ class AddToFavoriteFailure extends ProductState {
 }
 
 class ToggleFavoriteAddSuccess extends ProductState {
-  final ProductModelEntity? product;
+  final Product? product;
   final bool isFavorited;
   final String? message;
 

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
@@ -24,6 +22,7 @@ class NotificationPage extends StatelessWidget {
           AppStrings.notifications,
           overflow: TextOverflow.ellipsis,
           style: getSemiBoldStyle(
+            context,
             font: FontConstants.ojuju,
             fontSize: AppSize.s24,
           ),

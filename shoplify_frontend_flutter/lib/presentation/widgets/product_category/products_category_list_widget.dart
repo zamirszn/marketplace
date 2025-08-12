@@ -29,6 +29,8 @@ class _ProductsCategoriesListWidgetState
 
   @override
   Widget build(BuildContext context) {
+        final colorScheme = Theme.of(context).colorScheme;
+
     return SliverToBoxAdapter(
       child: SizedBox(
         height: AppSize.s36,
@@ -83,7 +85,11 @@ class _ProductsCategoriesListWidgetState
                           const EdgeInsets.symmetric(horizontal: AppSize.s6),
                       alignment: Alignment.center,
                       decoration: ShapeDecoration(
-                        color: ColorManager.blue.withAlpha(30),
+                        color: 
+                        
+                         colorScheme.secondary
+
+                        .withAlpha(30),
                         shape: const StadiumBorder(),
                       ),
                       child: Text(

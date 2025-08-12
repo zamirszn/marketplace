@@ -15,7 +15,7 @@ class AppTheme {
       colorScheme: colorScheme,
       useMaterial3: true,
       fontFamily: FontConstants.poppins,
-      scaffoldBackgroundColor: colorScheme.primaryContainer,
+      scaffoldBackgroundColor: colorScheme.surface,
       actionIconTheme: ActionIconThemeData(
         backButtonIconBuilder: (context) => const GoBackButton(
           padding: EdgeInsets.all(AppPadding.p8),

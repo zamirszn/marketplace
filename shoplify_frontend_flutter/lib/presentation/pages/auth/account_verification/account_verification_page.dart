@@ -61,6 +61,7 @@ class _AccountVerificationPageState extends State<AccountVerificationPage>
               systemNavigationBarColor: colorScheme.primaryContainer,
             ),
           ),
+          backgroundColor: colorScheme.primaryContainer,
           extendBodyBehindAppBar: true,
           body: BlocListener<AccountVerificationBloc, AccountVerificationState>(
             listener: (context, state) {

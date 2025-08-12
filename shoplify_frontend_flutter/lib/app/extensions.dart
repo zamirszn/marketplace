@@ -81,10 +81,11 @@ class RoundCorner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius ?? 10),
-      child: ColoredBox(
-          color: color ?? ColorManager.grey.withAlpha(200), child: child),
+      child: ColoredBox(color: color ?? colorScheme.onPrimary, child: child),
     );
   }
 }

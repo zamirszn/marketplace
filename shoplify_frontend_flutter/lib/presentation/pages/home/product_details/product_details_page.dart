@@ -12,6 +12,7 @@ import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/widgets/add_to_cart_bottomsheet/add_to_cart_bottomsheet.dart';
 import 'package:shoplify/presentation/widgets/coverflow_carousel.dart';
+import 'package:shoplify/presentation/widgets/refresh_widget.dart';
 import 'package:shoplify/presentation/widgets/star_rating/star_rating_widget.dart';
 
 class ProductDetailsPage extends StatelessWidget {
@@ -33,7 +34,7 @@ class ProductDetailsPage extends StatelessWidget {
               child: SizedBox(
                 height: deviceHeight(context),
                 width: deviceWidth(context),
-                child: RefreshIndicator(
+                child: RefreshWidget(
                   onRefresh: () async {
                     context.read<ProductDetailsBloc>().add(
                         RefreshProductDetailsEvent(
@@ -285,7 +286,6 @@ class ProductDetailsPage extends StatelessWidget {
                                 height: AppSize.s70,
                                 width: double.infinity,
                                 child: ElevatedButton(
-                                   
                                     onPressed: () {
                                       showModalBottomSheet(
                                         context: context,

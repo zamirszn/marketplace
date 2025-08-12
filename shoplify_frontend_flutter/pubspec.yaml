@@ -57,6 +57,7 @@ dependencies:
       url: https://github.com/ksokolovskyi/material_shapes.git
 
   dynamic_color: ^1.7.0
+  custom_refresh_indicator: ^4.0.1
 
 dev_dependencies:
   flutter_test:

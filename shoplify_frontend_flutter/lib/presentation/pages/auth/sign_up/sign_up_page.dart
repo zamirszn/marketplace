@@ -50,6 +50,8 @@ class _SignUpPageState extends State<SignUpPage> {
           systemNavigationBarColor: colorScheme.primaryContainer,
         ),
       ),
+      backgroundColor:     colorScheme.primaryContainer,
+
       body: BlocProvider(
         create: (context) => SignUpBloc(),
         child: BlocListener<SignUpBloc, SignUpState>(

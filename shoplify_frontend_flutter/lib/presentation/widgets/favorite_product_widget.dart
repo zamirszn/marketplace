@@ -17,6 +17,8 @@ class FavoriteProductWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final colorScheme = Theme.of(context).colorScheme;
+
     return Stack(
       children: [
         GestureDetector(
@@ -39,14 +41,16 @@ class FavoriteProductWidget extends StatelessWidget {
                 errorWidget: (context, url, error) => Container(
                   height: AppSize.s100,
                   width: AppSize.s100,
-                  color: ColorManager.blue,
+                        color: colorScheme.error,
+
                 ),
                 placeholder: (
                   context,
                   url,
                 ) =>
                     Container(
-                  color: ColorManager.blue,
+                        color: colorScheme.secondary,
+
                   height: AppSize.s100,
                   width: AppSize.s100,
                 ),

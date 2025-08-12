@@ -20,6 +20,7 @@ import 'package:shoplify/presentation/widgets/popular_product_widget/bloc/popula
 import 'package:shoplify/presentation/widgets/product_category/bloc/product_category_bloc.dart';
 import 'package:shoplify/presentation/widgets/product_category/products_category_list_widget.dart';
 import 'package:shoplify/presentation/widgets/product_search_text_field.dart';
+import 'package:shoplify/presentation/widgets/refresh_widget.dart';
 import 'package:shoplify/presentation/widgets/retry_button.dart';
 import 'package:shoplify/presentation/widgets/snackbar.dart';
 
@@ -45,7 +46,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       backgroundColor: colorScheme.surface,
-      body: RefreshIndicator(
+      body: RefreshWidget(
         onRefresh: () async {
           context.read<ProductBloc>().add(GetOrCreateCartEvent());
           context.read<ProductCategoryBloc>().add(GetProductCategoryEvent());

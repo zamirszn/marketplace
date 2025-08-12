@@ -6,9 +6,11 @@ void showMessage(
   BuildContext context,
   String message,
 ) {
+      final colorScheme = Theme.of(context).colorScheme;
+
   final snackBar = SnackBar(
     content: Text(message),
-    backgroundColor: ColorManager.blue,
+    backgroundColor: colorScheme.secondary,
     behavior: SnackBarBehavior.floating,
     dismissDirection: DismissDirection.horizontal,
     shape: RoundedRectangleBorder(

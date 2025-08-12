@@ -9,10 +9,12 @@ class NotificationIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Badge(
       label: const Text("3"),
       alignment: const AlignmentDirectional(.7, -.8),
-      backgroundColor: ColorManager.blue,
+      backgroundColor: colorScheme.primary,
       textColor: ColorManager.white,
       textStyle: getRegularStyle(context, font: FontConstants.ojuju),
       child: IconButton(

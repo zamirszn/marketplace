@@ -14,7 +14,9 @@ class InteractiveStarRatingWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) {    final colorScheme = Theme.of(context).colorScheme;
+
+
     return BlocProvider(
       create: (context) => StarRatingBloc(),
       child: BlocBuilder<StarRatingBloc, StarRatingState>(
@@ -57,7 +59,8 @@ class InteractiveStarRatingWidget extends StatelessWidget {
                           ? 20
                           : 16, // Bigger size for selected stars
                       color: isFullStar
-                          ? ColorManager.blue
+                        ?colorScheme.secondary
+
                           : ColorManager.black.withAlpha(70),
                     ),
                   ),

@@ -7,6 +7,7 @@ class AppStrings {
   static const String price = "Price";
   static const String deactivateAccount = "Deactivate Account";
   static const String phone = "Phone";
+  static const String save = "Save";
   static const String address = "Address";
   static const String shippingAddress = "Shipping Address";
   static const String notifications = "Notifications";

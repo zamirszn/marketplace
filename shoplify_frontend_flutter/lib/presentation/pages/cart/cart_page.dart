@@ -10,6 +10,7 @@ import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/widgets/dashed_line.dart';
+import 'package:shoplify/presentation/widgets/refresh_widget.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -42,7 +43,7 @@ class _CartPageState extends State<CartPage> {
             style: getRegularStyle(context,
                 font: FontConstants.ojuju, fontSize: FontSize.s20),
           )),
-      body: RefreshIndicator(
+      body: RefreshWidget(
         onRefresh: () async {
           context.read<CartBloc>().add(GetCartEvent());
         },

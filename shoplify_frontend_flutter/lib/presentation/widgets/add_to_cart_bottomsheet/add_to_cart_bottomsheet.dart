@@ -6,14 +6,14 @@ import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/data/models/product_model.dart';
-import 'package:shoplify/presentation/resources/font_manager.dart';
-import 'package:shoplify/presentation/resources/string_manager.dart';
-import 'package:shoplify/presentation/resources/styles_manager.dart';
-import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/pages/auth/sign_up/sign_up_page.dart';
 import 'package:shoplify/presentation/pages/cart/bloc/cart_bloc.dart';
 import 'package:shoplify/presentation/pages/favorite/bloc/favorite_bloc.dart';
 import 'package:shoplify/presentation/pages/home/bloc/product_bloc.dart';
+import 'package:shoplify/presentation/resources/font_manager.dart';
+import 'package:shoplify/presentation/resources/string_manager.dart';
+import 'package:shoplify/presentation/resources/styles_manager.dart';
+import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/widgets/add_to_cart_bottomsheet/bloc/add_to_cart_bottomsheet_bloc.dart';
 import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:shoplify/presentation/widgets/loading/loading_widget.dart';
@@ -31,6 +31,8 @@ class AddtoCartBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     AddToCartBottomsheetBloc cartBottomsheetBloc =
         context.read<AddToCartBottomsheetBloc>();
 
@@ -142,7 +144,7 @@ class AddtoCartBottomSheet extends StatelessWidget {
                                   },
                                   icon: Icon(
                                     Iconsax.heart5,
-                                    color: ColorManager.blue,
+                                    color: colorScheme.secondary,
                                     size: AppSize.s28,
                                   ));
                             } else {
@@ -160,7 +162,7 @@ class AddtoCartBottomSheet extends StatelessWidget {
                                   },
                                   icon: Icon(
                                     Iconsax.heart,
-                                    color: ColorManager.blue,
+                                    color: colorScheme.secondary,
                                     size: AppSize.s28,
                                   ));
                             }
@@ -330,7 +332,6 @@ class AddtoCartBottomSheet extends StatelessWidget {
                             height: AppSize.s60,
                             width: double.infinity,
                             child: ElevatedButton(
-                              
                                 onPressed: () {
                                   context
                                       .read<AddToCartBottomsheetBloc>()

@@ -46,6 +46,16 @@ class _LoginPageState extends State<LoginPage> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+       appBar: AppBar(
+        toolbarHeight: 0,
+        forceMaterialTransparency: true,
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: colorScheme.primaryContainer,
+          statusBarIconBrightness: Brightness.dark,
+          systemNavigationBarColor: colorScheme.primaryContainer,
+        ),
+      ),
+      backgroundColor:     colorScheme.primaryContainer,
        
         body: BlocListener<LoginBloc, LoginState>(
           listener: (context, state) {

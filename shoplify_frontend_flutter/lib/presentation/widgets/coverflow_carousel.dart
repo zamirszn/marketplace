@@ -207,6 +207,8 @@ class _CoverFlowPositionedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final colorScheme = Theme.of(context).colorScheme;
+
     Widget child = ClipRRect(
       borderRadius: BorderRadius.circular(20),
       child: SizedBox(
@@ -230,7 +232,8 @@ class _CoverFlowPositionedItem extends StatelessWidget {
               width: AppSize.s100,
             )),
             errorWidget: (context, url, error) => Container(
-              color: ColorManager.blue,
+                        color: colorScheme.error,
+
               height: AppSize.s100,
               width: AppSize.s100,
             ),

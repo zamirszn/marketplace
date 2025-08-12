@@ -14,6 +14,7 @@ import 'package:shoplify/presentation/widgets/favorite_product_widget.dart';
 import 'package:shoplify/presentation/widgets/loading/loading_widget.dart';
 import 'package:shoplify/presentation/widgets/product_carousel_skeleton_widget.dart';
 import 'package:shoplify/presentation/widgets/product_widget_skeleton.dart';
+import 'package:shoplify/presentation/widgets/refresh_widget.dart';
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key});
@@ -55,7 +56,7 @@ class _FavoritePageState extends State<FavoritePage> {
           forceMaterialTransparency: true,
           automaticallyImplyLeading: false,
         ),
-        body: RefreshIndicator(
+        body: RefreshWidget(
           onRefresh: () async {
             context.read<FavoriteBloc>().add(RefreshFavoriteProductEvent(
                   params: FavoriteProductParamsModel(

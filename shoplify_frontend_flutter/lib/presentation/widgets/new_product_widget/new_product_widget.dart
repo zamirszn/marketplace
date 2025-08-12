@@ -1,15 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/data/models/product_model.dart';
+import 'package:shoplify/presentation/pages/home/product_details/bloc/product_details_bloc.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/pages/home/product_details/bloc/product_details_bloc.dart';
 import 'package:shoplify/presentation/widgets/blur_background_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -22,6 +21,7 @@ class NewProductWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: () {
         context
@@ -47,14 +47,14 @@ class NewProductWidget extends StatelessWidget {
                 errorWidget: (context, url, error) => Container(
                   height: AppSize.s100,
                   width: AppSize.s100,
-                  color: ColorManager.blue,
+                  color: colorScheme.error,
                 ),
                 placeholder: (
                   context,
                   url,
                 ) =>
                     Container(
-                  color: ColorManager.blue,
+                  color: colorScheme.secondary,
                   height: AppSize.s100,
                   width: AppSize.s100,
                 ),

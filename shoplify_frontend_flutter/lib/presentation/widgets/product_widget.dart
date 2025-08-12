@@ -23,6 +23,8 @@ class ProductWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+        final colorScheme = Theme.of(context).colorScheme;
+
     return GestureDetector(
       onTap: () {
         context
@@ -61,12 +63,14 @@ class ProductWidget extends StatelessWidget {
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Skeletonizer(
                                 child: Container(
-                              color: ColorManager.blue,
+                        color: colorScheme.secondary,
+
                               height: AppSize.s100,
                               width: AppSize.s100,
                             )),
                             errorWidget: (context, url, error) => Container(
-                              color: ColorManager.blue,
+                        color: colorScheme.error,
+
                               height: AppSize.s100,
                               width: AppSize.s100,
                             ),

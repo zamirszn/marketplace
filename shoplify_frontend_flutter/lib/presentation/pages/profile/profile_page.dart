@@ -2,10 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:material_shapes/material_shapes.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/core/constants/api_urls.dart';
+import 'package:shoplify/presentation/pages/auth/login/bloc/login_bloc.dart';
 import 'package:shoplify/presentation/pages/notification/notification_icon.dart';
 import 'package:shoplify/presentation/pages/profile/bloc/profile_bloc.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
@@ -15,7 +17,8 @@ import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/widgets/error_message_widget.dart';
 import 'package:shoplify/presentation/widgets/loading/loading_widget.dart';
-import 'package:shoplify/presentation/widgets/retry_button.dart';
+import 'package:shoplify/presentation/widgets/material_expressive/expressive_shapes.dart';
+import 'package:shoplify/presentation/widgets/refresh_widget.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -66,8 +69,8 @@ class _ProfilePageState extends State<ProfilePage> {
           )
         ],
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
+      body: RefreshWidget(
+        onRefresh: () {
           getProfile();
         },
         child: BlocBuilder<ProfileBloc, ProfileState>(
@@ -78,7 +81,6 @@ class _ProfilePageState extends State<ProfilePage> {
 
               case ProfileStatus.failure:
                 return ErrorMessageWidget(
-
                   retry: () => getProfile(),
                   message: state.errorMessage,
                 );
@@ -104,26 +106,17 @@ class _ProfilePageState extends State<ProfilePage> {
                           leading: SizedBox(
                             width: 50,
                             height: 50,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: CachedNetworkImage(
-                                imageUrl: ApiUrls.baseUrl +
-                                    state.profile?.profilePicture,
-                                height: 40,
-                                fit: BoxFit.cover,
-                                placeholder: (context, url) => Skeletonizer(
-                                    child: Container(
-                                  color: ColorManager.lightGrey,
-                                  height: AppSize.s100,
-                                  width: AppSize.s100,
-                                )),
-                                errorWidget: (context, url, error) => Container(
-                                  color: ColorManager.lightGrey,
-                                  height: AppSize.s100,
-                                  width: AppSize.s100,
-                                  child: const Icon(Iconsax.warning_2),
-                                ),
-                              ),
+                            child: AnimatedExpressiveShape(
+                              shapes: [
+                                MaterialShapes.square,
+                                MaterialShapes.arch,
+                                MaterialShapes.pill,
+                                MaterialShapes.cookie4Sided,
+                                MaterialShapes.clover4Leaf,
+                                MaterialShapes.ghostish,
+                                MaterialShapes.bun,
+                              ],
+                              child: UserProfilePicture(),
                             ),
                           ),
                           shape: RoundedRectangleBorder(
@@ -150,7 +143,6 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         space(h: AppSize.s20),
                         RoundCorner(
-                          color: ColorManager.lightGrey,
                           child: InkWell(
                             borderRadius: BorderRadius.circular(
                               AppSize.s10,
@@ -168,11 +160,6 @@ class _ProfilePageState extends State<ProfilePage> {
                                     alignment: WrapAlignment.spaceBetween,
                                     runSpacing: AppSize.s20,
                                     children: [
-                                      // ProfileInfoWidget(
-                                      //   data: "12/03/1998",
-                                      //   iconData: Iconsax.calendar,
-                                      //   title: "Joined on",
-                                      // ),
                                       ProfileInfoWidget(
                                         data: state.profile?.phone ?? "-",
                                         iconData: Iconsax.call,
@@ -295,6 +282,37 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
+class UserProfilePicture extends StatelessWidget {
+  const UserProfilePicture({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        return CachedNetworkImage(
+          imageUrl: ApiUrls.baseUrl + state.profile?.profilePicture,
+          height: 40,
+          fit: BoxFit.cover,
+          placeholder: (context, url) => Skeletonizer(
+              child: Container(
+            color: ColorManager.lightGrey,
+            height: AppSize.s100,
+            width: AppSize.s100,
+          )),
+          errorWidget: (context, url, error) => Container(
+            color: ColorManager.lightGrey,
+            height: AppSize.s100,
+            width: AppSize.s100,
+            child: const Icon(Iconsax.warning_2),
+          ),
+        );
+      },
+    );
+  }
+}
+
 class ProfileInfoWidget extends StatelessWidget {
   const ProfileInfoWidget({
     super.key,
@@ -322,10 +340,8 @@ class ProfileInfoWidget extends StatelessWidget {
             space(w: AppSize.s6),
             Text(
               title,
-              style: getRegularStyle(context,
-                  fontSize: FontSize.s14,
-                  color: ColorManager.black,
-                  font: FontConstants.ojuju),
+              style: getSemiBoldStyle(context,
+                  fontSize: FontSize.s16, font: FontConstants.ojuju),
             ),
           ],
         ),
@@ -333,9 +349,7 @@ class ProfileInfoWidget extends StatelessWidget {
         Text(
           data,
           style: getLightStyle(context,
-              fontSize: FontSize.s14,
-              color: ColorManager.blue,
-              font: FontConstants.poppins),
+              fontSize: FontSize.s14, font: FontConstants.poppins),
         ),
       ],
     );
@@ -392,13 +406,15 @@ class EnterArrow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return RoundCorner(
-      color: ColorManager.lightGrey,
-      child: const Padding(
-        padding: EdgeInsets.all(AppPadding.p7),
+      child: Padding(
+        padding: const EdgeInsets.all(AppPadding.p7),
         child: Icon(
           Icons.arrow_forward_ios_rounded,
           size: AppSize.s20,
+          color: colorScheme.secondary,
         ),
       ),
     );

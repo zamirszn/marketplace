@@ -61,6 +61,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage>
           systemNavigationBarColor: colorScheme.primaryContainer,
         ),
       ),
+      backgroundColor: colorScheme.primaryContainer,
       body: BlocListener<ForgotPasswordBloc, ForgotPasswordState>(
         listener: (context, state) {
           if (state.forgotPasswordStatus == ForgotPasswordStatus.failure) {

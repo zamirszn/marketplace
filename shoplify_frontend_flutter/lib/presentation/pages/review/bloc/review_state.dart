@@ -2,6 +2,8 @@ part of 'review_bloc.dart';
 
 enum ReviewStatus { initial, success, failure }
 
+enum SubmitReviewStatus { initial, loading, success, failure }
+
 final class ReviewState extends Equatable {
   const ReviewState(
       {this.status = ReviewStatus.initial,
@@ -10,6 +12,7 @@ final class ReviewState extends Equatable {
       this.isFetching = false,
       this.page = 1,
       this.errorMessage,
+      this.submitReviewStatus = SubmitReviewStatus.initial,
       // this.sortBy,
       this.selectedOption});
 
@@ -20,6 +23,7 @@ final class ReviewState extends Equatable {
   final bool isFetching;
   final int page;
   final String? selectedOption;
+  final SubmitReviewStatus submitReviewStatus;
 
   ReviewState copyWith({
     ReviewStatus? status,
@@ -29,6 +33,8 @@ final class ReviewState extends Equatable {
     bool? isFetching,
     int? page,
     String? selectedOption,
+    SubmitReviewStatus? submitReviewStatus
+
     // String? sortBy,
   }) {
     return ReviewState(
@@ -40,6 +46,7 @@ final class ReviewState extends Equatable {
       errorMessage: errorMessage ?? this.errorMessage,
       // sortBy: sortBy ?? this.sortBy,
       selectedOption: selectedOption ?? this.selectedOption,
+      submitReviewStatus: submitReviewStatus ?? this.submitReviewStatus,
     );
   }
 
@@ -51,16 +58,7 @@ final class ReviewState extends Equatable {
         isFetching,
         page,
         // sortBy,
-        selectedOption
+        selectedOption,
+        submitReviewStatus,
       ];
 }
-
-final class SubmitReviewLoadingState extends ReviewState {}
-
-final class SubmitReviewFailureState extends ReviewState {
-  final String message;
-
-  const SubmitReviewFailureState({required this.message});
-}
-
-final class SubmitReviewSuccessState extends ReviewState {}

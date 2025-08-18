@@ -1,15 +1,14 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/presentation/pages/home/product_details/bloc/product_details_bloc.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
+import 'package:shoplify/presentation/widgets/favorite_button.dart';
 import 'package:shoplify/presentation/widgets/star_rating/star_rating_widget.dart';
 
 class PopularProductsWidget extends StatelessWidget {
@@ -39,8 +38,7 @@ class PopularProductsWidget extends StatelessWidget {
         child: Container(
           width: AppSize.s250,
           decoration: BoxDecoration(
-              color: colorScheme.surfaceDim,
-              border: Border.all(color: ColorManager.black, width: 1),
+              color: colorScheme.primary.withAlpha(10),
               borderRadius: BorderRadius.circular(AppSize.s20)),
           padding: const EdgeInsets.symmetric(
               vertical: AppPadding.p12, horizontal: AppPadding.p12),
@@ -54,7 +52,7 @@ class PopularProductsWidget extends StatelessWidget {
                           ? product.images.first.image!
                           : "",
                       height: AppSize.s100,
-                      width: AppSize.s50,
+                      width: AppSize.s60,
                       fit: BoxFit.cover,
                       placeholder: (context, url) => Container(
                         color: colorScheme.secondary,
@@ -76,13 +74,14 @@ class PopularProductsWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: AppSize.s140,
+                          width: AppSize.s130,
                           child: Text(
                             product.name ?? "",
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
+                        StarRatingWidget(rating: product.averageRating ?? 0),
                         Row(
                           children: [
                             Column(
@@ -122,19 +121,11 @@ class PopularProductsWidget extends StatelessWidget {
                 ],
               ),
               Positioned(
-                  top: 0,
+                  bottom: 0,
                   right: 2,
-                  child: StarRatingWidget(rating: product.averageRating ?? 0)),
-              Positioned(
-                bottom: 0,
-                right: 2,
-                child: IconButton(
-                    splashColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onPressed: () {},
-                    icon: const Icon(Iconsax.heart)),
-              )
+                  child: FavoriteButton(
+                    product: product,
+                  ))
             ],
           ),
         ),

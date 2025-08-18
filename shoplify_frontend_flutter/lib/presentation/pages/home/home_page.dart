@@ -52,15 +52,18 @@ class _HomePageState extends State<HomePage> {
           context.read<ProductCategoryBloc>().add(GetProductCategoryEvent());
           context.read<NewProductBloc>().add(GetNewProductsEvent());
           context.read<PopularProductBloc>().add(GetPopularProductsEvent());
-          context.read<AllProductsBloc>().add(ResetAllProductListEvent());
-          context.read<AllProductsBloc>().add(
+
+          allProductsBloc.add(ResetAllProductListEvent());
+
+          allProductsBloc.add(
               GetAllProductsEvent(params: ProductQueryParamsModel(page: 1)));
         },
         child: NotificationListener<ScrollNotification>(
           onNotification: (ScrollNotification scrollInfo) {
             if (scrollInfo.metrics.pixels >=
-                scrollInfo.metrics.maxScrollExtent - 60) {
+                scrollInfo.metrics.maxScrollExtent - 50) {
               // Load more items when the user reaches the end of the list
+
               allProductsBloc.add(GetAllProductsEvent(
                   params: ProductQueryParamsModel(
                       page: allProductsBloc.state.page)));
@@ -131,8 +134,7 @@ class _HomePageState extends State<HomePage> {
                       sliverSpace(h: AppSize.s10),
                       // new products
                       const SliverToBoxAdapter(
-                        child:
-                            SizedBox(height: 280, child: NewProductsListView()),
+                        child: NewProductsListView(),
                       ),
                       sliverSpace(h: AppSize.s20),
                       SliverPadding(
@@ -157,9 +159,7 @@ class _HomePageState extends State<HomePage> {
                       sliverSpace(h: AppSize.s10),
                       // popular products
                       const SliverToBoxAdapter(
-                        child: SizedBox(
-                            height: AppSize.s100,
-                            child: PopularProductsListView()),
+                        child: PopularProductsListView(),
                       ),
                       sliverSpace(h: AppSize.s20),
                       SliverPadding(
@@ -170,26 +170,13 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              AppStrings.discoverProducts,
+                              AppStrings.ourCatalog,
                               overflow: TextOverflow.ellipsis,
                               style: getSemiBoldStyle(
                                 context,
                                 font: FontConstants.ojuju,
                                 fontSize: AppSize.s24,
                               ),
-                            ),
-                            Column(
-                              children: [
-                                Text(
-                                  AppStrings.viewAll,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: getLightStyle(
-                                    context,
-                                    font: FontConstants.poppins,
-                                    fontSize: AppSize.s14,
-                                  ),
-                                ),
-                              ],
                             ),
                           ],
                         )),

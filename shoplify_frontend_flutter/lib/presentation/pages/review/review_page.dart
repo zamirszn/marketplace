@@ -6,6 +6,7 @@ import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/data/models/review_model.dart';
+import 'package:shoplify/presentation/pages/home/product_details/bloc/product_details_bloc.dart';
 import 'package:shoplify/presentation/pages/review/bloc/review_bloc.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
@@ -21,8 +22,9 @@ import 'package:shoplify/presentation/widgets/star_rating/star_rating_widget.dar
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ReviewPage extends StatefulWidget {
-  const ReviewPage({super.key, required this.product});
-  final Product product;
+  const ReviewPage({
+    super.key,
+  });
 
   @override
   State<ReviewPage> createState() => _ReviewPageState();
@@ -33,15 +35,32 @@ class _ReviewPageState extends State<ReviewPage> {
 
   @override
   void initState() {
+    getProductReview();
     _scrollController.addListener(_onScroll);
     super.initState();
   }
 
+  void getProductReview() {
+    final ReviewBloc reviewBloc = context.read<ReviewBloc>();
+    final ProductDetailsBloc productBloc = context.read<ProductDetailsBloc>();
+    if (productBloc.state.selectedProduct?.id != null) {
+      reviewBloc.add(RefreshProductReviewEvent(
+        params: ReviewParamModel(
+            productId: productBloc.state.selectedProduct!.id!, page: 1),
+      ));
+    }
+  }
+
   void _onScroll() {
-    if (_isBottom) {
-      context.read<ReviewBloc>().add(GetProductReviewEvent(
-            params: ReviewParamModel(productId: widget.product.id!),
-          ));
+    final ProductDetailsBloc productBloc = context.read<ProductDetailsBloc>();
+
+    if (productBloc.state.selectedProduct?.id != null) {
+      if (_isBottom) {
+        context.read<ReviewBloc>().add(GetProductReviewEvent(
+              params: ReviewParamModel(
+                  productId: productBloc.state.selectedProduct!.id!),
+            ));
+      }
     }
   }
 
@@ -60,6 +79,12 @@ class _ReviewPageState extends State<ReviewPage> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final ProductDetailsBloc productDetailsBloc =
+        context.read<ProductDetailsBloc>();
+    final String? productId = productDetailsBloc.state.selectedProduct?.id;
+    final Product? product = productDetailsBloc.state.selectedProduct;
+
     final List<String> sortOptions = [
       'Newest',
       'Oldest',
@@ -72,27 +97,32 @@ class _ReviewPageState extends State<ReviewPage> {
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.transparent,
-          leading: Padding(
-            padding: const EdgeInsets.all(AppPadding.p10),
-            child: GoBackButton(
-              backgroundColor: ColorManager.lightGrey,
-            ),
-          ),
+          centerTitle: true,
           title: Text(
             AppStrings.reviews,
-            style: getRegularStyle(context,
-                font: FontConstants.ojuju, fontSize: FontSize.s20),
+            overflow: TextOverflow.ellipsis,
+            style: getSemiBoldStyle(
+              context,
+              font: FontConstants.ojuju,
+              fontSize: AppSize.s24,
+            ),
+          ),
+          forceMaterialTransparency: true,
+          leading: const Padding(
+            padding: EdgeInsets.all(AppPadding.p10),
+            child: GoBackButton(),
           ),
         ),
         body: RefreshWidget(
           onRefresh: () async {
-            context.read<ReviewBloc>().add(RefreshProductReviewEvent(
-                  params:
-                      ReviewParamModel(productId: widget.product.id!, page: 1),
-                ));
+            if (productId != null) {
+              context.read<ReviewBloc>().add(RefreshProductReviewEvent(
+                    params: ReviewParamModel(productId: productId, page: 1),
+                  ));
+            }
           },
           child: CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             controller: _scrollController,
             slivers: [
               sliverSpace(h: AppSize.s10),
@@ -104,112 +134,127 @@ class _ReviewPageState extends State<ReviewPage> {
                   child: ClipRRect(
                       borderRadius: BorderRadius.circular(AppSize.s20),
                       child: ColoredBox(
-                          color: ColorManager.lightGrey,
+                          color: colorScheme.onSecondary,
                           child: BlocBuilder<ReviewBloc, ReviewState>(
                             builder: (context, state) {
                               switch (state.status) {
                                 case ReviewStatus.success:
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: AppPadding.p10,
-                                        horizontal: AppPadding.p10),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                  return BlocBuilder<ProductDetailsBloc,
+                                      ProductDetailsState>(
+                                    builder: (context, state) {
+                                      return Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: AppPadding.p10,
+                                            horizontal: AppPadding.p10),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  top: AppPadding.p5,
-                                                  left: AppPadding.p5),
-                                              child: Align(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  AppStrings.reviews,
-                                                  style: getMediumStyle(context,
-                                                      fontSize: FontSize.s14),
-                                                ),
-                                              ),
-                                            ),
-                                            Row(
+                                            Column(
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
+                                                  CrossAxisAlignment.start,
                                               children: [
-                                                Text(
-                                                  widget.product.averageRating
-                                                          ?.toString() ??
-                                                      "0",
-                                                  style: getRegularStyle(
-                                                      context,
-                                                      fontSize: FontSize.s30,
-                                                      font:
-                                                          FontConstants.ojuju),
-                                                ),
                                                 Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          bottom: 4),
-                                                  child: Text(
-                                                    "/5",
-                                                    style: getRegularStyle(
-                                                        context,
-                                                        fontSize: FontSize.s16,
-                                                        font: FontConstants
-                                                            .ojuju),
+                                                          top: AppPadding.p5,
+                                                          left: AppPadding.p5),
+                                                  child: Align(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    child: Text(
+                                                      AppStrings.reviews,
+                                                      style: getMediumStyle(
+                                                          context,
+                                                          fontSize:
+                                                              FontSize.s14),
+                                                    ),
                                                   ),
                                                 ),
+                                                Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.end,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      state.selectedProduct
+                                                              ?.averageRating
+                                                              ?.toString() ??
+                                                          "0",
+                                                      style: getRegularStyle(
+                                                          context,
+                                                          fontSize:
+                                                              FontSize.s30,
+                                                          font: FontConstants
+                                                              .ojuju),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              bottom: 4),
+                                                      child: Text(
+                                                        "/5",
+                                                        style: getRegularStyle(
+                                                            context,
+                                                            fontSize:
+                                                                FontSize.s16,
+                                                            font: FontConstants
+                                                                .ojuju),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                space(h: AppSize.s4),
+                                                Text(
+                                                  "${AppStrings.basedOn} ${state.selectedProduct?.reviewsLength} ${AppStrings.reviews}",
+                                                  style: getLightStyle(context,
+                                                      fontSize: FontSize.s12,
+                                                      font: FontConstants
+                                                          .poppins),
+                                                ),
+                                                space(h: AppSize.s12),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: AppPadding.p10),
+                                                  child: Transform.scale(
+                                                    scale: 1.4,
+                                                    child: StarRatingWidget(
+                                                      rating: state
+                                                              .selectedProduct
+                                                              ?.averageRating ??
+                                                          0,
+                                                    ),
+                                                  ),
+                                                ),
+                                                space(h: AppSize.s10),
                                               ],
                                             ),
-                                            space(h: AppSize.s4),
-                                            Text(
-                                              "${AppStrings.basedOn} ${widget.product.reviewsLength} ${AppStrings.reviews}",
-                                              style: getLightStyle(context,
-                                                  fontSize: FontSize.s12,
-                                                  font: FontConstants.poppins),
-                                            ),
-                                            space(h: AppSize.s12),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: AppPadding.p10),
-                                              child: Transform.scale(
-                                                scale: 1.4,
-                                                child: StarRatingWidget(
-                                                  rating: widget.product
-                                                          .averageRating ??
-                                                      0,
+                                            const Column(
+                                              children: [
+                                                // ratingbar
+                                                RatingBar(
+                                                  ratingText: 5,
                                                 ),
-                                              ),
-                                            ),
-                                            space(h: AppSize.s10),
+                                                RatingBar(
+                                                  ratingText: 4,
+                                                ),
+                                                RatingBar(
+                                                  ratingText: 3,
+                                                ),
+                                                RatingBar(
+                                                  ratingText: 2,
+                                                ),
+                                                RatingBar(
+                                                  ratingText: 1,
+                                                ),
+                                              ],
+                                            )
                                           ],
                                         ),
-                                        const Column(
-                                          children: [
-                                            // ratingbar
-                                            RatingBar(
-                                              ratingText: 5,
-                                            ),
-                                            RatingBar(
-                                              ratingText: 4,
-                                            ),
-                                            RatingBar(
-                                              ratingText: 3,
-                                            ),
-                                            RatingBar(
-                                              ratingText: 2,
-                                            ),
-                                            RatingBar(
-                                              ratingText: 1,
-                                            ),
-                                          ],
-                                        )
-                                      ],
-                                    ),
+                                      );
+                                    },
                                   );
 
                                 default:
@@ -237,8 +282,10 @@ class _ReviewPageState extends State<ReviewPage> {
                                 // splashColor: Colors.transparent,
                                 // hoverColor: Colors.transparent,
                                 onTap: () {
-                                  goPush(context, Routes.addReviewPage,
-                                      extra: widget.product);
+                                  goPush(
+                                    context,
+                                    Routes.addReviewPage,
+                                  );
                                 },
                                 child: const AddReviewWidget()),
                           );
@@ -276,18 +323,20 @@ class _ReviewPageState extends State<ReviewPage> {
                                   borderRadius:
                                       BorderRadius.circular(AppSize.s10),
                                   onTap: () {
-                                    showBottomSheet(
-                                        context: context,
-                                        // isDismissible: true,
-                                        showDragHandle: true,
-                                        enableDrag: true,
+                                    if (product != null) {
+                                      showBottomSheet(
+                                          context: context,
+                                          // isDismissible: true,
+                                          showDragHandle: true,
+                                          enableDrag: true,
 
-                                        // isScrollControlled: true,
+                                          // isScrollControlled: true,
 
-                                        builder: (context) =>
-                                            ReviewSortBottomSheet(
-                                                sortOptions: sortOptions,
-                                                product: widget.product));
+                                          builder: (context) =>
+                                              ReviewSortBottomSheet(
+                                                  sortOptions: sortOptions,
+                                                  product: product));
+                                    }
                                   },
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
@@ -331,41 +380,31 @@ class _ReviewPageState extends State<ReviewPage> {
                   padding: const EdgeInsets.symmetric(vertical: AppPadding.p10),
                   sliver: SliverToBoxAdapter(
                     child: Container(
-                      width: deviceWidth(context),
                       margin:
                           const EdgeInsets.symmetric(horizontal: AppMargin.m12),
-                      decoration: BoxDecoration(
-                        color: ColorManager.lightGrey,
-                        borderRadius: BorderRadius.circular(AppSize.s20),
-                      ),
                       child: BlocBuilder<ReviewBloc, ReviewState>(
                         builder: (context, state) {
                           switch (state.status) {
                             case ReviewStatus.initial:
-                              return ListView.builder(
-                                shrinkWrap: true,
-                                physics: const BouncingScrollPhysics(),
-                                padding: const EdgeInsets.all(0),
-                                scrollDirection: Axis.vertical,
-                                itemCount: 4,
-                                itemBuilder: (context, index) {
-                                  return const ReviewWidgetSkeleton();
-                                },
-                              );
+                              return const Center(child: LoadingWidget());
 
                             case ReviewStatus.failure:
-                              return ErrorMessageWidget(
-                                message: state.errorMessage,
-                                retry: () {
-                                  context
-                                      .read<ReviewBloc>()
-                                      .add(RefreshProductReviewEvent(
-                                        params: ReviewParamModel(
-                                          productId: widget.product.id!,
-                                          page: 1,
-                                        ),
-                                      ));
-                                },
+                              return Center(
+                                child: ErrorMessageWidget(
+                                  message: state.errorMessage,
+                                  retry: () {
+                                    if (productId != null) {
+                                      context
+                                          .read<ReviewBloc>()
+                                          .add(RefreshProductReviewEvent(
+                                            params: ReviewParamModel(
+                                              productId: productId,
+                                              page: 1,
+                                            ),
+                                          ));
+                                    }
+                                  },
+                                ),
                               );
 
                             case ReviewStatus.success:
@@ -403,97 +442,108 @@ class _ReviewPageState extends State<ReviewPage> {
                                   } else {
                                     Review productReview = state.reviews[index];
 
-                                    return Column(
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              flex: 2,
-                                              child: Padding(
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: colorScheme.onSecondary,
+                                        borderRadius:
+                                            BorderRadius.circular(AppSize.s20),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                flex: 2,
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: AppPadding.p16,
+                                                          top: AppPadding.p18,
+                                                          bottom:
+                                                              AppPadding.p10),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        productReview.owner
+                                                                ?.fullName ??
+                                                            "",
+                                                        style: getMediumStyle(
+                                                            context,
+                                                            fontSize:
+                                                                FontSize.s14),
+                                                      ),
+                                                      Text(
+                                                        productReview.review ??
+                                                            "",
+                                                        style: getRegularStyle(
+                                                          context,
+                                                        ),
+                                                      ),
+                                                      space(h: AppSize.s8),
+                                                      Text(
+                                                        "Posted ${formatDateDDMMMYYY(
+                                                          productReview
+                                                                  .dateCreated ??
+                                                              DateTime.now(),
+                                                        )}",
+                                                        style: getLightStyle(
+                                                            context,
+                                                            fontSize:
+                                                                FontSize.s10),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              Padding(
                                                 padding: const EdgeInsets.only(
-                                                    left: AppPadding.p16,
-                                                    top: AppPadding.p18,
-                                                    bottom: AppPadding.p10),
+                                                  right: AppPadding.p10,
+                                                ),
                                                 child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
                                                   crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                      CrossAxisAlignment.center,
                                                   children: [
                                                     Text(
-                                                      productReview.owner
-                                                              ?.fullName ??
-                                                          "",
-                                                      style: getMediumStyle(
-                                                          context,
-                                                          fontSize:
-                                                              FontSize.s14),
-                                                    ),
-                                                    Text(
-                                                      productReview.review ??
-                                                          "",
+                                                      productReview.rating
+                                                              ?.toString() ??
+                                                          "0",
                                                       style: getRegularStyle(
-                                                        context,
-                                                      ),
-                                                    ),
-                                                    space(h: AppSize.s8),
-                                                    Text(
-                                                      "Posted ${formatDateDDMMMYYY(
-                                                        productReview
-                                                                .dateCreated ??
-                                                            DateTime.now(),
-                                                      )}",
-                                                      style: getLightStyle(
                                                           context,
                                                           fontSize:
-                                                              FontSize.s10),
+                                                              FontSize.s20,
+                                                          font: FontConstants
+                                                              .ojuju),
+                                                    ),
+                                                    space(h: AppSize.s10),
+                                                    StarRatingWidget(
+                                                      rating: productReview
+                                                              .rating ??
+                                                          0,
                                                     ),
                                                   ],
                                                 ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding: const EdgeInsets.only(
-                                                right: AppPadding.p10,
+                                            ],
+                                          ),
+                                          if (index + 1 != state.reviews.length)
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: AppPadding.p20),
+                                              child: Divider(
+                                                thickness: AppSize.s1,
                                               ),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    productReview.rating
-                                                            ?.toString() ??
-                                                        "0",
-                                                    style: getRegularStyle(
-                                                        context,
-                                                        fontSize: FontSize.s20,
-                                                        font: FontConstants
-                                                            .ojuju),
-                                                  ),
-                                                  space(h: AppSize.s10),
-                                                  StarRatingWidget(
-                                                    rating:
-                                                        productReview.rating ??
-                                                            0,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        if (index + 1 != state.reviews.length)
-                                          Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: AppPadding.p20),
-                                            child: Divider(
-                                              thickness: AppSize.s1,
-                                            ),
-                                          )
-                                        else
-                                          space(h: AppSize.s10)
-                                      ],
+                                            )
+                                          else
+                                            space(h: AppSize.s10)
+                                        ],
+                                      ),
                                     );
                                   }
                                 },
@@ -533,9 +583,8 @@ class ReviewSortBottomSheet extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  GoBackButton(
-                    padding: const EdgeInsets.all(AppPadding.p8),
-                    backgroundColor: ColorManager.grey,
+                  const GoBackButton(
+                    padding: EdgeInsets.all(AppPadding.p8),
                   ),
                   Center(
                     child: Text('Sort',
@@ -610,10 +659,8 @@ class RatingBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final reviewBloc = context.read<ReviewBloc>();
+    final colorScheme = Theme.of(context).colorScheme;
 
-    final percentage =
-        calculateRatingPercentage(reviewBloc.state.reviews, ratingText);
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
@@ -631,19 +678,26 @@ class RatingBar extends StatelessWidget {
             // bottom
             Container(
               decoration: BoxDecoration(
-                color: ColorManager.grey,
+                color: colorScheme.primary.withAlpha(100),
                 borderRadius: BorderRadius.circular(AppSize.s10),
               ),
               height: AppSize.s8,
               width: deviceWidth(context) * .2,
             ),
             // top
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(AppSize.s10),
-              ),
-              height: AppSize.s8,
-              width: deviceWidth(context) * .2 * percentage / 100,
+            BlocBuilder<ReviewBloc, ReviewState>(
+              builder: (context, state) {
+                final percentage =
+                    calculateRatingPercentage(state.reviews, ratingText);
+                return Container(
+                  decoration: BoxDecoration(
+                    color: colorScheme.tertiary,
+                    borderRadius: BorderRadius.circular(AppSize.s10),
+                  ),
+                  height: AppSize.s8,
+                  width: deviceWidth(context) * .2 * percentage / 100,
+                );
+              },
             ),
           ],
         )
@@ -657,10 +711,12 @@ class AddReviewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(AppSize.s10),
       child: ColoredBox(
-        color: ColorManager.lightGrey,
+        color: colorScheme.onSecondary,
         child: const Column(
           children: [
             ListTile(

@@ -29,7 +29,6 @@ class _AllProductGridViewState extends State<AllProductGridView> {
 
   void getAllProducts() {
     final allProductsBloc = context.read<AllProductsBloc>();
-    allProductsBloc.add(ResetAllProductListEvent());
     allProductsBloc
         .add(GetAllProductsEvent(params: ProductQueryParamsModel(page: 1)));
   }
@@ -71,14 +70,18 @@ class _AllProductGridViewState extends State<AllProductGridView> {
           case AllProductsListStatus.success:
             if (state.productsList.isEmpty) {
               return const SliverToBoxAdapter(
-                child: Center(
-                    child: EmptyWidget(
-                  message: AppStrings.noProducts,
-                  icon: Icon(
-                    Iconsax.search_normal_1,
-                    size: AppSize.s40,
-                  ),
-                )),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      top: AppPadding.p40, bottom: AppPadding.p60),
+                  child: Center(
+                      child: EmptyWidget(
+                    message: AppStrings.noProducts,
+                    icon: Icon(
+                      Iconsax.search_normal_1,
+                      size: AppSize.s40,
+                    ),
+                  )),
+                ),
               );
             }
 
@@ -89,9 +92,7 @@ class _AllProductGridViewState extends State<AllProductGridView> {
                     padding: const EdgeInsets.only(),
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: state.hasReachedMax
-                        ? state.productsList.length
-                        : state.productsList.length,
+                    itemCount: state.productsList.length,
                     gridDelegate:
                         const SliverGridDelegateWithMaxCrossAxisExtent(
                             maxCrossAxisExtent: 200,

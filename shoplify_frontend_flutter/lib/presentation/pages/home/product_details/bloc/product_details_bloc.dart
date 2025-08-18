@@ -33,7 +33,6 @@ class ProductDetailsBloc
         final Product product = Product.fromMap(data);
         emit(state.copyWith(
             selectedProduct: product, status: ProductDetailsStatus.success));
-        print("refreshing");
       },
     );
   }

@@ -9,4 +9,10 @@ class GetAllProductsEvent extends AllProductsEvent {
   GetAllProductsEvent({required this.params});
 }
 
-class ResetAllProductListEvent extends AllProductsEvent{}
+class ResetAllProductListEvent extends AllProductsEvent {}
+
+class SetViewProductImageUrl extends AllProductsEvent {
+  final String imageUrl;
+
+  SetViewProductImageUrl({required this.imageUrl});
+}

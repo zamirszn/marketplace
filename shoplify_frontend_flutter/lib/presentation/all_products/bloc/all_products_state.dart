@@ -11,15 +11,18 @@ class AllProductsState extends Equatable {
   final int page;
   final AllProductsListStatus allProductsListStatus;
   final List<Product> productsList;
+  final String? viewProductImageUrl;
 
-  const AllProductsState(
-      {this.hasReachedMax = false,
-      this.errorMessage,
-      this.successMessage,
-      this.isFetching = false,
-      this.page = 1,
-      this.allProductsListStatus = AllProductsListStatus.initial,
-      this.productsList = const []});
+  const AllProductsState({
+    this.hasReachedMax = false,
+    this.viewProductImageUrl,
+    this.errorMessage,
+    this.successMessage,
+    this.isFetching = false,
+    this.page = 1,
+    this.allProductsListStatus = AllProductsListStatus.initial,
+    this.productsList = const [],
+  });
 
   @override
   List<Object?> get props => [
@@ -29,10 +32,12 @@ class AllProductsState extends Equatable {
         page,
         successMessage,
         productsList,
-        allProductsListStatus
+        allProductsListStatus,
+        viewProductImageUrl
       ];
 
   AllProductsState copyWith({
+    String? viewProductImageUrl,
     bool? hasReachedMax,
     String? errorMessage,
     String? successMessage,
@@ -43,12 +48,14 @@ class AllProductsState extends Equatable {
   }) {
     return AllProductsState(
       hasReachedMax: hasReachedMax ?? this.hasReachedMax,
+      viewProductImageUrl: viewProductImageUrl ?? this.viewProductImageUrl,
       errorMessage: errorMessage ?? this.errorMessage,
-      successMessage:successMessage ?? this.successMessage,
-      isFetching:isFetching ?? this.isFetching,
-      page:page ?? this.page,
-      allProductsListStatus:allProductsListStatus ?? this.allProductsListStatus,
-      productsList:productsList ?? this.productsList,
+      successMessage: successMessage ?? this.successMessage,
+      isFetching: isFetching ?? this.isFetching,
+      page: page ?? this.page,
+      allProductsListStatus:
+          allProductsListStatus ?? this.allProductsListStatus,
+      productsList: productsList ?? this.productsList,
     );
   }
 }

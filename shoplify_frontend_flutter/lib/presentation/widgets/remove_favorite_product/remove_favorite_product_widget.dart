@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
-import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/pages/favorite/bloc/favorite_bloc.dart';
 import 'package:shoplify/presentation/widgets/loading/loading_widget.dart';
 import 'package:shoplify/presentation/widgets/remove_favorite_product/bloc/remove_favorite_bloc.dart';
@@ -34,7 +33,8 @@ class RemoveFavoriteProductWidget extends StatelessWidget {
           builder: (context, state) {
             if (state is RemoveFromFavoriteLoading) {
               return SizedBox(
-                  height: AppSize.s40,
+                  height: 48,
+                  width: 48,
                   child:
                       Transform.scale(scale: .7, child: const LoadingWidget()));
             }

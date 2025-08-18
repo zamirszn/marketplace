@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/presentation/pages/home/product_details/bloc/product_details_bloc.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
@@ -23,7 +22,7 @@ class ProductWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return GestureDetector(
       onTap: () {
@@ -40,7 +39,7 @@ class ProductWidget extends StatelessWidget {
         tag: '${product.id}_all',
         child: Container(
           decoration: BoxDecoration(
-              color: Colors.grey.shade300,
+              color: colorScheme.primary.withAlpha(10),
               borderRadius: BorderRadius.circular(AppSize.s20)),
           padding: const EdgeInsets.symmetric(
               vertical: AppPadding.p12, horizontal: AppPadding.p12),
@@ -63,14 +62,12 @@ class ProductWidget extends StatelessWidget {
                             fit: BoxFit.cover,
                             placeholder: (context, url) => Skeletonizer(
                                 child: Container(
-                        color: colorScheme.secondary,
-
+                              color: colorScheme.secondary,
                               height: AppSize.s100,
                               width: AppSize.s100,
                             )),
                             errorWidget: (context, url, error) => Container(
-                        color: colorScheme.error,
-
+                              color: colorScheme.error,
                               height: AppSize.s100,
                               width: AppSize.s100,
                             ),

@@ -112,6 +112,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                               space(h: AppSize.s10),
                               TextFormField(
+                                keyboardType:
+                                 TextInputType.name,
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 
@@ -145,6 +147,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                               space(h: AppSize.s10),
                               TextFormField(
+                                keyboardType:
+                                 TextInputType.emailAddress,
                                   autovalidateMode:
                                       AutovalidateMode.onUserInteraction,
                                   
@@ -177,6 +181,8 @@ class _SignUpPageState extends State<SignUpPage> {
                               ),
                               space(h: AppSize.s10),
                               TextFormField(
+                                keyboardType:
+                                 TextInputType.visiblePassword,
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 

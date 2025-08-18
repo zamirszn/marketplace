@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:material_shapes/material_shapes.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
@@ -22,6 +23,8 @@ class EditProfilePage extends StatefulWidget {
 
 class _EditProfilePageState extends State<EditProfilePage> {
   final emailController = TextEditingController();
+  final shippingAddressController = TextEditingController();
+  final phoneNumberController = TextEditingController();
   final fullNameController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
@@ -29,6 +32,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   void dispose() {
     fullNameController.dispose();
     emailController.dispose();
+    phoneNumberController.dispose();
+    shippingAddressController.dispose();
     super.dispose();
   }
 
@@ -59,126 +64,270 @@ class _EditProfilePageState extends State<EditProfilePage> {
             child: GoBackButton(),
           ),
         ),
-        body: Form(
-          key: formKey,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                space(h: AppSize.s40),
-                Center(
-                  child: RotatingMaterialShape(
-                    shape: MaterialShapes.cookie9Sided,
-                    child: const UserProfilePicture(),
-                  ),
-                ),
-                space(h: AppSize.s40),
-                Container(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(AppSize.s24)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: AppPadding.p2),
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: AppPadding.p20),
-                  child: AutofillGroup(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        space(h: AppSize.s20),
-                        Text(
-                          AppStrings.fullName,
-                          style: getSemiBoldStyle(context,
-                              font: FontConstants.poppins,
-                              fontSize: FontSize.s16),
-                        ),
-                        space(h: AppSize.s10),
-                        TextFormField(
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-
-                          style:
-                              getRegularStyle(context, fontSize: FontSize.s20),
-                          validator: nameValidator,
-                          // onChanged: (value) => context
-                          //     .read<SignUpBloc>()
-                          //     .add(SignUpFullNameChangedEvent(value)),
-                          controller: fullNameController,
-                          autofillHints: const [AutofillHints.name],
-                          inputFormatters: [
-                            LengthLimitingTextInputFormatter(
-                                Constant.nameLength),
-                          ],
-                          decoration: const InputDecoration(
-                            hintText: AppStrings.fullName,
-                            prefixIcon: Icon(
-                              Iconsax.user,
+        body: SingleChildScrollView(
+          child: Form(
+            key: formKey,
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Stack(
+                    children: [
+                      Column(
+                        children: [
+                          space(h: AppSize.s40),
+                          Center(
+                            child: RotatingMaterialShape(
+                              shape: MaterialShapes.cookie9Sided,
+                              child: const UserProfilePicture(),
                             ),
                           ),
-                        ),
-                        space(h: AppSize.s20),
-                        Text(
-                          AppStrings.emailAddress,
-                          style: getSemiBoldStyle(context,
-                              font: FontConstants.poppins,
-                              fontSize: FontSize.s16),
-                        ),
-                        space(h: AppSize.s10),
-                        TextFormField(
+                        ],
+                      ),
+                      Positioned(
+                        top: AppSize.s20,
+                        right: AppSize.s40,
+                        child: IconButton(
+                            style: IconButton.styleFrom(
+                              backgroundColor: colorScheme.onPrimary,
+                            ),
+                            onPressed: () {
+                              showModalBottomSheet(
+                                showDragHandle: true,
+                                context: context,
+                                builder: (context) =>
+                                    const EditProfilePictureBottomSheet(),
+                              );
+                            },
+                            icon: const Icon(Iconsax.gallery_edit)),
+                      )
+                    ],
+                  ),
+                  space(h: AppSize.s40),
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(AppSize.s24)),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: AppPadding.p2),
+                    margin:
+                        const EdgeInsets.symmetric(horizontal: AppPadding.p20),
+                    child: AutofillGroup(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          space(h: AppSize.s20),
+                          Text(
+                            AppStrings.fullName,
+                            style: getSemiBoldStyle(context,
+                                font: FontConstants.poppins,
+                                fontSize: FontSize.s16),
+                          ),
+                          space(h: AppSize.s10),
+                          TextFormField(
+                            keyboardType: TextInputType.name,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
+
                             style: getRegularStyle(context,
                                 fontSize: FontSize.s20),
-                            validator: emailValidator,
+                            validator: nameValidator,
                             // onChanged: (value) => context
                             //     .read<SignUpBloc>()
-                            //     .add(SignUpEmailChangedEvent(value)),
-                            controller: emailController,
-                            autofillHints: const [AutofillHints.email],
+                            //     .add(SignUpFullNameChangedEvent(value)),
+                            controller: fullNameController,
+                            autofillHints: const [AutofillHints.name],
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(
-                                  Constant.emailLength),
+                                  Constant.nameLength),
                             ],
                             decoration: const InputDecoration(
-                              hintText: AppStrings.emailAddress,
+                              hintText: AppStrings.fullName,
                               prefixIcon: Icon(
-                                Iconsax.sms,
-                              ),
-                            )),
-                        space(h: AppSize.s40),
-                        SizedBox(
-                          height: AppSize.s50,
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              TextInput.finishAutofillContext(shouldSave: true);
-
-                              if (formKey.currentState?.validate() ?? false) {
-                                // context
-                                //     .read<SignUpBloc>()
-                                //     .add(SignUpSubmittedEvent(
-                                //         params: SignupParamsModel(
-                                //       fullName:
-                                //           fullNameController.text,
-                                //       email: emailController.text,
-                                //       password:
-                                //           passwordController.text,
-                                //     )));
-                              }
-                            },
-                            child: Text(
-                              AppStrings.save,
-                              style: getSemiBoldStyle(
-                                context,
-                                font: FontConstants.ojuju,
-                                fontSize: FontSize.s20,
+                                Iconsax.user,
                               ),
                             ),
                           ),
-                        )
-                      ],
+                          space(h: AppSize.s20),
+                          Text(
+                            AppStrings.emailAddress,
+                            style: getSemiBoldStyle(context,
+                                font: FontConstants.poppins,
+                                fontSize: FontSize.s16),
+                          ),
+                          space(h: AppSize.s10),
+                          // email
+                          TextFormField(
+                              keyboardType: TextInputType.emailAddress,
+                              autovalidateMode:
+                                  AutovalidateMode.onUserInteraction,
+                              style: getRegularStyle(context,
+                                  fontSize: FontSize.s20),
+                              validator: emailValidator,
+                              // onChanged: (value) => context
+                              //     .read<SignUpBloc>()
+                              //     .add(SignUpEmailChangedEvent(value)),
+                              controller: emailController,
+                              autofillHints: const [AutofillHints.email],
+                              inputFormatters: [
+                                LengthLimitingTextInputFormatter(
+                                    Constant.emailLength),
+                              ],
+                              decoration: const InputDecoration(
+                                hintText: AppStrings.emailAddress,
+                                prefixIcon: Icon(
+                                  Iconsax.sms,
+                                ),
+                              )),
+                          // phone
+
+                          space(h: AppSize.s20),
+
+                          Text(
+                            AppStrings.phoneNumber,
+                            style: getSemiBoldStyle(context,
+                                font: FontConstants.poppins,
+                                fontSize: FontSize.s16),
+                          ),
+                          space(h: AppSize.s10),
+                          TextFormField(
+                            keyboardType: TextInputType.phone,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+
+                            style: getRegularStyle(context,
+                                fontSize: FontSize.s20),
+                            validator: phoneNumValidator,
+                            // onChanged: (value) => context
+                            //     .read<SignUpBloc>()
+                            //     .add(SignUpFullNameChangedEvent(value)),
+                            controller: phoneNumberController,
+                            autofillHints: const [
+                              AutofillHints.telephoneNumber
+                            ],
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(
+                                  Constant.phoneLength),
+                            ],
+                            decoration: const InputDecoration(
+                              hintText: AppStrings.phoneNumber,
+                              prefixIcon: Icon(
+                                Iconsax.call,
+                              ),
+                            ),
+                          ),
+                          // shipping addr
+
+                          space(h: AppSize.s20),
+
+                          Text(
+                            AppStrings.shippingAddress,
+                            style: getSemiBoldStyle(context,
+                                font: FontConstants.poppins,
+                                fontSize: FontSize.s16),
+                          ),
+                          space(h: AppSize.s10),
+                          TextFormField(
+                            keyboardType: TextInputType.streetAddress,
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+
+                            style: getRegularStyle(context,
+                                fontSize: FontSize.s20),
+                            validator: addressValidator,
+                            // onChanged: (value) => context
+                            //     .read<SignUpBloc>()
+                            //     .add(SignUpFullNameChangedEvent(value)),
+                            controller: shippingAddressController,
+                            autofillHints: const [
+                              AutofillHints.fullStreetAddress
+                            ],
+                            inputFormatters: [
+                              LengthLimitingTextInputFormatter(
+                                  Constant.addressLength),
+                            ],
+                            decoration: const InputDecoration(
+                              hintText: AppStrings.shippingAddress,
+                              prefixIcon: Icon(
+                                Iconsax.location,
+                              ),
+                            ),
+                          ),
+                          space(h: AppSize.s40),
+                          // save button
+                          SizedBox(
+                            height: AppSize.s50,
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                TextInput.finishAutofillContext(
+                                    shouldSave: true);
+
+                                if (formKey.currentState?.validate() ?? false) {
+                                  // context
+                                  //     .read<SignUpBloc>()
+                                  //     .add(SignUpSubmittedEvent(
+                                  //         params: SignupParamsModel(
+                                  //       fullName:
+                                  //           fullNameController.text,
+                                  //       email: emailController.text,
+                                  //       password:
+                                  //           passwordController.text,
+                                  //     )));
+                                }
+                              },
+                              child: Text(
+                                AppStrings.save,
+                                style: getSemiBoldStyle(
+                                  context,
+                                  font: FontConstants.ojuju,
+                                  fontSize: FontSize.s20,
+                                ),
+                              ),
+                            ),
+                          ),
+                          space(h: AppSize.s40),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              ]),
+                ]),
+          ),
         ));
+  }
+}
+
+class EditProfilePictureBottomSheet extends StatelessWidget {
+  const EditProfilePictureBottomSheet({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          "Upload photo",
+          style: getMediumStyle(context,
+              font: FontConstants.ojuju, fontSize: FontSize.s23),
+        ),
+        space(h: AppSize.s20),
+        ListTileWidget(
+          onTap: () {
+            pickImage(context, ImageSource.camera);
+          },
+          iconData: Iconsax.camera,
+          title: AppStrings.camera,
+        ),
+        ListTileWidget(
+          onTap: () {
+            pickImage(context, ImageSource.gallery);
+          },
+          iconData: Iconsax.gallery,
+          title: AppStrings.gallery,
+        ),
+        space(h: AppSize.s20)
+      ],
+    );
   }
 }

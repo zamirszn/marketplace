@@ -1,20 +1,16 @@
 import 'package:get_it/get_it.dart';
 import 'package:shoplify/core/network/dio_client.dart';
 import 'package:shoplify/data/repository/auth_repo_impl.dart';
-import 'package:shoplify/data/repository/favorite_repo_impl.dart';
 import 'package:shoplify/data/repository/product_repo_impl.dart';
 import 'package:shoplify/data/repository/review_repo_impl.dart';
-import 'package:shoplify/data/source/favorite_product_data_source.dart';
 import 'package:shoplify/data/source/review_service_data_source.dart';
 import 'package:shoplify/data/source/shared_pref_service_impl.dart';
 import 'package:shoplify/data/source/auth_service_data_source.dart';
 import 'package:shoplify/data/source/products_service_data_source.dart';
 import 'package:shoplify/domain/repository/auth_repo.dart';
-import 'package:shoplify/domain/repository/favorite_product_repo.dart';
 import 'package:shoplify/domain/repository/products_repo.dart';
 import 'package:shoplify/domain/repository/review_repo.dart';
 import 'package:shoplify/domain/usecases/auth_usecase.dart';
-import 'package:shoplify/domain/usecases/favorite_products_usecase.dart';
 import 'package:shoplify/domain/usecases/products_usecase.dart';
 import 'package:shoplify/data/source/secure_storage_data_source.dart';
 
@@ -29,14 +25,12 @@ void setupServiceLocator() async {
   sl.registerSingleton<SharedPrefDataSource>(SharePrefImpl());
   sl.registerSingleton<ProductsServiceDataSource>(ProductServiceImpl());
   sl.registerSingleton<ReviewServiceDataSource>(ReviewServiceDataSourceImpl());
-  sl.registerSingleton<FavoriteProductsDataSource>(
-      FavoriteProductsDataSourceImpl());
+  
 
   // repo
   sl.registerSingleton<AuthRepository>(AuthRepositoryImpl());
   sl.registerSingleton<ProductsRepository>(ProductRepositoryImpl());
   sl.registerSingleton<ReviewRepository>(ReviewRepositoryImpl());
-  sl.registerSingleton<FavoriteRepository>(FavoriteRepositoryImpl());
 
   // auth usecases
   sl.registerSingleton<SignupUseCase>(SignupUseCase());
@@ -76,4 +70,7 @@ void setupServiceLocator() async {
 
   // favorite
   sl.registerSingleton<GetFavoriteProductUseCase>(GetFavoriteProductUseCase());
+  
+  // order
+  sl.registerSingleton<GetMyOrderUseCase>(GetMyOrderUseCase());
 }

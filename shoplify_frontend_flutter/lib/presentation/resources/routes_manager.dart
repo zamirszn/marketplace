@@ -1,29 +1,27 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/presentation/pages/auth/account_blocked.dart';
 import 'package:shoplify/presentation/pages/auth/account_verification/account_verification_page.dart';
 import 'package:shoplify/presentation/pages/auth/forgot_password/forgot_password_page.dart';
 import 'package:shoplify/presentation/pages/auth/forgot_password/new_password_page.dart';
+import 'package:shoplify/presentation/pages/auth/login/login_page.dart';
+import 'package:shoplify/presentation/pages/auth/sign_up/sign_up_page.dart';
 import 'package:shoplify/presentation/pages/auth/splash_page.dart';
 import 'package:shoplify/presentation/pages/bottom_nav/bottom_nav.dart';
 import 'package:shoplify/presentation/pages/cart/cart_page.dart';
 import 'package:shoplify/presentation/pages/home/product_details/product_details_page.dart';
 import 'package:shoplify/presentation/pages/home/product_image_page.dart';
 import 'package:shoplify/presentation/pages/notification/notification_page.dart';
+import 'package:shoplify/presentation/pages/onboarding/onboarding_screen.dart';
+import 'package:shoplify/presentation/pages/order/my_orders_page.dart';
 import 'package:shoplify/presentation/pages/order/order_page.dart';
 import 'package:shoplify/presentation/pages/profile/edit_profile_page.dart';
 import 'package:shoplify/presentation/pages/review/add_review_page.dart';
-import 'package:shoplify/presentation/pages/review/bloc/review_bloc.dart';
 import 'package:shoplify/presentation/pages/review/review_page.dart';
 import 'package:shoplify/presentation/pages/search/search_page.dart';
 import 'package:shoplify/presentation/widgets/error_404_page.dart';
-import 'package:shoplify/presentation/pages/auth/login/login_page.dart';
-import 'package:shoplify/presentation/pages/auth/sign_up/sign_up_page.dart';
-import 'package:shoplify/presentation/pages/onboarding/onboarding_screen.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: Routes.splashPage,
@@ -99,12 +97,17 @@ final GoRouter appRouter = GoRouter(
       },
     ),
     GoRoute(
+      path: Routes.myOrderPage,
+      builder: (context, state) {
+        return const MyOrdersPage();
+      },
+    ),
+    GoRoute(
       path: Routes.addReviewPage,
       builder: (context, state) {
-        // TODO : select from bloc dont pass it here
-        final Product product = state.extra as Product;
+  
 
-        return AddReviewPage(product: product);
+        return AddReviewPage();
       },
     ),
     GoRoute(
@@ -121,29 +124,15 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       builder: (context, state) {
-        // TODO: use bloc
-        final String image = state.extra as String;
-
-        return ProductImagePage(
-          imagePath: image,
-        );
+        return const ProductImagePage();
       },
       path: Routes.productImagePage,
     ),
     GoRoute(
       builder: (context, state) {
-        final Product product = state.extra as Product;
-
-        return BlocProvider<ReviewBloc>(
-            create: (context) => ReviewBloc()
-              ..add(GetProductReviewEvent(
-                params: ReviewParamModel(productId: product.id!),
-              )),
-            child: ReviewPage(
-              product: product,
-            ));
+        return const ReviewPage();
       },
-      path: Routes.productReviewPage,
+      path: Routes.reviewPage,
     ),
   ],
   // TODO: work on this page too
@@ -161,10 +150,11 @@ class Routes {
   static const String loginPage = "/loginPage";
   static const String splashPage = "/splashPage";
   static const String orderPage = "/orderPage";
+  static const String myOrderPage = "/myOrderPage";
   static const String signUpPage = "/signUpPage";
   static const String bottomNav = "/bottomNav";
   static const String productDetailsPage = "/productDetailsPage";
-  static const String productReviewPage = "/productReviewPage";
+  static const String reviewPage = "/reviewPage";
   static const String productImagePage = "/productImagePage";
   static const String accountVerificationPage = "/accountVerificationPage";
   static const String accountBlocked = "/accountBlocked";

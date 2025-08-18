@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';

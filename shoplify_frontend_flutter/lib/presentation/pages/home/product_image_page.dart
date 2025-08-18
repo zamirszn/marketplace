@@ -1,18 +1,21 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
+import 'package:shoplify/presentation/all_products/bloc/all_products_bloc.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
-import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:shoplify/presentation/widgets/error_message_widget.dart';
+import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class ProductImagePage extends StatefulWidget {
-  const ProductImagePage({super.key, required this.imagePath});
-  final String imagePath;
+  const ProductImagePage({
+    super.key,
+  });
 
   @override
   State<ProductImagePage> createState() => _ProductImagePageState();
@@ -221,15 +224,20 @@ class _ProductImagePageState extends State<ProductImagePage>
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: ColorManager.white,
+        centerTitle: true,
+        title: Text(
+          AppStrings.image,
+          overflow: TextOverflow.ellipsis,
+          style: getSemiBoldStyle(
+            context,
+            font: FontConstants.ojuju,
+            fontSize: AppSize.s24,
+          ),
+        ),
+        forceMaterialTransparency: true,
         leading: const Padding(
           padding: EdgeInsets.all(AppPadding.p10),
           child: GoBackButton(),
-        ),
-        title: Text(
-          "Image",
-          style: getRegularStyle(context,
-              font: FontConstants.ojuju, fontSize: FontSize.s20),
         ),
       ),
       body: SizedBox(
@@ -277,29 +285,30 @@ class _ProductImagePageState extends State<ProductImagePage>
                     _doubleTapLocalPosition = details.localPosition;
                   },
                   onDoubleTap: _onDoubleTap,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(AppSize.s10),
-                    child: CachedNetworkImage(
-                        alignment: Alignment.center,
-                        imageUrl: widget.imagePath,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Skeletonizer(
-                                child: Container(
-                              color: ColorManager.white,
-                              height: AppSize.s100,
-                              width: AppSize.s100,
-                            )),
-                        errorWidget: (context, url, error) => Container(
-                              margin: const EdgeInsets.all(AppMargin.m20),
-                              color: ColorManager.white,
-                              height: AppSize.s400,
-                              width: AppSize.s100,
-                              child: ErrorMessageWidget(
-                                retry: () {},
-                                message: AppStrings.invalidImage,
-                              ),
-                            )),
+                  child: BlocBuilder<AllProductsBloc, AllProductsState>(
+                    builder: (context, state) {
+                      return CachedNetworkImage(
+                          alignment: Alignment.center,
+                          imageUrl: state.viewProductImageUrl!,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => Skeletonizer(
+                                  child: Container(
+                                color: ColorManager.white,
+                                height: AppSize.s100,
+                                width: AppSize.s100,
+                              )),
+                          errorWidget: (context, url, error) => Container(
+                                margin: const EdgeInsets.all(AppMargin.m20),
+                                color: ColorManager.white,
+                                height: AppSize.s400,
+                                width: AppSize.s100,
+                                child: ErrorMessageWidget(
+                                  retry: () {},
+                                  message: AppStrings.invalidImage,
+                                ),
+                              ));
+                    },
                   ),
                 ),
               ),

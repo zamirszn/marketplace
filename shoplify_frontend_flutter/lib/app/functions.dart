@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/core/constants/constant.dart';
@@ -9,7 +12,41 @@ import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/service_locator.dart';
+import 'package:shoplify/presentation/widgets/snackbar.dart';
 
+Future<XFile?> pickImage(
+  BuildContext context,
+  ImageSource imageSource,
+) async {
+  try {
+    // Pick image
+    final XFile? image =
+        await ImagePicker().pickImage(source: imageSource, imageQuality: 50);
+    if (image == null) return null;
+
+    // Validate file size (sync check)
+    final file = File(image.path);
+    final fileSizeInMB = file.lengthSync() / (1024 * 1024);
+
+    if (fileSizeInMB > Constant.maxImageSizeMB) {
+      if (context.mounted) {
+        showErrorMessage(
+          context,
+          "File size exceeds ${Constant.maxImageSizeMB.toStringAsFixed(0)}MB limit. "
+          "Please select a smaller file.",
+        );
+      }
+      return null;
+    }
+
+    return image;
+  } catch (e) {
+    if (context.mounted) {
+      showErrorMessage(context, AppStrings.somethingWentWrong);
+    }
+    return null;
+  }
+}
 
 num calculateProductRange(num range) {
   return (range * 1000).ceil();
@@ -130,11 +167,31 @@ String? emailValidator(
   return null;
 }
 
+String? phoneNumValidator(
+  String? value,
+) {
+  if (value!.isEmpty) {
+    return '${AppStrings.phoneNumber} is required';
+  } else if (value.length < 3) {
+    return 'Please enter a valid ${AppStrings.phoneNumber}';
+  }
+  return null;
+}
+
 String? nameValidator(
   String? value,
 ) {
   if (value!.isEmpty) {
     return '${AppStrings.fullName} is required';
+  }
+  return null;
+}
+
+String? addressValidator(
+  String? value,
+) {
+  if (value!.isEmpty) {
+    return '${AppStrings.address} is required';
   }
   return null;
 }

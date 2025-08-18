@@ -33,16 +33,6 @@ final class AllProductEmpty extends ProductState {}
 
 
 // add to cart
-final class AddToCartLoading extends ProductState {}
-
-final class AddToCartFailure extends ProductState {}
-
-final class AddToCartSuccess extends ProductState {
-  final CartItem? cartItemToAdd;
-
-  AddToCartSuccess({required this.cartItemToAdd});
-}
-// create cart
 
 final class CreateorGetCartFailure extends ProductState {
   final String errorMessage;
@@ -78,35 +68,3 @@ final class CartItemState extends ProductState {
 }
 
 // add to favorite
-
-class AddToFavoriteLoading extends ProductState {}
-
-class AddToFavoriteFailure extends ProductState {
-  final String message;
-
-  AddToFavoriteFailure({required this.message});
-
-  @override
-  List<Object?> get props => [message];
-}
-
-class ToggleFavoriteAddSuccess extends ProductState {
-  final Product? product;
-  final bool isFavorited;
-  final String? message;
-
-  ToggleFavoriteAddSuccess(
-      {this.product, required this.isFavorited, required this.message});
-
-  @override
-  List<Object?> get props => [product, isFavorited, message];
-}
-
-class ToggleFavoriteRemoveSuccess extends ProductState {
-  final String? message;
-
-  ToggleFavoriteRemoveSuccess({required this.message});
-
-  @override
-  List<Object?> get props => [message];
-}

@@ -11,6 +11,8 @@ class RefreshWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomMaterialIndicator(
+        triggerMode: IndicatorTriggerMode.onEdge,
+        trigger: IndicatorTrigger.leadingEdge,
         onRefresh: () async => onRefresh(),
         indicatorBuilder: (_, __) {
           return Transform.scale(scale: 1.1, child: const LoadingWidget());

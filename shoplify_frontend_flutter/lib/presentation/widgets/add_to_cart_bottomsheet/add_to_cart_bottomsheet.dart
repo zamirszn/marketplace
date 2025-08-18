@@ -4,11 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/presentation/pages/auth/sign_up/sign_up_page.dart';
 import 'package:shoplify/presentation/pages/cart/bloc/cart_bloc.dart';
-import 'package:shoplify/presentation/pages/favorite/bloc/favorite_bloc.dart';
 import 'package:shoplify/presentation/pages/home/bloc/product_bloc.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
@@ -16,7 +14,6 @@ import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/widgets/add_to_cart_bottomsheet/bloc/add_to_cart_bottomsheet_bloc.dart';
 import 'package:shoplify/presentation/widgets/go_back_button.dart';
-import 'package:shoplify/presentation/widgets/loading/loading_widget.dart';
 import 'package:shoplify/presentation/widgets/snackbar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -46,26 +43,26 @@ class AddtoCartBottomSheet extends StatelessWidget {
       },
       child: BlocListener<ProductBloc, ProductState>(
         listener: (ctx, productState) {
-          if (productState is AddToFavoriteFailure) {
-            showErrorMessage(context, productState.message);
-          } else if (productState is ToggleFavoriteAddSuccess) {
-            if (productState.message != null) {
-              showMessage(context, productState.message!);
-            }
-            // if the server returns a product object (product was favorited)
-            // add the object to favorite product page
-            // server returns null if the
+          // if (productState is AddToFavoriteFailure) {
+          //   showErrorMessage(context, productState.message);
+          // } else if (productState is ToggleFavoriteAddSuccess) {
+          //   if (productState.message != null) {
+          //     showMessage(context, productState.message!);
+          //   }
+          //   // if the server returns a product object (product was favorited)
+          //   // add the object to favorite product page
+          //   // server returns null if the
 
-            if (product != null) {
-              ctx
-                  .read<FavoriteBloc>()
-                  .add(AddToFavoritePageEvent(product: productState.product!));
-            }
-          } else if (productState is ToggleFavoriteRemoveSuccess) {
-            if (productState.message != null) {
-              showMessage(context, productState.message!);
-            }
-          }
+          //   if (product != null) {
+          //     ctx
+          //         .read<FavoriteBloc>()
+          //         .add(AddToFavoritePageEvent(product: productState.product!));
+          //   }
+          // } else if (productState is ToggleFavoriteRemoveSuccess) {
+          //   if (productState.message != null) {
+          //     showMessage(context, productState.message!);
+          //   }
+          // }
         },
         child:
             BlocListener<AddToCartBottomsheetBloc, AddToCartBottomsheetState>(
@@ -123,49 +120,51 @@ class AddtoCartBottomSheet extends StatelessWidget {
                             bool currentFavoritedState =
                                 product?.isFavorite ?? false;
 
-                            if (state is AddToFavoriteLoading) {
-                              return Transform.scale(
-                                  scale: .5, child: const LoadingWidget());
-                            }
+                            return const SizedBox();
 
-                            if (state is ToggleFavoriteAddSuccess &&
-                                state.isFavorited == true) {
-                              return IconButton(
-                                  onPressed: () {
-                                    if (product?.id != null) {
-                                      context.read<ProductBloc>().add(
-                                            ToggleFavoriteEvent(
-                                              productId: product!.id!,
-                                              isCurrentlyFavorited:
-                                                  currentFavoritedState,
-                                            ),
-                                          );
-                                    }
-                                  },
-                                  icon: Icon(
-                                    Iconsax.heart5,
-                                    color: colorScheme.secondary,
-                                    size: AppSize.s28,
-                                  ));
-                            } else {
-                              return IconButton(
-                                  onPressed: () {
-                                    if (product?.id != null) {
-                                      context.read<ProductBloc>().add(
-                                            ToggleFavoriteEvent(
-                                              productId: product!.id!,
-                                              isCurrentlyFavorited:
-                                                  currentFavoritedState,
-                                            ),
-                                          );
-                                    }
-                                  },
-                                  icon: Icon(
-                                    Iconsax.heart,
-                                    color: colorScheme.secondary,
-                                    size: AppSize.s28,
-                                  ));
-                            }
+                            // if (state is AddToFavoriteLoading) {
+                            //   return Transform.scale(
+                            //       scale: .5, child: const LoadingWidget());
+                            // }
+
+                            // if (state is ToggleFavoriteAddSuccess &&
+                            //     state.isFavorited == true) {
+                            //   return IconButton(
+                            //       onPressed: () {
+                            //         if (product?.id != null) {
+                            //           context.read<ProductBloc>().add(
+                            //                 ToggleFavoriteEvent(
+                            //                   productId: product!.id!,
+                            //                   isCurrentlyFavorited:
+                            //                       currentFavoritedState,
+                            //                 ),
+                            //               );
+                            //         }
+                            //       },
+                            //       icon: Icon(
+                            //         Iconsax.heart5,
+                            //         color: colorScheme.secondary,
+                            //         size: AppSize.s28,
+                            //       ));
+                            // } else {
+                            //   return IconButton(
+                            //       onPressed: () {
+                            //         if (product?.id != null) {
+                            //           context.read<ProductBloc>().add(
+                            //                 ToggleFavoriteEvent(
+                            //                   productId: product!.id!,
+                            //                   isCurrentlyFavorited:
+                            //                       currentFavoritedState,
+                            //                 ),
+                            //               );
+                            //         }
+                            //       },
+                            //       icon: Icon(
+                            //         Iconsax.heart,
+                            //         color: colorScheme.secondary,
+                            //         size: AppSize.s28,
+                            //       ));
+                            // }
                           },
                         ),
                       )
@@ -186,14 +185,14 @@ class AddtoCartBottomSheet extends StatelessWidget {
                             fit: BoxFit.cover,
                             placeholder: (context, url) => SizedBox(
                               child: Container(
-                                color: ColorManager.white,
+                                color: colorScheme.secondary,
                                 height: 310,
                                 width: 310,
                               ),
                             ),
                             errorWidget: (context, url, error) => Skeletonizer(
                                 child: Container(
-                              color: ColorManager.white,
+                              color: colorScheme.error,
                               height: 310,
                               width: 310,
                             )),
@@ -321,12 +320,10 @@ class AddtoCartBottomSheet extends StatelessWidget {
                         AddToCartBottomsheetState>(
                       builder: (context, state) {
                         if (state.status == AddToCartStatus.loading) {
-                          return SizedBox(
+                          return const SizedBox(
                               height: AppSize.s60,
                               width: double.infinity,
-                              child: ButtonLoadingWidget(
-                                backgroundColor: ColorManager.grey,
-                              ));
+                              child: ButtonLoadingWidget());
                         } else {
                           return SizedBox(
                             height: AppSize.s60,

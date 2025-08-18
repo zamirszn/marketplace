@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/presentation/pages/home/product_details/bloc/product_details_bloc.dart';
@@ -66,13 +67,17 @@ class SearchProductWidget extends StatelessWidget {
               bottom: AppPadding.p20,
               left: AppPadding.p10,
               child: BlurBackgroundWidget(
-                child: Text(
-                  "\$${product.price?.toString() ?? ""}",
-                  overflow: TextOverflow.ellipsis,
-                  style: getSemiBoldStyle(context,
-                      color: ColorManager.white,
-                      fontSize: FontSize.s23,
-                      font: FontConstants.ojuju),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: AppPadding.p5),
+                  child: Text(
+                    "\$${roundToTwoDecimalPlaces(product.price) ?? ""}",
+                    overflow: TextOverflow.ellipsis,
+                    style: getSemiBoldStyle(context,
+                        color: ColorManager.white,
+                        fontSize: FontSize.s23,
+                        font: FontConstants.ojuju),
+                  ),
                 ),
               )),
         if (product.name != null)

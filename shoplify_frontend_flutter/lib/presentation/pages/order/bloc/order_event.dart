@@ -9,14 +9,15 @@ final class PlaceOrder extends OrderEvent {
   PlaceOrder({required this.params});
 }
 
-// was working on add create order feature
+final class GetMyOrder extends OrderEvent {
+  final GetMyOrderParams params;
 
-final List<int> s = [1, 5,3,4,2,10,7,8,9];
+  GetMyOrder({required this.params});
 
+}
 
+final class SetMyOrderFilter extends OrderEvent {
+  final MyOrderFilter myOrderFilter;
 
-
-
-
-
-
+  SetMyOrderFilter({required this.myOrderFilter});
+}

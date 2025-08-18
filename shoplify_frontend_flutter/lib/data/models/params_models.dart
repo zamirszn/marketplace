@@ -382,3 +382,28 @@ class CartParamsModel {
         "cart_id": cartId,
       };
 }
+
+class GetMyOrderParams {
+  final int? page;
+  final String orderStatus;
+
+  GetMyOrderParams({required this.page, required this.orderStatus});
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'page': page,
+      'order_status': orderStatus,
+    };
+  }
+
+  factory GetMyOrderParams.fromMap(Map<String, dynamic> map) {
+    return GetMyOrderParams(
+      page: map['page'] != null ? map['page'] as int : null,
+      orderStatus: map['order_status'] as String,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory GetMyOrderParams.fromJson(String source) => GetMyOrderParams.fromMap(json.decode(source) as Map<String, dynamic>);
+}

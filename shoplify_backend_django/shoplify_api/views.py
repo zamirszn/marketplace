@@ -27,7 +27,6 @@ from django.contrib.humanize.templatetags.humanize import intcomma
 
 
 class ProductViewSet(ModelViewSet):
-
     def get_serializer_context(self):
         """Pass request context to the serializer to check favorites"""
         return {"request": self.request}
@@ -109,7 +108,6 @@ class FavoriteViewSet(ModelViewSet):
     serializer_class = FavoriteProductSerializer
     filter_backends = [DjangoFilterBackend, OrderingFilter]
 
-
     def get_queryset(self):
         """Return the favorite products of the authenticated user."""
         return FavoriteProducts.objects.filter(owner=self.request.user)
@@ -118,14 +116,20 @@ class FavoriteViewSet(ModelViewSet):
     def add(self, request, pk=None):
         """Add a product to favorites."""
         product = get_object_or_404(Product, id=pk)
-        _, created = FavoriteProducts.objects.get_or_create(owner=request.user, product=product)
+        favorite, created = FavoriteProducts.objects.get_or_create(owner=request.user, product=product)
 
-        product_data = ProductSerializer(product).data
+
+        favorite_data = FavoriteProductSerializer(favorite).data
 
         if created:
-            return Response({'message': 'Added to favorites', "product": product_data}, status=status.HTTP_201_CREATED)
-        return Response({'message': 'Already in favorites', "product": product_data}, status=status.HTTP_200_OK)
-
+            return Response(
+                {'message': 'Added to favorites', 'favorite': favorite_data},
+                status=status.HTTP_201_CREATED
+            )
+        return Response(
+            {'message': 'Already in favorites', 'favorite': favorite_data},
+            status=status.HTTP_200_OK
+        )
     @action(detail=True, methods=['delete'])
     def remove(self, request, pk=None):
         """Remove a product from favorites."""
@@ -296,6 +300,11 @@ def initialize_payment(amount, email, order_id, request):
 
 class OrderViewSet(ModelViewSet):
 
+    filterset_class = OrderFilter
+
+    filter_backends = [DjangoFilterBackend, OrderingFilter]
+
+
     @action(detail=True, methods=["POST"])
     def make_payment(self, request, pk=None):
         order = self.get_object()
@@ -355,7 +364,6 @@ class OrderViewSet(ModelViewSet):
         return Order.objects.filter(owner=user)
 
     
-
 
 
 def badge_callback(request):

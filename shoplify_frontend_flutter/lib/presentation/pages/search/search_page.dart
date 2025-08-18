@@ -14,7 +14,6 @@ import 'package:shoplify/presentation/widgets/error_message_widget.dart';
 import 'package:shoplify/presentation/widgets/filter_products_button.dart';
 import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:shoplify/presentation/widgets/loading/loading_widget.dart';
-import 'package:shoplify/presentation/widgets/product_carousel_skeleton_widget.dart';
 import 'package:shoplify/presentation/widgets/product_search_text_field.dart';
 import 'package:shoplify/presentation/widgets/product_widget_skeleton.dart';
 
@@ -95,21 +94,13 @@ class _SearchPageState extends State<SearchPage> {
                           switch (state.searchStatus) {
                             case SearchStatus.initial:
                               if (state.isFetching) {
-                                return CarouselView.weighted(
-                                  scrollDirection: Axis.vertical,
-                                  consumeMaxWeight: true,
-                                  enableSplash: false,
-                                  flexWeights: const [4, 2, 1],
-                                  children: List.generate(
-                                    5,
-                                    (index) =>
-                                        const ProductCarouselSkeletonWidget(),
-                                  ),
+                                return const Center(
+                                  child: LoadingWidget(),
                                 );
                               } else {
                                 return const SizedBox();
                               }
-
+    
                             case SearchStatus.failure:
                               return ErrorMessageWidget(
                                 retry: () {
@@ -121,7 +112,7 @@ class _SearchPageState extends State<SearchPage> {
                                 },
                                 message: state.errorMessage,
                               );
-
+    
                             case SearchStatus.success:
                               if (state.searchResultProducts.isEmpty) {
                                 return const Center(
@@ -134,16 +125,18 @@ class _SearchPageState extends State<SearchPage> {
                                   ),
                                 );
                               }
-
+    
                               return NotificationListener<ScrollNotification>(
                                 onNotification:
                                     (ScrollNotification scrollInfo) {
                                   if (scrollInfo.metrics.pixels >=
-                                      scrollInfo.metrics.maxScrollExtent - 50) {
+                                      scrollInfo.metrics.maxScrollExtent -
+                                          50) {
                                     // Load more items when the user reaches the end of the list
                                     searchBloc.add(SearchProductEvent(
                                       searchParamsModel: SearchParamsModel(
-                                        searchText: searchBloc.state.searchText,
+                                        searchText:
+                                            searchBloc.state.searchText,
                                         page: state.page,
                                       ),
                                     ));
@@ -160,7 +153,7 @@ class _SearchPageState extends State<SearchPage> {
                                     ...state.searchResultProducts.map(
                                         (product) => SearchProductWidget(
                                             product: product)),
-
+    
                                     // Add a loading widget if more items are being loaded
                                     if (!state.hasReachedMax)
                                       Padding(

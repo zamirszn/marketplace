@@ -7,7 +7,11 @@ class AppStrings {
   static const String price = "Price";
   static const String deactivateAccount = "Deactivate Account";
   static const String phone = "Phone";
+  static const String gallery = "Gallery";
+  static const String camera = "Camera";
   static const String save = "Save";
+  static const String image = "Image";
+  static const String noOrders = "No Orders";
   static const String address = "Address";
   static const String shippingAddress = "Shipping Address";
   static const String notifications = "Notifications";
@@ -16,6 +20,7 @@ class AppStrings {
   static const String customerService = "Customer Service";
   static const String helpAndSupport = "Help and Support";
   static const String cancelled = "Cancelled";
+  static const String paymentFailed = "Payment Failed";
   static const String back = "Back";
   static const String processing = "Processing";
   static const String delivered = "Delivered";
@@ -88,7 +93,7 @@ class AppStrings {
   static const String apply = "Apply";
   static const String promoCode = "Promo Code";
   static const String cart = "Cart";
-  static const String discoverProducts = "Discover Products";
+  static const String ourCatalog = "Our Catalog";
   static const String viewAll = "View all";
   static const String search = "Search";
   static const String pleaseSignInHere = "Please sign in here";

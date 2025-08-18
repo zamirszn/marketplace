@@ -74,7 +74,7 @@ class Review(models.Model):
     #     unique_together = ("product", "owner")
 
     def __str__(self):
-        return f"Review by {self.owner.email} for {self.product.name} - {self.rating} stars"
+        return f"Review by {self.owner.email} - {self.rating} stars"
 
 
 class Cart(models.Model):
@@ -110,9 +110,10 @@ class Product(models.Model):
         related_name="products",
     )
     slug = models.SlugField(default=None)
+
     id = models.UUIDField(
-        default=uuid.uuid4, editable=False, primary_key=True, unique=True
-    )
+        default=uuid.uuid4, editable=False, primary_key=True, unique=True)
+    
     inventory = models.IntegerField(default=1)
     flash_sales = models.BooleanField(default=False)
 
@@ -170,8 +171,7 @@ class ProductImage(models.Model):
         verbose_name = "Product Image"
         verbose_name_plural = "Products Images"
 
-    def __str__(self):
-        return self.product.name
+    
 
 
 class CartItem(models.Model):
@@ -192,11 +192,11 @@ class CartItem(models.Model):
 
 
 class Order(models.Model):
-    PAYMENT_STATUS_PENDING = "P"
-    PAYMENT_STATUS_COMPLETE = "C"
-    PAYMENT_STATUS_FAILED = "F"
-    ORDER_DELIVERED = "D"
-    ORDER_CANCELLED = "CA"
+    PAYMENT_STATUS_PENDING = "PAYMENT_STATUS_PENDING"
+    PAYMENT_STATUS_COMPLETE = "PAYMENT_STATUS_COMPLETE"
+    PAYMENT_STATUS_FAILED = "PAYMENT_STATUS_FAILED"
+    ORDER_DELIVERED = "ORDER_DELIVERED"
+    ORDER_CANCELLED = "ORDER_CANCELLED"
 
     PAYMENT_STATUS_CHOICES = [
         (PAYMENT_STATUS_FAILED, "Payment Failed"),
@@ -257,6 +257,5 @@ class FavoriteProducts(models.Model):
         verbose_name = "Favorite Products"
         verbose_name_plural = "Favorite Products"
 
-    def __str__(self) -> str:
-        return f"{self.owner.email} favorited {self.product.name}"
+   
     

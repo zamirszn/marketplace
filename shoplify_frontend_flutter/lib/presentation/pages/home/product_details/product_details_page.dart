@@ -3,8 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
+import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/presentation/pages/home/product_details/bloc/product_details_bloc.dart';
+import 'package:shoplify/presentation/pages/search/bloc/search_bloc.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
@@ -12,6 +13,8 @@ import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/widgets/add_to_cart_bottomsheet/add_to_cart_bottomsheet.dart';
 import 'package:shoplify/presentation/widgets/coverflow_carousel.dart';
+import 'package:shoplify/presentation/widgets/favorite_button.dart';
+import 'package:shoplify/presentation/widgets/go_back_button.dart';
 import 'package:shoplify/presentation/widgets/refresh_widget.dart';
 import 'package:shoplify/presentation/widgets/star_rating/star_rating_widget.dart';
 
@@ -24,9 +27,39 @@ class ProductDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
-        backgroundColor: ColorManager.white,
-        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          elevation: 0,
+          centerTitle: true,
+          title: Text(
+            AppStrings.product,
+            overflow: TextOverflow.ellipsis,
+            style: getSemiBoldStyle(
+              context,
+              font: FontConstants.ojuju,
+              fontSize: AppSize.s24,
+            ),
+          ),
+          forceMaterialTransparency: true,
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: AppPadding.p10),
+              child: BlocBuilder<ProductDetailsBloc, ProductDetailsState>(
+                builder: (context, state) {
+                  return FavoriteButton(
+                    product: state.selectedProduct!,
+                  );
+                },
+              ),
+            ),
+          ],
+          leading: const Padding(
+            padding: EdgeInsets.all(AppPadding.p10),
+            child: GoBackButton(),
+          ),
+        ),
         body: BlocBuilder<ProductDetailsBloc, ProductDetailsState>(
           builder: (context, state) {
             return Hero(
@@ -52,152 +85,158 @@ class ProductDetailsPage extends StatelessWidget {
                             ClipRRect(
                                 borderRadius:
                                     BorderRadius.circular(AppSize.s20),
-                                child: ColoredBox(
-                                    color: ColorManager.lightGrey,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: AppPadding.p20),
-                                      child: CoverFlowCarousel(
-                                          productImages:
-                                              state.selectedProduct?.images ??
-                                                  []),
-                                    ))),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: AppPadding.p20),
+                                  child: Transform.scale(
+                                    scale: 1.1,
+                                    child: CoverFlowCarousel(
+                                        productImages:
+                                            state.selectedProduct?.images ??
+                                                []),
+                                  ),
+                                )),
                             space(h: AppSize.s3),
                             ClipRRect(
                               borderRadius: BorderRadius.circular(AppSize.s20),
-                              child: ColoredBox(
-                                  color: ColorManager.lightGrey,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        vertical: AppPadding.p10,
-                                        horizontal: AppPadding.p10),
-                                    child: Column(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: AppPadding.p10,
+                                    horizontal: AppPadding.p10),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    space(h: AppSize.s10),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                          CrossAxisAlignment.end,
                                       children: [
-                                        space(h: AppSize.s10),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            ConstrainedBox(
-                                              constraints:
-                                                  BoxConstraints.tightFor(
-                                                      width:
-                                                          deviceWidth(context) /
-                                                              2),
-                                              child: Text(
-                                                state.selectedProduct?.name ??
-                                                    "",
-                                                style: getSemiBoldStyle(
-                                                  context,
-                                                  fontSize: FontSize.s16,
-                                                ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                "${AppStrings.price}: \$${roundToTwoDecimalPlaces(state.selectedProduct?.price) ?? ""}",
-                                                textAlign: TextAlign.end,
-                                                style: getSemiBoldStyle(context,
-                                                    fontSize: FontSize.s16,
-                                                    font: FontConstants.ojuju),
-                                              ),
-                                            ),
-                                          ],
+                                        Expanded(
+                                          child: Text(
+                                            state.selectedProduct?.name ?? "",
+                                            style: getMediumStyle(context,
+                                                fontSize: FontSize.s20,
+                                                font: FontConstants.ojuju),
+                                          ),
                                         ),
-                                        space(h: AppSize.s28),
-                                        Text(
-                                          AppStrings.productInfo,
-                                          style: getRegularStyle(context,
-                                              fontSize: FontSize.s16),
+                                        Expanded(
+                                          child: Text(
+                                            "${AppStrings.price}: \$${roundToTwoDecimalPlaces(state.selectedProduct?.price) ?? ""}",
+                                            textAlign: TextAlign.end,
+                                            style: getSemiBoldStyle(context,
+                                                fontSize: FontSize.s20,
+                                                font: FontConstants.ojuju),
+                                          ),
                                         ),
-                                        space(h: AppSize.s4),
-                                        Text(
-                                          state.selectedProduct?.description ??
-                                              "",
-                                          style: getLightStyle(context,
-                                              fontSize: FontSize.s14),
-                                        ),
-                                        space(h: AppSize.s20),
-                                        Wrap(
-                                          children: [
-                                            if (state.selectedProduct
-                                                    ?.inventory !=
-                                                null)
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        AppSize.s10),
-                                                child: ColoredBox(
-                                                  color: state.selectedProduct!
-                                                                  .inventory !=
-                                                              null &&
-                                                          state.selectedProduct!
-                                                                  .inventory! >=
-                                                              1
-                                                      ? ColorManager.green
-                                                      : ColorManager.red,
-                                                  child: Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              8.0),
-                                                      child: Text(
-                                                        "${state.selectedProduct?.inventory} available in stock",
-                                                        style: getRegularStyle(
-                                                            context,
-                                                            color: ColorManager
-                                                                .white,
-                                                            fontSize:
-                                                                FontSize.s12,
-                                                            font: FontConstants
-                                                                .poppins),
-                                                      )),
-                                                ),
-                                              ),
-                                            space(w: AppSize.s10),
-                                            if (state.selectedProduct?.category
-                                                    ?.name !=
-                                                null)
-                                              RoundCorner(
-                                                child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: Text(
-                                                      state
-                                                              .selectedProduct
-                                                              ?.category
-                                                              ?.name ??
-                                                          "",
-                                                      style: getRegularStyle(
-                                                          context,
-                                                          fontSize:
-                                                              FontSize.s12,
-                                                          font: FontConstants
-                                                              .poppins),
-                                                    )),
-                                              ),
-                                          ],
-                                        ),
-                                        space(h: AppSize.s10),
                                       ],
                                     ),
-                                  )),
+                                    space(h: AppSize.s28),
+                                    Text(
+                                      AppStrings.productInfo,
+                                      style: getRegularStyle(context,
+                                          fontSize: FontSize.s16),
+                                    ),
+                                    space(h: AppSize.s4),
+                                    ReadMoreText(
+                                        text: state
+                                                .selectedProduct?.description ??
+                                            ""),
+                                    space(h: AppSize.s20),
+                                    Wrap(
+                                      children: [
+                                        if (state.selectedProduct?.inventory !=
+                                            null)
+                                          ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                AppSize.s10),
+                                            child: ColoredBox(
+                                              color: state.selectedProduct!
+                                                              .inventory !=
+                                                          null &&
+                                                      state.selectedProduct!
+                                                              .inventory! >=
+                                                          1
+                                                  ? colorScheme
+                                                      .secondaryContainer
+                                                  : colorScheme.error,
+                                              child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    "${state.selectedProduct?.inventory} available in stock",
+                                                    style: getRegularStyle(
+                                                        context,
+                                                        fontSize: FontSize.s12,
+                                                        font: FontConstants
+                                                            .poppins),
+                                                  )),
+                                            ),
+                                          ),
+                                        space(w: AppSize.s10),
+                                        if (state.selectedProduct?.category
+                                                ?.name !=
+                                            null)
+                                          GestureDetector(
+                                            onTap: () {
+                                              context
+                                                  .read<SearchBloc>()
+                                                  .add(ResetSearchEvent());
+                                              context.read<SearchBloc>().add(
+                                                  SearchProductEvent(
+                                                      useFilterParams: true,
+                                                      searchParamsModel:
+                                                          SearchParamsModel(
+                                                              category: state
+                                                                  .selectedProduct
+                                                                  ?.category
+                                                                  ?.name)));
+
+                                              goPush(
+                                                context,
+                                                Routes.searchPage,
+                                              );
+                                            },
+                                            child: RoundCorner(
+                                              color:
+                                                  colorScheme.primaryContainer,
+                                              child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(
+                                                    state.selectedProduct
+                                                            ?.category?.name ??
+                                                        "",
+                                                    style: getRegularStyle(
+                                                        context,
+                                                        fontSize: FontSize.s12,
+                                                        font: FontConstants
+                                                            .poppins),
+                                                  )),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                    space(h: AppSize.s10),
+                                  ],
+                                ),
+                              ),
                             ),
                             space(h: AppSize.s3),
                             GestureDetector(
                               onTap: () {
-                                goPush(context, Routes.productReviewPage,
-                                    extra: state.selectedProduct);
+                                goPush(
+                                  context,
+                                  Routes.reviewPage,
+                                );
                               },
                               child: ClipRRect(
                                   borderRadius:
                                       BorderRadius.circular(AppSize.s20),
                                   child: ColoredBox(
-                                      color: ColorManager.lightGrey,
+                                      color:
+                                          colorScheme.onSecondary.withAlpha(50),
                                       child: Padding(
                                         padding: const EdgeInsets.symmetric(
                                             vertical: AppPadding.p10,
@@ -256,7 +295,6 @@ class ProductDetailsPage extends StatelessWidget {
                                               "${AppStrings.basedOn} ${state.selectedProduct?.reviewsLength} ${AppStrings.reviews}",
                                               style: getLightStyle(context,
                                                   fontSize: FontSize.s14,
-                                                  color: ColorManager.lightGrey,
                                                   font: FontConstants.poppins),
                                             ),
                                             space(h: AppSize.s12),

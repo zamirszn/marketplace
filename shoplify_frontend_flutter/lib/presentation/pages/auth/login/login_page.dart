@@ -121,6 +121,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               space(h: AppSize.s10),
                               TextFormField(
+                                
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 style: getRegularStyle(context,
@@ -154,6 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               space(h: AppSize.s10),
                               TextFormField(
+                                
                                 autovalidateMode:
                                     AutovalidateMode.onUserInteraction,
                                 style: getRegularStyle(context,

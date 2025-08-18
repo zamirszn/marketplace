@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 
 void showMessage(
   BuildContext context,
   String message,
 ) {
-      final colorScheme = Theme.of(context).colorScheme;
+  final colorScheme = Theme.of(context).colorScheme;
 
   final snackBar = SnackBar(
     content: Text(message),
-    backgroundColor: colorScheme.secondary,
+    backgroundColor: colorScheme.primary,
     behavior: SnackBarBehavior.floating,
     dismissDirection: DismissDirection.horizontal,
     shape: RoundedRectangleBorder(
@@ -25,9 +24,11 @@ void showErrorMessage(
   BuildContext context,
   String message,
 ) {
+  final colorScheme = Theme.of(context).colorScheme;
+
   final snackBar = SnackBar(
     content: Text(message),
-    backgroundColor: ColorManager.red,
+    backgroundColor: colorScheme.error,
     behavior: SnackBarBehavior.floating,
     dismissDirection: DismissDirection.horizontal,
     shape: RoundedRectangleBorder(

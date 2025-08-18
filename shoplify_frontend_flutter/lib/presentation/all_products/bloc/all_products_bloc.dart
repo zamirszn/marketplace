@@ -17,17 +17,18 @@ class AllProductsBloc extends Bloc<AllProductsEvent, AllProductsState> {
       emit(const AllProductsState());
     });
 
+    on<SetViewProductImageUrl>((event, emit) async {
+      emit(state.copyWith(viewProductImageUrl: event.imageUrl));
+    });
+
     on<GetAllProductsEvent>((event, emit) async {
       if (state.isFetching || state.hasReachedMax) {
         return;
       }
-      
 
       emit(state.copyWith(
         isFetching: true,
       ));
-
-      
 
       Either response =
           await sl<GetAllProductUseCase>().call(params: event.params);
@@ -64,6 +65,7 @@ class AllProductsBloc extends Bloc<AllProductsEvent, AllProductsState> {
         ));
         return;
       });
+      return;
     });
   }
 }

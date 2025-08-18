@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
+import 'package:shoplify/presentation/resources/styles_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 
 extension PascalCase on String {
@@ -105,6 +106,59 @@ class Required extends StatelessWidget {
           "*",
           style: TextStyle(color: ColorManager.red, fontSize: FontSize.s20),
         )
+      ],
+    );
+  }
+}
+
+class ReadMoreText extends StatefulWidget {
+  final String text;
+  final int trimLines;
+
+  const ReadMoreText({
+    super.key,
+    required this.text,
+    this.trimLines = 3,
+  });
+
+  @override
+  ReadMoreTextState createState() => ReadMoreTextState();
+}
+
+class ReadMoreTextState extends State<ReadMoreText> {
+  bool _readMore = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AnimatedSize(
+          duration: const Duration(milliseconds: 200),
+          child: Text(
+            widget.text,
+            overflow: TextOverflow.fade,
+            maxLines: _readMore ? null : widget.trimLines,
+            style: getLightStyle(context, fontSize: FontSize.s14),
+          ),
+        ),
+        const SizedBox(height: 4),
+        InkWell(
+          onTap: () {
+            setState(() {
+              _readMore = !_readMore;
+            });
+          },
+          child: Text(
+            _readMore ? 'Read less' : 'Read more',
+            style: TextStyle(
+              color: colorScheme.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
       ],
     );
   }

@@ -34,6 +34,10 @@ class _ProductSearchTextFieldState extends State<ProductSearchTextField> {
     super.dispose();
   }
 
+ 
+
+
+
   @override
   Widget build(BuildContext context) {
     final searchBloc = context.read<SearchBloc>();
@@ -41,6 +45,7 @@ class _ProductSearchTextFieldState extends State<ProductSearchTextField> {
 
     return Expanded(
       child: TextField(
+        autofocus: false,
         controller: searchController,
         onChanged: (value) {
           context.read<SearchBloc>().add(UpdateSearchText(text: value));

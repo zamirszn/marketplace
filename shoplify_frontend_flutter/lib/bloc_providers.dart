@@ -12,6 +12,7 @@ import 'package:shoplify/presentation/pages/home/filter_bottom_sheet/bloc/filter
 import 'package:shoplify/presentation/pages/home/product_details/bloc/product_details_bloc.dart';
 import 'package:shoplify/presentation/pages/order/bloc/order_bloc.dart';
 import 'package:shoplify/presentation/pages/profile/bloc/profile_bloc.dart';
+import 'package:shoplify/presentation/pages/review/bloc/review_bloc.dart';
 import 'package:shoplify/presentation/pages/search/bloc/search_bloc.dart';
 import 'package:shoplify/presentation/widgets/add_to_cart_bottomsheet/bloc/add_to_cart_bottomsheet_bloc.dart';
 import 'package:shoplify/presentation/widgets/count_down_widget/bloc/countdown_bloc.dart';
@@ -21,6 +22,7 @@ import 'package:shoplify/presentation/widgets/product_category/bloc/product_cate
 
 final List<SingleChildWidget> blocProviders = [
   BlocProvider(create: (context) => FavoriteBloc()),
+  BlocProvider(create: (context) => ReviewBloc()),
   BlocProvider(create: (context) => ProfileBloc()),
   BlocProvider(create: (context) => PopularProductBloc()),
   BlocProvider(create: (context) => NewProductBloc()),

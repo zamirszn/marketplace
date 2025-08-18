@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:shoplify/presentation/widgets/star_rating/bloc/star_rating_bloc.dart';
 
@@ -14,8 +13,8 @@ class InteractiveStarRatingWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {    final colorScheme = Theme.of(context).colorScheme;
-
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
 
     return BlocProvider(
       create: (context) => StarRatingBloc(),
@@ -59,9 +58,8 @@ class InteractiveStarRatingWidget extends StatelessWidget {
                           ? 20
                           : 16, // Bigger size for selected stars
                       color: isFullStar
-                        ?colorScheme.secondary
-
-                          : ColorManager.black.withAlpha(70),
+                          ? colorScheme.tertiary
+                          : colorScheme.primary,
                     ),
                   ),
                 ),

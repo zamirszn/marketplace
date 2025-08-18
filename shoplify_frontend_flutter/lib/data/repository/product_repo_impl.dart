@@ -41,9 +41,9 @@ class ProductRepositoryImpl extends ProductsRepository {
   }
 
   @override
-  Future<Either> getAllProducts(ProductQueryParamsModel productQueryParams) async {
+  Future<Either> getAllProducts(ProductQueryParamsModel params) async {
     Either result =
-        await sl<ProductsServiceDataSource>().getAllProducts(productQueryParams);
+        await sl<ProductsServiceDataSource>().getAllProducts(params);
     return result.fold((error) {
       return Left(error);
     }, (data) async {
@@ -53,9 +53,8 @@ class ProductRepositoryImpl extends ProductsRepository {
   }
 
   @override
-  Future<Either> addToCart(AddToCartParamsModel addToCartParams) async {
-    Either result =
-        await sl<ProductsServiceDataSource>().addToCart(addToCartParams);
+  Future<Either> addToCart(AddToCartParamsModel params) async {
+    Either result = await sl<ProductsServiceDataSource>().addToCart(params);
     return result.fold((error) {
       return Left(error);
     }, (data) async {
@@ -118,11 +117,11 @@ class ProductRepositoryImpl extends ProductsRepository {
       return Right(response.data);
     });
   }
-  
+
   @override
-  Future<Either> removeFromCart(RemoveFromCartModelParams removeFromCartModelParams)async {
+  Future<Either> removeFromCart(RemoveFromCartModelParams params) async {
     Either result =
-        await sl<ProductsServiceDataSource>().removeFromCart(removeFromCartModelParams);
+        await sl<ProductsServiceDataSource>().removeFromCart(params);
     return result.fold((error) {
       return Left(error);
     }, (data) async {
@@ -132,9 +131,34 @@ class ProductRepositoryImpl extends ProductsRepository {
   }
 
   @override
-  Future<Either> searchProduct(SearchParamsModel searchParamsModel)async {
-  Either result =
-        await sl<ProductsServiceDataSource>().searchProduct(searchParamsModel);
+  Future<Either> searchProduct(SearchParamsModel params) async {
+    Either result = await sl<ProductsServiceDataSource>().searchProduct(params);
+    return result.fold((error) {
+      return Left(error);
+    }, (data) async {
+      Response response = data;
+      return Right(response.data);
+    });
+  }
+  
+  @override
+  Future<Either> getFavoriteProducts(FavoriteProductParamsModel params)async {
+        Either result = await sl<ProductsServiceDataSource>().getFavoriteProducts(params);
+
+    return result.fold((error) {
+      return Left(error);
+    }, (data) async {
+      Response response = data;
+      return Right(response.data);
+    });
+  }
+
+  
+  
+  @override
+  Future<Either> getMyOrder(GetMyOrderParams params)async {
+      Either result = await sl<ProductsServiceDataSource>().getMyOrder(params);
+
     return result.fold((error) {
       return Left(error);
     }, (data) async {

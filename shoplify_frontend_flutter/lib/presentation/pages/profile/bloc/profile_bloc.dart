@@ -28,7 +28,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
               profileStatus: ProfileStatus.failure, errorMessage: error),
         );
       }, (data) {
-        print(data);
         final GetProfileResponseModel profileResponse =
             GetProfileResponseModel.fromMap(data);
         emit(state.copyWith(

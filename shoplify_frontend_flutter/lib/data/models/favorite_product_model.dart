@@ -2,40 +2,41 @@ import 'dart:convert';
 
 import 'package:shoplify/data/models/product_model.dart';
 
-FavoriteProducts favoriteProductsFromMap(String str) =>
-    FavoriteProducts.fromMap(json.decode(str));
+// TODO: move all models to response model
+FavoriteProductsResponseModel favoriteProductsFromMap(String str) =>
+    FavoriteProductsResponseModel.fromMap(json.decode(str));
 
-String favoriteProductsToMap(FavoriteProducts data) =>
+String favoriteProductsToMap(FavoriteProductsResponseModel data) =>
     json.encode(data.toMap());
 
-class FavoriteProducts {
+class FavoriteProductsResponseModel {
   final int? count;
   final String? next;
   final String? previous;
   final List<FavoriteProductResult>? results;
 
-  FavoriteProducts({
+  FavoriteProductsResponseModel({
     this.count,
     this.next,
     this.previous,
     this.results,
   });
 
-  FavoriteProducts copyWith({
+  FavoriteProductsResponseModel copyWith({
     int? count,
     String? next,
     dynamic previous,
     List<FavoriteProductResult>? results,
   }) =>
-      FavoriteProducts(
+      FavoriteProductsResponseModel(
         count: count ?? this.count,
         next: next ?? this.next,
         previous: previous ?? this.previous,
         results: results ?? this.results,
       );
 
-  factory FavoriteProducts.fromMap(Map<String, dynamic> json) =>
-      FavoriteProducts(
+  factory FavoriteProductsResponseModel.fromMap(Map<String, dynamic> json) =>
+      FavoriteProductsResponseModel(
         count: json["count"],
         next: json["next"],
         previous: json["previous"],

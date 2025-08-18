@@ -40,12 +40,7 @@ class AddToCartBottomsheetBloc
 
   void _onResetItemCartCount(ResetCartItemCountEvent event,
       Emitter<AddToCartBottomsheetState> emit) async {
-    emit(state.copyWith(
-        selectedProductId: null,
-        itemCount: 1,
-        status: AddToCartStatus.initial,
-        cartItemToAdd: null,
-        errorMessage: null));
+    emit(const AddToCartBottomsheetState());
   }
 
   void _onSetCartItem(

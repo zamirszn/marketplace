@@ -16,6 +16,7 @@ final class RefreshFavoriteProductEvent extends FavoriteEvent {
 
   RefreshFavoriteProductEvent({required this.params});
 }
+
 /// event removes products from the `FavoritePage` list using
 /// thier id
 class RemoveFromFavoritePageEvent extends FavoriteEvent {
@@ -26,7 +27,17 @@ class RemoveFromFavoritePageEvent extends FavoriteEvent {
 
 /// event adds product object to the `FavoritePage` list
 final class AddToFavoritePageEvent extends FavoriteEvent {
-  final Product product;
+  final FavoriteProductResult product;
 
   AddToFavoritePageEvent({required this.product});
+}
+
+class ToggleFavoriteEvent extends FavoriteEvent {
+  final Product product;
+  final bool isCurrentlyFavorited;
+
+  ToggleFavoriteEvent({
+    required this.product,
+    required this.isCurrentlyFavorited,
+  });
 }

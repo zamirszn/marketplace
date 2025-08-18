@@ -103,3 +103,17 @@ class RemoveFromCartUseCase
     return sl<ProductsRepository>().removeFromCart(params!);
   }
 }
+
+class GetFavoriteProductUseCase implements Usecase<Either, dynamic> {
+  @override
+  Future<Either> call({params}) async {
+    return sl<ProductsRepository>().getFavoriteProducts(params);
+  }
+}
+
+class GetMyOrderUseCase implements Usecase<Either, GetMyOrderParams> {
+  @override
+  Future<Either> call({GetMyOrderParams? params}) async {
+    return sl<ProductsRepository>().getMyOrder(params!);
+  }
+}

@@ -5,6 +5,7 @@ class ApiUrls {
   static const String api = "api";
   static const String products = "products";
   static const String reviews = "reviews";
+  static const String orders = "orders";
   static const String cart = "cart";
   static const String items = "items";
   static const String getProfile = "profile/";
@@ -23,4 +24,6 @@ class ApiUrls {
   static const String requestNewPasswordOTP =
       "$auth/request-password-reset-otp/";
   static const String resetPassword = "$auth/reset-password/";
+    static const String myOrders = "$api/orders/";
+
 }

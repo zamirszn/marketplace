@@ -15,10 +15,13 @@ abstract class ProductsServiceDataSource {
   Future<Either> addToCart(AddToCartParamsModel addToCartParams);
   Future<Either> getOrCreateCart();
   Future<Either> addToFavorite(String productId);
+  Future<Either> getMyOrder(GetMyOrderParams productId);
   Future<Either> removeToFavorite(String productId);
   Future<Either> refreshProductDetails(String productId);
   Future<Either> removeFromCart(
       RemoveFromCartModelParams removeFromCartModelParams);
+  Future<Either> getFavoriteProducts(
+      FavoriteProductParamsModel favoriteProductParamModel);
 }
 
 class ProductServiceImpl extends ProductsServiceDataSource {
@@ -137,6 +140,29 @@ class ProductServiceImpl extends ProductsServiceDataSource {
     try {
       Response response = await sl<DioClient>().delete(
           "${ApiUrls.cartUrl}/${removeFromCartModelParams.cartId}/${ApiUrls.items}/${removeFromCartModelParams.cartItemId}/");
+      return Right(response);
+    } catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either> getMyOrder(GetMyOrderParams params) async {
+    try {
+      Response response = await sl<DioClient>()
+          .get(ApiUrls.myOrders, queryParameters: params.toMap());
+      return Right(response);
+    } catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either> getFavoriteProducts(
+      FavoriteProductParamsModel favoriteProductParamModel) async {
+    try {
+      Response response = await sl<DioClient>().get(ApiUrls.favorites,
+          queryParameters: favoriteProductParamModel.toMap());
       return Right(response);
     } catch (e) {
       return Left(e);

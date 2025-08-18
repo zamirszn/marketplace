@@ -41,7 +41,8 @@ class NewProductWidget extends StatelessWidget {
               height: AppSize.s400,
               width: AppSize.s300,
               child: CachedNetworkImage(
-                imageUrl: product.images.first.image!,
+                imageUrl:
+                    product.images.isEmpty ? " " : product.images.first.image!,
                 height: AppSize.s120,
                 fit: BoxFit.cover,
                 errorWidget: (context, url, error) => Container(
@@ -60,37 +61,47 @@ class NewProductWidget extends StatelessWidget {
                 ),
               ),
             ),
-            if (product.price != null)
-              Positioned(
-                  bottom: AppPadding.p20,
-                  left: AppPadding.p10,
-                  child: BlurBackgroundWidget(
-                    child: Text(
-                      "\$${roundToTwoDecimalPlaces(product.price) ?? ""}",
-                      overflow: TextOverflow.ellipsis,
-                      style: getSemiBoldStyle(context,
-                          color: ColorManager.white,
-                          fontSize: FontSize.s23,
-                          font: FontConstants.ojuju),
-                    ),
-                  )),
             if (product.name != null)
               Positioned(
                 top: AppPadding.p20,
                 right: AppPadding.p10,
                 child: BlurBackgroundWidget(
-                  child: Text(
-                    product.name?.toString() ?? "",
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: getSemiBoldStyle(context,
-                        color: ColorManager.white,
-                        fontSize: FontSize.s18,
-                        font: FontConstants.ojuju),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: AppPadding.p5),
+                    child: Text(
+                      product.name?.toString() ?? "",
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: getSemiBoldStyle(context,
+                              color: ColorManager.white,
+                              fontSize: FontSize.s18,
+                              font: FontConstants.ojuju)
+                          .copyWith(decoration: TextDecoration.none),
+                    ),
                   ),
                 ),
               ),
+            if (product.price != null)
+              Positioned(
+                  bottom: AppPadding.p20,
+                  right: AppPadding.p10,
+                  child: BlurBackgroundWidget(
+                    child: Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: AppPadding.p5),
+                      child: Text(
+                        "\$${roundToTwoDecimalPlaces(product.price) ?? ""}",
+                        overflow: TextOverflow.ellipsis,
+                        style: getSemiBoldStyle(context,
+                                color: ColorManager.white,
+                                fontSize: FontSize.s23,
+                                font: FontConstants.ojuju)
+                            .copyWith(decoration: TextDecoration.none),
+                      ),
+                    ),
+                  )),
           ],
         ),
       ),

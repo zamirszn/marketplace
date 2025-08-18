@@ -1,6 +1,6 @@
 from decimal import Decimal
 from django_filters.rest_framework import FilterSet, NumberFilter, DateFromToRangeFilter, CharFilter
-from .models import Category, Product, Review
+from .models import Category, Order, Product, Review
 
 
 class ProductFilter(FilterSet):
@@ -20,6 +20,13 @@ class ProductFilter(FilterSet):
                   
                   }
 
+
+
+class OrderFilter(FilterSet):
+
+    class Meta:
+        model = Order
+        fields = ["order_status"]
 
 class ReviewFilter(FilterSet):
     rating = NumberFilter(method="filter_rating_range")

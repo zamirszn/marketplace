@@ -117,28 +117,30 @@ class ReviewSerializer(serializers.ModelSerializer):
         return Review.objects.create(product_id=product_id, **validated_data)
 
 
-class TrimmedProductDetailsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Product
-        fields = [
-            "id",
-            "name",
-            "price",
-            "inventory",
-            "images",
-        ]
+# class TrimmedProductDetailsSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Product
+#         fields = [
+#             "id",
+#             "name",
+#             "price",
+#             "inventory",
+#             "images",
+#         ]
 
 
 class CartItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
     sub_total = serializers.SerializerMethodField()
+    
 
     class Meta:
         model = CartItem
         fields = ["id", "product", "quantity", "sub_total"]
 
     def get_sub_total(self, cartItem):
-        return cartItem.quantity * cartItem.product.price
+       
+            return cartItem.quantity * cartItem.product.price
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -195,7 +197,7 @@ class AddCartItemSerializer(serializers.ModelSerializer):
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    product = TrimmedProductDetailsSerializer()
+    product = ProductSerializer()
 
     class Meta:
         model = OrderItem

@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/data/models/product_model.dart';
+import 'package:shoplify/presentation/all_products/bloc/all_products_bloc.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
 import 'package:shoplify/presentation/resources/values_manager.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -68,10 +70,12 @@ class _CoverFlowCarouselViewState extends State<CoverFlowCarouselView> {
 
   @override
   void initState() {
-    _pageController = PageController(
-      initialPage: _currentPageIndex.toInt(),
-    );
-    _pageController?.addListener(_pageControllerListener);
+    _pageController = PageController();
+    _pageController?.addListener(() {
+      setState(() {
+        _currentPageIndex = _pageController?.page ?? 0;
+      });
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _animateToLastAndBack();
     });
@@ -80,30 +84,39 @@ class _CoverFlowCarouselViewState extends State<CoverFlowCarouselView> {
   }
 
   Future<void> _animateToLastAndBack() async {
-    // Animate from the first to the last page
-    if (_pageController?.hasClients == true) {
-      await _pageController?.animateToPage(
+    if (widget.productImages.isEmpty) {
+      return;
+    }
+
+    // Check if PageController is properly attached to a PageView
+    if (_pageController == null ||
+        !_pageController!.hasClients ||
+        _pageController!.positions.isEmpty) {
+      return;
+    }
+
+    try {
+      // Animate from the first to the last page
+      await _pageController!.animateToPage(
         widget.productImages.length - 1,
         duration: const Duration(milliseconds: 1300),
         curve: Curves.linear,
       );
-      await _pageController?.animateToPage(
+
+      // Animate back to the first page
+      await _pageController!.animateToPage(
         0,
         duration: const Duration(milliseconds: 400),
         curve: Curves.linear,
       );
+    } catch (e) {
+      // Handle any animation errors gracefully
+      debugPrint('Animation error: $e');
     }
-  }
-
-  void _pageControllerListener() {
-    _currentPageIndex = _pageController?.page ?? 0;
-
-    setState(() {});
   }
 
   @override
   void dispose() {
-    _pageController?.removeListener(_pageControllerListener);
     _pageController?.dispose();
     super.dispose();
   }
@@ -207,7 +220,7 @@ class _CoverFlowPositionedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        final colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     Widget child = ClipRRect(
       borderRadius: BorderRadius.circular(20),
@@ -218,7 +231,13 @@ class _CoverFlowPositionedItem extends StatelessWidget {
           behavior: HitTestBehavior.translucent,
           onTap: () {
             if (imagePath != null) {
-              goPush(context, Routes.productImagePage, extra: imagePath);
+              context
+                  .read<AllProductsBloc>()
+                  .add(SetViewProductImageUrl(imageUrl: imagePath!));
+              goPush(
+                context,
+                Routes.productImagePage,
+              );
             }
           },
           child: CachedNetworkImage(
@@ -232,8 +251,7 @@ class _CoverFlowPositionedItem extends StatelessWidget {
               width: AppSize.s100,
             )),
             errorWidget: (context, url, error) => Container(
-                        color: colorScheme.error,
-
+              color: colorScheme.error,
               height: AppSize.s100,
               width: AppSize.s100,
             ),

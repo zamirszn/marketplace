@@ -7,8 +7,8 @@ import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/core/constants/api_urls.dart';
-import 'package:shoplify/presentation/pages/auth/login/bloc/login_bloc.dart';
 import 'package:shoplify/presentation/pages/notification/notification_icon.dart';
+import 'package:shoplify/presentation/pages/order/bloc/order_bloc.dart';
 import 'package:shoplify/presentation/pages/profile/bloc/profile_bloc.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/routes_manager.dart';
@@ -42,6 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final orderBloc = context.read<OrderBloc>();
 
     return Scaffold(
       extendBodyBehindAppBar: false,
@@ -107,6 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             width: 50,
                             height: 50,
                             child: AnimatedExpressiveShape(
+                              morphDuration: const Duration(seconds: 2),
                               shapes: [
                                 MaterialShapes.square,
                                 MaterialShapes.arch,
@@ -116,7 +118,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 MaterialShapes.ghostish,
                                 MaterialShapes.bun,
                               ],
-                              child: UserProfilePicture(),
+                              child: const UserProfilePicture(),
                             ),
                           ),
                           shape: RoundedRectangleBorder(
@@ -152,26 +154,40 @@ class _ProfilePageState extends State<ProfilePage> {
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(AppPadding.p20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                              child: Stack(
                                 children: [
-                                  Wrap(
-                                    direction: Axis.horizontal,
-                                    alignment: WrapAlignment.spaceBetween,
-                                    runSpacing: AppSize.s20,
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
                                     children: [
-                                      ProfileInfoWidget(
-                                        data: state.profile?.phone ?? "-",
-                                        iconData: Iconsax.call,
-                                        title: AppStrings.phone,
-                                      ),
-                                      ProfileInfoWidget(
-                                        data: state.profile?.shippingAddress ??
-                                            "-",
-                                        iconData: Iconsax.location,
-                                        title: AppStrings.shippingAddress,
+                                      Wrap(
+                                        direction: Axis.horizontal,
+                                        alignment: WrapAlignment.spaceBetween,
+                                        runSpacing: AppSize.s20,
+                                        children: [
+                                          ProfileInfoWidget(
+                                            data: state.profile?.phone ?? "-",
+                                            iconData: Iconsax.call,
+                                            title: AppStrings.phone,
+                                          ),
+                                          ProfileInfoWidget(
+                                            data: state
+                                                    .profile?.shippingAddress ??
+                                                "-",
+                                            iconData: Iconsax.location,
+                                            title: AppStrings.shippingAddress,
+                                          ),
+                                        ],
                                       ),
                                     ],
+                                  ),
+                                  Positioned(
+                                    right: AppSize.s1,
+                                    child: Icon(
+                                      Icons.arrow_forward_ios_rounded,
+                                      size: AppSize.s20,
+                                      color: colorScheme.secondary,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -184,25 +200,54 @@ class _ProfilePageState extends State<ProfilePage> {
                                 fontSize: FontSize.s20,
                                 font: FontConstants.ojuju)),
                         space(h: AppSize.s10),
-                        ProfileListTileWidget(
-                          onTap: () {},
+                        ListTileWidget(
+                          onTap: () {
+                            orderBloc.add(SetMyOrderFilter(
+                                myOrderFilter:
+                                    MyOrderFilter.PAYMENT_STATUS_PENDING));
+
+                            goPush(context, Routes.myOrderPage);
+                          },
                           iconData: Iconsax.card,
                           title: AppStrings.pendingPayment,
                         ),
-                        ProfileListTileWidget(
-                          onTap: () {},
+                        ListTileWidget(
+                          onTap: () {
+                            orderBloc.add(SetMyOrderFilter(
+                                myOrderFilter: MyOrderFilter.ORDER_DELIVERED));
+                            goPush(context, Routes.myOrderPage);
+                          },
                           iconData: Iconsax.truck,
                           title: AppStrings.delivered,
                         ),
-                        ProfileListTileWidget(
-                          onTap: () {},
+                        ListTileWidget(
+                          onTap: () {
+                            orderBloc.add(SetMyOrderFilter(
+                                myOrderFilter:
+                                    MyOrderFilter.PAYMENT_STATUS_COMPLETE));
+                            goPush(context, Routes.myOrderPage);
+                          },
                           iconData: Iconsax.timer_pause,
                           title: AppStrings.processing,
                         ),
-                        ProfileListTileWidget(
-                          onTap: () {},
+                        ListTileWidget(
+                          onTap: () {
+                            orderBloc.add(SetMyOrderFilter(
+                                myOrderFilter: MyOrderFilter.ORDER_CANCELLED));
+                            goPush(context, Routes.myOrderPage);
+                          },
                           iconData: Iconsax.box_remove,
                           title: AppStrings.cancelled,
+                        ),
+                        ListTileWidget(
+                          onTap: () {
+                            orderBloc.add(SetMyOrderFilter(
+                                myOrderFilter:
+                                    MyOrderFilter.PAYMENT_STATUS_FAILED));
+                            goPush(context, Routes.myOrderPage);
+                          },
+                          iconData: Iconsax.card_remove,
+                          title: AppStrings.paymentFailed,
                         ),
                         space(h: AppSize.s20),
                         Text(AppStrings.preferences,
@@ -210,7 +255,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 fontSize: FontSize.s20,
                                 font: FontConstants.ojuju)),
                         space(h: AppSize.s10),
-                        ProfileListTileWidget(
+                        ListTileWidget(
                           onTap: () {
                             showModalBottomSheet(
                               context: context,
@@ -223,7 +268,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           iconData: Iconsax.language_square,
                           title: AppStrings.changeLanguage,
                         ),
-                        ProfileListTileWidget(
+                        ListTileWidget(
                           onTap: () {},
                           iconData: Iconsax.notification,
                           title: AppStrings.notifications,
@@ -243,7 +288,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 fontSize: FontSize.s20,
                                 font: FontConstants.ojuju)),
                         space(h: AppSize.s10),
-                        ProfileListTileWidget(
+                        ListTileWidget(
                           onTap: () {},
                           iconData: Iconsax.lifebuoy,
                           title: AppStrings.customerService,
@@ -254,17 +299,17 @@ class _ProfilePageState extends State<ProfilePage> {
                                 fontSize: FontSize.s20,
                                 font: FontConstants.ojuju)),
                         space(h: AppSize.s10),
-                        ProfileListTileWidget(
+                        ListTileWidget(
                           onTap: () {},
                           iconData: Iconsax.user_minus,
                           title: AppStrings.deactivateAccount,
                         ),
-                        ProfileListTileWidget(
+                        ListTileWidget(
                           onTap: () {},
                           iconData: Iconsax.lock_1,
                           title: AppStrings.changePassword,
                         ),
-                        ProfileListTileWidget(
+                        ListTileWidget(
                           onTap: () {},
                           iconData: Iconsax.close_circle,
                           title: AppStrings.logout,
@@ -367,8 +412,8 @@ class ChangeLanguageBottomsheet extends StatelessWidget {
   }
 }
 
-class ProfileListTileWidget extends StatelessWidget {
-  const ProfileListTileWidget(
+class ListTileWidget extends StatelessWidget {
+  const ListTileWidget(
       {super.key,
       required this.iconData,
       required this.title,

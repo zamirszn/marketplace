@@ -8,7 +8,7 @@ class ApiUrls {
   static const String orders = "orders";
   static const String cart = "cart";
   static const String items = "items";
-  static const String getProfile = "profile/";
+  static const String profile = "profile/";
   static const String register = "$auth/signup/";
   static const String login = "$auth/login/";
   static const String refreshToken = "$auth/jwt/refresh";
@@ -24,6 +24,5 @@ class ApiUrls {
   static const String requestNewPasswordOTP =
       "$auth/request-password-reset-otp/";
   static const String resetPassword = "$auth/reset-password/";
-    static const String myOrders = "$api/orders/";
-
+  static const String myOrders = "$api/orders/";
 }

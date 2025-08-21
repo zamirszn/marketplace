@@ -9,11 +9,10 @@ class ProductFilter(FilterSet):
         lookup_expr='iexact'
     )
     
-   
 
     class Meta:
         model = Product
-        fields = {"category_id": ["exact"], "old_price": ["gt", "lt"],
+        fields = {"category_id": ["exact"], "price": ["gt", "lt"],
                 "discount": ["exact"],
                 "flash_sales": ["exact"],
                 "category":["exact"],

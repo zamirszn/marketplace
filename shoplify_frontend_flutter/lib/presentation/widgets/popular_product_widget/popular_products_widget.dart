@@ -87,15 +87,15 @@ class PopularProductsWidget extends StatelessWidget {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                if (product.discount == true)
+                                if (product.discountedPrice != null)
                                   Text(
-                                    "\$${roundToTwoDecimalPlaces(product.oldPrice)}",
+                                    "\$${roundToTwoDecimalPlaces(product.price)}",
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
-                                        decoration: product.discount != null &&
-                                                product.discount == true
-                                            ? TextDecoration.lineThrough
-                                            : null,
+                                        decoration:
+                                            product.discountedPrice != null
+                                                ? TextDecoration.lineThrough
+                                                : null,
                                         fontSize: FontSize.s12,
                                         fontFamily: FontConstants.ojuju),
                                   ),
@@ -103,7 +103,9 @@ class PopularProductsWidget extends StatelessWidget {
                                   constraints: const BoxConstraints(
                                       maxWidth: AppSize.s90),
                                   child: Text(
-                                    "\$${roundToTwoDecimalPlaces(product.price)}",
+                                    product.discountedPrice != null
+                                        ? "\$${roundToTwoDecimalPlaces(product.discountedPrice)}"
+                                        : "\$${roundToTwoDecimalPlaces(product.price)}",
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                         fontSize: FontSize.s16,

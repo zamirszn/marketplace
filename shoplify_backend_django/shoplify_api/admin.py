@@ -11,18 +11,21 @@ from unfold.contrib.import_export.forms import ExportForm, ImportForm, Selectabl
 class ProductImageAdmin(StackedInline):
     model = ProductImage
 
+
+
+
+
 @admin.register(Product)
-class ProductAdmin(ModelAdmin, ImportExportModelAdmin):
+class ProductAdmin(ModelAdmin,ImportExportModelAdmin):
     import_form_class = ImportForm
-    export_form_class = ExportForm
-    export_form_class = SelectableFieldsExportForm
+    export_form_class = SelectableFieldsExportForm  # keep only one, you had duplicate
     save_as = True
 
     list_per_page = 100
 
     inlines = [ProductImageAdmin]
     list_filter = [
-        "discount",
+        "discount_percentage",   # updated field
         "created_at",
         "category",
         "flash_sales"
@@ -30,9 +33,9 @@ class ProductAdmin(ModelAdmin, ImportExportModelAdmin):
     list_display = [
         "name",
         "id",
-        "discount",
-        "price",
-        "old_price",
+        "price",                # base price
+        "discount_percentage",  # %
+        "discounted_price",     # final computed price
         "average_rating",
         "inventory",
         "reviews_length",
@@ -42,9 +45,6 @@ class ProductAdmin(ModelAdmin, ImportExportModelAdmin):
     search_fields = [
         "name",
         "id",
-        
-        
-        
     ]
 
     prepopulated_fields = {"slug": ("name",)}
@@ -142,7 +142,6 @@ class CartItemAdmin(ModelAdmin, ImportExportModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(ModelAdmin, ImportExportModelAdmin):
-
     import_form_class = ImportForm
     export_form_class = ExportForm
     export_form_class = SelectableFieldsExportForm
@@ -151,10 +150,13 @@ class OrderAdmin(ModelAdmin, ImportExportModelAdmin):
         models = Order
 
     list_filter = ["placed_at", "order_status"]
-    search_fields = ["id", "placed_at", "order_status"]
-    list_display = ["id", "placed_at", "order_status", "owner", "owner_id"]
-
+    search_fields = ["id", "placed_at", "order_status", "owner__username", "phone_number"]
+    list_display = [
+        "id", "owner", "phone_number", "total_price", 
+        "shipping_cost", "grand_total", "order_status", "placed_at"
+    ]
     list_per_page = 100
+
 
 
 @admin.register(Review)

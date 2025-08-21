@@ -62,7 +62,7 @@ class SearchProductWidget extends StatelessWidget {
             right: AppPadding.p10,
             child: BlurBackgroundWidget(
                 width: AppSize.s40, child: AddToCartWidget(product: product))),
-        if (product.price != null)
+        if (product.discountedPrice != null)
           Positioned(
               bottom: AppPadding.p20,
               left: AppPadding.p10,
@@ -71,7 +71,7 @@ class SearchProductWidget extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: AppPadding.p5),
                   child: Text(
-                    "\$${roundToTwoDecimalPlaces(product.price) ?? ""}",
+                    "\$${roundToTwoDecimalPlaces(product.discountedPrice) ?? ""}",
                     overflow: TextOverflow.ellipsis,
                     style: getSemiBoldStyle(context,
                         color: ColorManager.white,

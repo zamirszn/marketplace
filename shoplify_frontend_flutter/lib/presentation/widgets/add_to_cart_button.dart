@@ -29,6 +29,11 @@ class AddToCartWidget extends StatelessWidget {
                 cartItem: state.cartItemToAdd!, quantityToAdd: 1));
           }
           showMessage(context, "${product.name} ${AppStrings.addedToCart}");
+        } else if (state.selectedProductId == product.id &&
+            state.status == AddToCartStatus.failure) {
+          if (state.errorMessage != null) {
+            showErrorMessage(context, state.errorMessage!);
+          }
         }
       },
       child: BlocBuilder<AddToCartBottomsheetBloc, AddToCartBottomsheetState>(

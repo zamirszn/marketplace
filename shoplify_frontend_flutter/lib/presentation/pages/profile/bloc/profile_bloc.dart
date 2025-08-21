@@ -15,6 +15,45 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
       emit(const ProfileState());
     });
 
+    on<UpdateNotificationEvent>((event, emit) async {
+      emit(state.copyWith(
+          updateNotificationStatus: UpdateNotificationStatus.loading));
+
+      final Either response =
+          await sl<UpdateProfileUseCase>().call(params: event.params);
+
+      response.fold((error) {
+        emit(state.copyWith(
+            errorMessage: error,
+            updateNotificationStatus: UpdateNotificationStatus.failure));
+      }, (data) {
+        final ProfileModel profileResponse = ProfileModel.fromMap(data);
+        emit(state.copyWith(
+          profile: profileResponse,
+          updateNotificationStatus: UpdateNotificationStatus.success,
+        ));
+      });
+    });
+
+    on<UpdateProfileEvent>((event, emit) async {
+      emit(state.copyWith(updateProfileStatus: UpdateProfileStatus.loading));
+
+      final Either response =
+          await sl<UpdateProfileUseCase>().call(params: event.params);
+
+      response.fold((error) {
+        emit(state.copyWith(
+            errorMessage: error,
+            updateProfileStatus: UpdateProfileStatus.failure));
+      }, (data) {
+        final ProfileModel profileResponse = ProfileModel.fromMap(data);
+        emit(state.copyWith(
+          profile: profileResponse,
+          updateProfileStatus: UpdateProfileStatus.success,
+        ));
+      });
+    });
+
     on<GetProfileEvent>((event, emit) async {
       emit(
         state.copyWith(profileStatus: ProfileStatus.loading),
@@ -28,8 +67,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
               profileStatus: ProfileStatus.failure, errorMessage: error),
         );
       }, (data) {
-        final GetProfileResponseModel profileResponse =
-            GetProfileResponseModel.fromMap(data);
+        final ProfileModel profileResponse = ProfileModel.fromMap(data);
         emit(state.copyWith(
           profile: profileResponse,
           profileStatus: ProfileStatus.success,

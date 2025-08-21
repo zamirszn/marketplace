@@ -13,10 +13,9 @@ class Product {
   final String? id;
   final String? name;
   final String? description;
-  final bool? discount;
   final ProductCategory? category;
-  final double? oldPrice;
-  final double? price;
+  final num? price;
+  final num? discountedPrice;
   final String? slug;
   final int? inventory;
   final num? averageRating;
@@ -30,9 +29,8 @@ class Product {
     this.name,
     this.description,
     this.category,
-    this.oldPrice,
-    this.discount,
     this.price,
+    this.discountedPrice,
     this.slug,
     this.inventory,
     this.averageRating,
@@ -46,9 +44,8 @@ class Product {
     String? name,
     String? description,
     ProductCategory? category,
-    double? oldPrice,
-    double? price,
-    bool? discount,
+    num? price,
+    num? discountedPrice,
     String? slug,
     int? inventory,
     num? averageRating,
@@ -61,9 +58,8 @@ class Product {
         name: name ?? this.name,
         description: description ?? this.description,
         category: category ?? this.category,
-        oldPrice: oldPrice ?? this.oldPrice,
-        discount: discount ?? this.discount,
         price: price ?? this.price,
+        discountedPrice: discountedPrice ?? this.discountedPrice,
         slug: slug ?? this.slug,
         inventory: inventory ?? this.inventory,
         averageRating: averageRating ?? this.averageRating,
@@ -76,12 +72,15 @@ class Product {
         id: json["id"],
         name: json["name"],
         description: json["description"],
-        discount: json["discount"],
         category: json["category"] == null
             ? null
             : ProductCategory.fromMap(json["category"]),
-        oldPrice: json["old_price"]?.toDouble(),
-        price: json["price"]?.toDouble(),
+        price: json['price'] != null
+            ? num.tryParse(json['price'].toString())
+            : null,
+        discountedPrice: json['discounted_price'] != null
+            ? num.tryParse(json['discounted_price'].toString())
+            : null,
         slug: json["slug"],
         inventory: json["inventory"],
         averageRating: json["average_rating"],
@@ -96,9 +95,8 @@ class Product {
         "name": name,
         "description": description,
         "category": category?.toMap(),
-        "old_price": oldPrice,
-        "discount": discount,
         "price": price,
+        "discounted_price": discountedPrice,
         "slug": slug,
         "inventory": inventory,
         "average_rating": averageRating,

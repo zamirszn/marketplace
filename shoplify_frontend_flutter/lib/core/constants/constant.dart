@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 
 class Constant {
-   static const double maxFileSizeMB = 2.0;
+  static const double maxFileSizeMB = 2.0;
   static const double maxImageSizeMB = 5.0;
   static const String doneOnboarding = "doneOnboarding";
   static const String accessToken = "access";
@@ -11,7 +11,7 @@ class Constant {
   static const String accountBlocked = "account_blocked";
   static const String appName = "Shoplify";
   static int otpCountdown = 60;
-  static int phoneLength = 20;
+  static int phoneLength = 16;
   static int passwordLength = 20;
   static int nameLength = 50;
   static int emailLength = 50;
@@ -19,6 +19,8 @@ class Constant {
   static int paginationLimit = 50;
   static int verificationCodeLimit = 6;
   static String success = "success";
+  static const double sliderMaxRange = 10000;
+
   static List<String> imageExtenstions = [
     "img",
     "png",

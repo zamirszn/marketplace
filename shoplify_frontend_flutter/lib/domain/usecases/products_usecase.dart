@@ -74,6 +74,12 @@ class GetorCreateCartUseCase implements Usecase<Either, dynamic> {
     return sl<ProductsRepository>().getOrCreateCart();
   }
 }
+class UpdateCartItemQuantityUseCase implements Usecase<Either, UpdateCartItemQuantityParams> {
+  @override
+  Future<Either> call({UpdateCartItemQuantityParams? params}) async {
+    return sl<ProductsRepository>().updateCartItemQuantity(params!);
+  }
+}
 
 class GetCartIdUseCase implements Usecase<String?, dynamic> {
   @override

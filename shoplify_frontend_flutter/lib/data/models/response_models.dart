@@ -47,13 +47,13 @@ class AllProductresponseModel {
       };
 }
 
-GetProfileResponseModel getProfileResponseModelFromMap(String str) =>
-    GetProfileResponseModel.fromMap(json.decode(str));
+ProfileModel getProfileResponseModelFromMap(String str) =>
+    ProfileModel.fromMap(json.decode(str));
 
-String getProfileResponseModelToMap(GetProfileResponseModel data) =>
+String getProfileResponseModelToMap(ProfileModel data) =>
     json.encode(data.toMap());
 
-class GetProfileResponseModel {
+class ProfileModel {
   final int? id;
   final String? phone;
   final dynamic profilePicture;
@@ -62,7 +62,7 @@ class GetProfileResponseModel {
   final String? fullName;
   final String? email;
 
-  GetProfileResponseModel({
+  ProfileModel({
     this.id,
     this.phone,
     this.profilePicture,
@@ -72,8 +72,7 @@ class GetProfileResponseModel {
     this.email,
   });
 
-  factory GetProfileResponseModel.fromMap(Map<String, dynamic> json) =>
-      GetProfileResponseModel(
+  factory ProfileModel.fromMap(Map<String, dynamic> json) => ProfileModel(
         id: json["id"],
         phone: json["phone"],
         email: json["email"],

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:shoplify/data/models/params_models.dart';
+import 'package:shoplify/data/models/response_models.dart';
 
 
 abstract class AuthRepository {
@@ -10,5 +11,6 @@ abstract class AuthRepository {
   Future<Either> requestNewPasswordOTP(String email);
   Future<Either> resetPassword(ResetPasswordParams resetPasswordParams);
   Future<Either> getProfile();
+  Future<Either> updateProfile(ProfileModel params);
   Future<Either> verifyEmailVerificationOTP(VerifyOtpParams verifyOtpParams);
 }

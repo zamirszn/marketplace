@@ -212,7 +212,8 @@ class ProfileView(APIView):
     serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
-    http_method_names = ["post", "patch", "put", "get"]  # Added "put"
+    http_method_names = ["post", "patch", "get"] 
+
 
     def get(self, request, *args, **kwargs):
         profile = Profile.objects.filter(owner=request.user).first()
@@ -222,7 +223,6 @@ class ProfileView(APIView):
         return Response(profile_serializer.data)
 
     def post(self, request, *args, **kwargs):
-        print(f'user is {request.user}')  # Fixed the f-string syntax
         profile = Profile.objects.filter(owner=request.user).first()
         if profile:
             # Update existing profile
@@ -247,13 +247,13 @@ class ProfileView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, *args, **kwargs):
-        profile = Profile.objects.filter(owner=request.user).first()
-        if not profile:
-            return Response({"detail": "Profile not found."}, status=status.HTTP_404_NOT_FOUND)
+    # def put(self, request, *args, **kwargs):
+    #     profile = Profile.objects.filter(owner=request.user).first()
+    #     if not profile:
+    #         return Response({"detail": "Profile not found."}, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = self.serializer_class(profile, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #     serializer = self.serializer_class(profile, data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

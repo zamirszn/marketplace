@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import "package:shoplify/core/constants/constant.dart";
 import 'package:shoplify/core/network/dio_client.dart';
 import 'package:shoplify/data/models/params_models.dart';
+import 'package:shoplify/data/models/response_models.dart';
 import 'package:shoplify/data/source/auth_service_data_source.dart';
 import 'package:shoplify/data/source/secure_storage_data_source.dart';
 import 'package:shoplify/domain/repository/auth_repo.dart';
@@ -119,6 +120,17 @@ class AuthRepositoryImpl extends AuthRepository {
   @override
   Future<Either> getProfile() async {
     Either result = await sl<AuthServiceDataSource>().getProfile();
+    return result.fold((error) {
+      return Left(error);
+    }, (data) async {
+      Response response = data;
+      return Right(response.data);
+    });
+  }
+
+  @override
+  Future<Either> updateProfile(ProfileModel params) async{
+    Either result = await sl<AuthServiceDataSource>().updateProfile(params);
     return result.fold((error) {
       return Left(error);
     }, (data) async {

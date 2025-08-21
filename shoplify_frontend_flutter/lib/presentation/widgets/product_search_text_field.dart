@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/presentation/pages/home/filter_bottom_sheet/bloc/filter_bottomsheet_bloc.dart';
 import 'package:shoplify/presentation/pages/search/bloc/search_bloc.dart';
@@ -34,10 +33,6 @@ class _ProductSearchTextFieldState extends State<ProductSearchTextField> {
     super.dispose();
   }
 
- 
-
-
-
   @override
   Widget build(BuildContext context) {
     final searchBloc = context.read<SearchBloc>();
@@ -45,7 +40,6 @@ class _ProductSearchTextFieldState extends State<ProductSearchTextField> {
 
     return Expanded(
       child: TextField(
-        autofocus: false,
         controller: searchController,
         onChanged: (value) {
           context.read<SearchBloc>().add(UpdateSearchText(text: value));
@@ -69,10 +63,8 @@ class _ProductSearchTextFieldState extends State<ProductSearchTextField> {
             searchBloc.add(SearchProductEvent(
                 useFilterParams: true,
                 searchParamsModel: SearchParamsModel(
-                    priceGreaterThan:
-                        "${calculateProductRange(filterBloc.state.priceRange.start)}",
-                    priceLessThan:
-                        "${calculateProductRange(filterBloc.state.priceRange.end)}",
+                    priceGreaterThan: "${filterBloc.state.priceRange.start}",
+                    priceLessThan: "${filterBloc.state.priceRange.end}",
                     categoryId: filterBloc.state.selectedCategoryId,
                     discount: filterBloc.state.sortProductBy ==
                         SortProductBy.discount,

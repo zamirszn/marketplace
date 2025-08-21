@@ -166,4 +166,16 @@ class ProductRepositoryImpl extends ProductsRepository {
       return Right(response.data);
     });
   }
+  
+  @override
+  Future<Either> updateCartItemQuantity(UpdateCartItemQuantityParams params)async {
+      Either result = await sl<ProductsServiceDataSource>().updateCartItemQuantity(params);
+
+    return result.fold((error) {
+      return Left(error);
+    }, (data) async {
+      Response response = data;
+      return Right(response.data);
+    });
+  }
 }

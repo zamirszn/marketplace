@@ -10,9 +10,13 @@ class AppStrings {
   static const String gallery = "Gallery";
   static const String camera = "Camera";
   static const String save = "Save";
+  static const String profileUpdateSuccess = "Profile updated successfully";
   static const String image = "Image";
+  static const String overview = "Overview";
   static const String noOrders = "No Orders";
   static const String address = "Address";
+  static const String payWithStripe = "Pay With Stripe";
+  static const String paymentInfo = "Payment Info";
   static const String shippingAddress = "Shipping Address";
   static const String notifications = "Notifications";
   static const String changePassword = "Change Password";

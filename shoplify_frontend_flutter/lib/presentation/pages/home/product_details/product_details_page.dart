@@ -123,7 +123,7 @@ class ProductDetailsPage extends StatelessWidget {
                                         ),
                                         Expanded(
                                           child: Text(
-                                            "${AppStrings.price}: \$${roundToTwoDecimalPlaces(state.selectedProduct?.price) ?? ""}",
+                                            "${AppStrings.price}: \$${roundToTwoDecimalPlaces(state.selectedProduct?.discountedPrice) ?? ""}",
                                             textAlign: TextAlign.end,
                                             style: getSemiBoldStyle(context,
                                                 fontSize: FontSize.s20,

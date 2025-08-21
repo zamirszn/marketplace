@@ -56,7 +56,7 @@ class CartItem {
   final String? cart;
   final Product? product;
   int? quantity;
-  final double? subTotal;
+  final num? subTotal;
 
   CartItem({
     this.id,
@@ -71,7 +71,7 @@ class CartItem {
     String? cart,
     Product? product,
     int? quantity,
-    double? subTotal,
+    num? subTotal,
   }) =>
       CartItem(
         id: id ?? this.id,

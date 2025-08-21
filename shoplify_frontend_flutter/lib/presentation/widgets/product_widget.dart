@@ -95,9 +95,11 @@ class ProductWidget extends StatelessWidget {
                       children: [
                         ConstrainedBox(
                           constraints:
-                              const BoxConstraints(maxWidth: AppSize.s100),
+                              const BoxConstraints(maxWidth: AppSize.s90),
                           child: Text(
-                            "\$${roundToTwoDecimalPlaces(product.price)}",
+                            product.discountedPrice != null
+                                ? "\$${roundToTwoDecimalPlaces(product.discountedPrice)}"
+                                : "\$${roundToTwoDecimalPlaces(product.price)}",
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                                 fontSize: FontSize.s18,
@@ -105,16 +107,15 @@ class ProductWidget extends StatelessWidget {
                                 fontFamily: FontConstants.ojuju),
                           ),
                         ),
-                        if (product.discount == true)
+                        if (product.discountedPrice != null)
                           Text(
-                            "\$${roundToTwoDecimalPlaces(product.oldPrice)}",
+                            "\$${roundToTwoDecimalPlaces(product.price)}",
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                decoration: product.discount != null &&
-                                        product.discount == true
+                                decoration: product.discountedPrice != null
                                     ? TextDecoration.lineThrough
                                     : null,
-                                fontSize: FontSize.s14,
+                                fontSize: FontSize.s12,
                                 fontFamily: FontConstants.ojuju),
                           ),
                       ],

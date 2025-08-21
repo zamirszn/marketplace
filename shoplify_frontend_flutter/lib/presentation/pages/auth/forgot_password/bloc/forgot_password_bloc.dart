@@ -62,7 +62,6 @@ class ForgotPasswordBloc
       ));
     }
 
-    print(state.otpCode);
   }
 
   void _onTogglePasswordVisibility(

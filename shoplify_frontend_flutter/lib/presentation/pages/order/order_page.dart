@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/presentation/pages/notification/notification_icon.dart';
+import 'package:shoplify/presentation/pages/profile/profile_page.dart';
 import 'package:shoplify/presentation/resources/font_manager.dart';
 import 'package:shoplify/presentation/resources/string_manager.dart';
 import 'package:shoplify/presentation/resources/styles_manager.dart';
@@ -32,6 +33,40 @@ class OrderPage extends StatelessWidget {
             w: AppSize.s10,
           )
         ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppPadding.p12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              AppStrings.overview,
+              style: getRegularStyle(context,
+                  font: FontConstants.ojuju, fontSize: FontSize.s23),
+            ),
+            Text(
+              AppStrings.paymentInfo,
+              style: getRegularStyle(context,
+                  font: FontConstants.ojuju, fontSize: FontSize.s23),
+            ),
+            space(h: AppSize.s10),
+            const ProfileNameListTile(),
+            space(h: AppSize.s20),
+            const ProfileInfoCard(),
+            space(h: AppSize.s40),
+            SizedBox(
+              height: 53,
+              width: double.infinity,
+              child: ElevatedButton(
+                  onPressed: () {},
+                  child: Text(
+                    AppStrings.payWithStripe,
+                    style: getRegularStyle(context,
+                        font: FontConstants.ojuju, fontSize: FontSize.s18),
+                  )),
+            )
+          ],
+        ),
       ),
     );
   }

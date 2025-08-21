@@ -2,6 +2,63 @@ import 'dart:convert';
 
 import 'package:shoplify/presentation/pages/favorite/bloc/favorite_bloc.dart';
 
+class UpdateCartItemQuantityParams {
+  final int quantity;
+  final String? cartId;
+  final int? cartItemId;
+  UpdateCartItemQuantityParams({
+    required this.quantity,
+    this.cartId,
+    this.cartItemId,
+  });
+
+  UpdateCartItemQuantityParams copyWith({
+    int? quantity,
+    String? cartId,
+    int? cartItemId,
+  }) {
+    return UpdateCartItemQuantityParams(
+      quantity: quantity ?? this.quantity,
+      cartId: cartId ?? this.cartId,
+      cartItemId: cartItemId ?? this.cartItemId,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'quantity': quantity,
+    };
+  }
+
+  factory UpdateCartItemQuantityParams.fromMap(Map<String, dynamic> map) {
+    return UpdateCartItemQuantityParams(
+      quantity: map['quantity'] as int,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory UpdateCartItemQuantityParams.fromJson(String source) =>
+      UpdateCartItemQuantityParams.fromMap(
+          json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() =>
+      'UpdateCartItemQuantityParams(quantity: $quantity, cartId: $cartId, cartItemId: $cartItemId)';
+
+  @override
+  bool operator ==(covariant UpdateCartItemQuantityParams other) {
+    if (identical(this, other)) return true;
+
+    return other.quantity == quantity &&
+        other.cartId == cartId &&
+        other.cartItemId == cartItemId;
+  }
+
+  @override
+  int get hashCode => quantity.hashCode ^ cartId.hashCode ^ cartItemId.hashCode;
+}
+
 class AddToCartParamsModel {
   final String productId;
   final int quantity;
@@ -405,5 +462,6 @@ class GetMyOrderParams {
 
   String toJson() => json.encode(toMap());
 
-  factory GetMyOrderParams.fromJson(String source) => GetMyOrderParams.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory GetMyOrderParams.fromJson(String source) =>
+      GetMyOrderParams.fromMap(json.decode(source) as Map<String, dynamic>);
 }

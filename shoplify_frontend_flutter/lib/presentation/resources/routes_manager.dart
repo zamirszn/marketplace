@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/presentation/pages/auth/account_blocked.dart';
 import 'package:shoplify/presentation/pages/auth/account_verification/account_verification_page.dart';
 import 'package:shoplify/presentation/pages/auth/forgot_password/forgot_password_page.dart';
@@ -105,9 +104,7 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: Routes.addReviewPage,
       builder: (context, state) {
-  
-
-        return AddReviewPage();
+        return const AddReviewPage();
       },
     ),
     GoRoute(

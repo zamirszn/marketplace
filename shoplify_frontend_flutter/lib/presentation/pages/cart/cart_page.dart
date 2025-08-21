@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
+import 'package:shoplify/data/models/cart_model.dart';
 import 'package:shoplify/data/models/product_model.dart';
 import 'package:shoplify/presentation/pages/cart/bloc/cart_bloc.dart';
 import 'package:shoplify/presentation/pages/cart/cart_item_widget.dart';
@@ -90,11 +91,12 @@ class _CartPageState extends State<CartPage> {
                         shrinkWrap: true,
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context, index) {
-                          Product? cartItems =
-                              state.cart?.items?[index].product;
+                          CartItem? cartItem =
+                              state.cart?.items?[index];
+
 
                           return CartItemWidget(
-                            product: cartItems!,
+                            cartItem: cartItem!,
                             index: index,
                           );
                         },

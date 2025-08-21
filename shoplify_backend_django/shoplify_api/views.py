@@ -346,8 +346,24 @@ class OrderViewSet(ModelViewSet):
         )
         serializer.is_valid(raise_exception=True)
         order = serializer.save()
+
+        # Recalculate totals (grand_total = total_price + shipping_cost)
+        order.grand_total = order.total_price + order.shipping_cost
+        order.save(update_fields=["grand_total"])
+
         serializer = OrderSerializer(order)
         return Response(serializer.data)
+    
+
+    @action(detail=True, methods=["POST"])
+    def confirm_payment(self, request, pk=None):
+        order = self.get_object()
+        order.order_status = "C"
+        order.save()
+        serializer = OrderSerializer(order)
+        return Response({"message": "Payment successful", "data": serializer.data})
+
+
 
     def get_serializer_class(self):
         if self.request.method == "POST":

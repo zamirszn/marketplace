@@ -46,6 +46,8 @@ void setupServiceLocator() async {
       ResetPasswordUsecase());
   sl.registerSingleton<GetProfileUseCase>(
       GetProfileUseCase());
+  sl.registerSingleton<UpdateProfileUseCase>(
+      UpdateProfileUseCase());
 
   //product usecases
   sl.registerSingleton<GetProductCategoryUsecase>(GetProductCategoryUsecase());
@@ -59,6 +61,7 @@ void setupServiceLocator() async {
   sl.registerSingleton<RemovefromFavoriteUseCase>(RemovefromFavoriteUseCase());
   sl.registerSingleton<RefreshProductDetails>(RefreshProductDetails());
   sl.registerSingleton<SearchProductUseCase>(SearchProductUseCase());
+  sl.registerSingleton<UpdateCartItemQuantityUseCase>(UpdateCartItemQuantityUseCase());
 
   // cart
   sl.registerSingleton<RemoveFromCartUseCase>(RemoveFromCartUseCase());

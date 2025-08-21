@@ -23,7 +23,6 @@ class ProductImageSerializers(serializers.ModelSerializer):
     def get_image(self, obj):
         return obj.image.url
 
-
 class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer()
     images = ProductImageSerializers(many=True, read_only=True)
@@ -34,14 +33,16 @@ class ProductSerializer(serializers.ModelSerializer):
         write_only=True,
     )
 
-    average_rating = serializers.FloatField(
-        read_only=True,
-    )
-    reviews_length = serializers.IntegerField(
-        read_only=True,
-    )
+    discounted_price = serializers.DecimalField(
+    max_digits=10,
+    decimal_places=2,
+    read_only=True
+)
 
+    average_rating = serializers.FloatField(read_only=True)
+    reviews_length = serializers.IntegerField(read_only=True)
     is_favorite = serializers.SerializerMethodField()
+    
 
     def get_is_favorite(self, obj):
         """Determines if the product is in the authenticated user's favorites."""
@@ -55,22 +56,21 @@ class ProductSerializer(serializers.ModelSerializer):
         fields = [
             "id",
             "name",
-            "discount",
             "description",
             "category",
-            "old_price",
-            "price",
+            "price",                # base/original price
+            "discounted_price",     # computed price after discount
             "slug",
             "inventory",
             "images",
             "uploaded_images",
             "average_rating",
             "reviews_length",
-            "is_favorite"
+            "is_favorite",
         ]
 
     def create(self, validated_data):
-        uploaded_images = validated_data.pop("uploaded_images")
+        uploaded_images = validated_data.pop("uploaded_images", [])
         product = Product.objects.create(**validated_data)
         for image in uploaded_images:
             ProductImage.objects.create(product=product, image=image)
@@ -159,6 +159,30 @@ class CartSerializer(serializers.ModelSerializer):
 
 
 class UpdateCartItemSerializer(serializers.ModelSerializer):
+    
+    def validate_quantity(self, value):
+        """
+        Validate that the new quantity doesn't exceed inventory
+        """
+        # Get the cart item instance being updated
+        cart_item = self.instance
+        if not cart_item:
+            raise serializers.ValidationError("Cart item not found.")
+        
+        # Get the product to check inventory
+        product = cart_item.product
+        if not product:
+            raise serializers.ValidationError("Product not found.")
+        
+        # Check if requested quantity exceeds inventory
+        if value > product.inventory:  # Assuming your Product model has 'inventory' field
+            raise serializers.ValidationError(
+                f"Cannot set quantity to {value}. "
+                f"Only {product.inventory} items available in stock."
+            )
+        
+        return value
+    
     class Meta:
         model = CartItem
         fields = ["quantity"]
@@ -168,11 +192,49 @@ class AddCartItemSerializer(serializers.ModelSerializer):
     product_id = serializers.UUIDField()
     product = ProductSerializer(read_only=True)
 
-
     def validate_product_id(self, value):
         if not Product.objects.filter(pk=value).exists():
-            raise serializers.ValidationError("No product with this ID exists.")
+            raise serializers.ValidationError("No product with this Id exists.")
         return value
+    
+    def validate(self, attrs):
+        """
+        Validate that the total quantity (existing + new) doesn't exceed inventory
+        """
+        product_id = attrs["product_id"]
+        requested_quantity = attrs["quantity"]
+        cart_id = self.context["cart_id"]
+        
+        # Get the product to check inventory
+        try:
+            product = Product.objects.get(pk=product_id)
+        except Product.DoesNotExist:
+            raise serializers.ValidationError("Product not found.")
+        
+        # Check current quantity in cart
+        try:
+            existing_cart_item = CartItem.objects.get(
+                product_id=product_id, 
+                cart_id=cart_id
+            )
+            current_quantity_in_cart = existing_cart_item.quantity
+        except CartItem.DoesNotExist:
+            current_quantity_in_cart = 0
+        
+        # Calculate total quantity that would be in cart
+        total_quantity = current_quantity_in_cart + requested_quantity
+        
+        # Validate against inventory
+        if total_quantity > product.inventory:  # Change 'inventory' to your actual field name
+            available_to_add = product.inventory - current_quantity_in_cart
+            raise serializers.ValidationError(
+                f"Cannot add {requested_quantity} items. "
+                f"Only {available_to_add} more items can be added. "
+                f"(You already have {current_quantity_in_cart} in your cart, "
+                f"product has {product.inventory} total in stock)"
+            )
+        
+        return attrs
 
     def save(self, **kwargs):
         product_id = self.validated_data["product_id"]
@@ -181,20 +243,22 @@ class AddCartItemSerializer(serializers.ModelSerializer):
 
         try:
             cart_item = CartItem.objects.get(product_id=product_id, cart_id=cart_id)
+            # The validation already passed, so we can safely add
             cart_item.quantity += quantity
             cart_item.save()
             self.instance = cart_item
         except CartItem.DoesNotExist:
+            # For new items, validation already confirmed quantity <= inventory
             self.instance = CartItem.objects.create(
                 cart_id=cart_id, **self.validated_data
             )
         return self.instance
+    
+    
 
     class Meta:
         model = CartItem
         fields = ["id", "product", "product_id", "quantity"]
-
-
 
 class OrderItemSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
@@ -203,17 +267,30 @@ class OrderItemSerializer(serializers.ModelSerializer):
         model = OrderItem
         fields = ["id", "product", "quantity"]
 
-
 class OrderSerializer(serializers.ModelSerializer):
     items = OrderItemSerializer(many=True, read_only=True)
+    total_price = serializers.ReadOnlyField()
+    grand_total = serializers.ReadOnlyField()
 
     class Meta:
         model = Order
-        fields = ["items", "id", "placed_at", "order_status", "owner"]
+        fields = [
+            "id",
+            "placed_at",
+            "order_status",
+            "owner",
+            "phone_number",
+            "notes",
+            "shipping_cost",
+            "total_price",
+            "grand_total",
+            "items",
+        ]
 
 
 class CreateOrderSerializer(serializers.Serializer):
     cart_id = serializers.UUIDField()
+    notes = serializers.CharField(required=False, allow_blank=True)
 
     def validate_cart_id(self, cart_id):
         if not Cart.objects.filter(pk=cart_id).exists():
@@ -226,7 +303,15 @@ class CreateOrderSerializer(serializers.Serializer):
         with transaction.atomic():
             cart_id = self.validated_data["cart_id"]
             user_id = self.context["user_id"]
-            order = Order.objects.create(owner_id=user_id)
+
+            user = User.objects.get(pk=user_id)
+
+            order = Order.objects.create(
+                owner_id=user_id,
+                phone_number=user.profile.phone_number,  # snapshot phone at order time
+                notes=self.validated_data.get("notes", ""),
+            )
+
             cart_items = CartItem.objects.filter(cart_id=cart_id)
 
             order_items = [
@@ -235,7 +320,9 @@ class CreateOrderSerializer(serializers.Serializer):
             ]
 
             OrderItem.objects.bulk_create(order_items)
-            Cart.objects.filter(id=cart_id).delete()
+            # Clear cart items instead of deleting cart
+            cart_items.delete()
+
         return order
 
 

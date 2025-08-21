@@ -125,6 +125,32 @@ class DioClient {
     }
   }
 
+    Future<Response> patch(
+    String url, {
+    dynamic data,
+    Map<String, dynamic>? queryParameters,
+    Options? options,
+    CancelToken? cancelToken,
+    ProgressCallback? onSendProgress,
+    ProgressCallback? onReceiveProgress,
+  }) async {
+    try {
+      final Response response = await _dio.patch(
+        url,
+        data: data,
+        queryParameters: queryParameters,
+        options: _getOptions(options),
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
+      );
+
+      return _processResponse(response);
+    } on DioException catch (e) {
+      throw _handleDioError(e);
+    }
+  }
+
   Future<Response> delete(
     String url, {
     dynamic data,

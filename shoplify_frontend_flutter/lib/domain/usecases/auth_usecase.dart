@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:shoplify/core/usecase/usecase.dart';
 import 'package:shoplify/data/models/params_models.dart';
+import 'package:shoplify/data/models/response_models.dart';
 import 'package:shoplify/domain/repository/auth_repo.dart';
 import 'package:shoplify/presentation/service_locator.dart';
 
@@ -56,6 +57,12 @@ class GetProfileUseCase implements Usecase<Either, dynamic> {
   @override
   Future<Either> call({dynamic params}) async {
     return sl<AuthRepository>().getProfile();
+  }
+}
+class UpdateProfileUseCase implements Usecase<Either, ProfileModel> {
+  @override
+  Future<Either> call({ProfileModel? params}) async {
+    return sl<AuthRepository>().updateProfile(params!);
   }
 }
 

@@ -83,7 +83,7 @@ class NewProductWidget extends StatelessWidget {
                   ),
                 ),
               ),
-            if (product.price != null)
+            if (product.discountedPrice != null)
               Positioned(
                   bottom: AppPadding.p20,
                   right: AppPadding.p10,
@@ -92,7 +92,7 @@ class NewProductWidget extends StatelessWidget {
                       padding:
                           const EdgeInsets.symmetric(horizontal: AppPadding.p5),
                       child: Text(
-                        "\$${roundToTwoDecimalPlaces(product.price) ?? ""}",
+                        "\$${roundToTwoDecimalPlaces(product.discountedPrice) ?? ""}",
                         overflow: TextOverflow.ellipsis,
                         style: getSemiBoldStyle(context,
                                 color: ColorManager.white,

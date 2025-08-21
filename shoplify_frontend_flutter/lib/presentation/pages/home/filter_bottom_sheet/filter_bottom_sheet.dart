@@ -4,6 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
+import 'package:shoplify/core/constants/constant.dart';
 import 'package:shoplify/data/models/params_models.dart';
 import 'package:shoplify/data/models/product_category_model.dart';
 import 'package:shoplify/presentation/pages/home/filter_bottom_sheet/bloc/filter_bottomsheet_bloc.dart';
@@ -158,7 +159,7 @@ class FilterBottomSheet extends StatelessWidget {
                 BlocBuilder<FilterBottomsheetBloc, FilterBottomsheetState>(
                   builder: (context, state) {
                     return Text(
-                      "\$${calculateProductRange(state.priceRange.start)} - \$${calculateProductRange(state.priceRange.end)}",
+                      "\$${state.priceRange.start.ceil()} - \$${state.priceRange.end.ceil()}",
                       style: getBoldStyle(context,
                           fontSize: FontSize.s16, font: FontConstants.ojuju),
                     );
@@ -175,6 +176,8 @@ class FilterBottomSheet extends StatelessWidget {
                     BlocBuilder<FilterBottomsheetBloc, FilterBottomsheetState>(
                   builder: (context, state) {
                     return RangeSlider(
+                      min: 0,
+                      max: Constant.sliderMaxRange,
                       values: state.priceRange,
                       onChanged: (newRange) {
                         context
@@ -215,9 +218,9 @@ class FilterBottomSheet extends StatelessWidget {
                                       useFilterParams: true,
                                       searchParamsModel: SearchParamsModel(
                                           priceGreaterThan:
-                                              "${calculateProductRange(state.priceRange.start)}",
+                                              "${state.priceRange.start.ceil()}",
                                           priceLessThan:
-                                              "${calculateProductRange(state.priceRange.end)}",
+                                              "${state.priceRange.end.ceil()}",
                                           categoryId: state.selectedCategoryId,
                                           discount: state.sortProductBy ==
                                               SortProductBy.discount,

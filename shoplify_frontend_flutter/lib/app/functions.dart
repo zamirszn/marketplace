@@ -48,9 +48,7 @@ Future<XFile?> pickImage(
   }
 }
 
-num calculateProductRange(num range) {
-  return (range * 1000).ceil();
-}
+
 
 num calculateProductAmountByQuantity(num productPrice, int quantity) {
   return productPrice * quantity;

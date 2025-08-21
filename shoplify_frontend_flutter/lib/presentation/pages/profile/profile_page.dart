@@ -7,6 +7,7 @@ import 'package:shoplify/app/extensions.dart';
 import 'package:shoplify/app/functions.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
 import 'package:shoplify/core/constants/api_urls.dart';
+import 'package:shoplify/data/models/response_models.dart';
 import 'package:shoplify/presentation/pages/notification/notification_icon.dart';
 import 'package:shoplify/presentation/pages/order/bloc/order_bloc.dart';
 import 'package:shoplify/presentation/pages/profile/bloc/profile_bloc.dart';
@@ -43,6 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final orderBloc = context.read<OrderBloc>();
+    final ProfileBloc profileBloc = context.read<ProfileBloc>();
 
     return Scaffold(
       extendBodyBehindAppBar: false,
@@ -94,106 +96,9 @@ class _ProfilePageState extends State<ProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ListTile(
-                          onTap: () {
-                            goPush(context, Routes.editProfilePage);
-                          },
-                          hoverColor: Colors.transparent,
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: AppPadding.p2,
-                              vertical: AppPadding.p5),
-                          dense: false,
-                          trailing: const EnterArrow(),
-                          leading: SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: AnimatedExpressiveShape(
-                              morphDuration: const Duration(seconds: 2),
-                              shapes: [
-                                MaterialShapes.square,
-                                MaterialShapes.arch,
-                                MaterialShapes.pill,
-                                MaterialShapes.cookie4Sided,
-                                MaterialShapes.clover4Leaf,
-                                MaterialShapes.ghostish,
-                                MaterialShapes.bun,
-                              ],
-                              child: const UserProfilePicture(),
-                            ),
-                          ),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(AppSize.s10)),
-                          horizontalTitleGap: AppSize.s14,
-                          title: Text(
-                            state.profile?.fullName ?? "",
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: getSemiBoldStyle(
-                              context,
-                              font: FontConstants.ojuju,
-                              fontSize: FontSize.s20,
-                            ),
-                          ),
-                          subtitle: Text(
-                            state.profile?.email ?? "",
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: getRegularStyle(context,
-                                font: FontConstants.poppins,
-                                color: ColorManager.grey),
-                          ),
-                        ),
+                        const ProfileNameListTile(),
                         space(h: AppSize.s20),
-                        RoundCorner(
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(
-                              AppSize.s10,
-                            ),
-                            onTap: () {
-                              goPush(context, Routes.editProfilePage);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(AppPadding.p20),
-                              child: Stack(
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    children: [
-                                      Wrap(
-                                        direction: Axis.horizontal,
-                                        alignment: WrapAlignment.spaceBetween,
-                                        runSpacing: AppSize.s20,
-                                        children: [
-                                          ProfileInfoWidget(
-                                            data: state.profile?.phone ?? "-",
-                                            iconData: Iconsax.call,
-                                            title: AppStrings.phone,
-                                          ),
-                                          ProfileInfoWidget(
-                                            data: state
-                                                    .profile?.shippingAddress ??
-                                                "-",
-                                            iconData: Iconsax.location,
-                                            title: AppStrings.shippingAddress,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  Positioned(
-                                    right: AppSize.s1,
-                                    child: Icon(
-                                      Icons.arrow_forward_ios_rounded,
-                                      size: AppSize.s20,
-                                      color: colorScheme.secondary,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                        const ProfileInfoCard(),
                         space(h: AppSize.s40),
                         Text(AppStrings.myOrders,
                             style: getSemiBoldStyle(context,
@@ -269,17 +174,30 @@ class _ProfilePageState extends State<ProfilePage> {
                           title: AppStrings.changeLanguage,
                         ),
                         ListTileWidget(
-                          onTap: () {},
                           iconData: Iconsax.notification,
                           title: AppStrings.notifications,
                           trailing: Transform.scale(
                             scale: .8,
-                            child: Switch(
-                              padding: const EdgeInsets.all(0),
-                              value:
-                                  state.profile?.notificationsEnabled ?? false,
-                              onChanged: (value) {},
-                            ),
+                            child: state.updateNotificationStatus ==
+                                    UpdateNotificationStatus.loading
+                                ? const LoadingWidget()
+                                : Switch(
+                                    padding: const EdgeInsets.all(0),
+                                    value:
+                                        state.profile?.notificationsEnabled ??
+                                            false,
+                                    onChanged: (value) {
+                                      bool enabled =
+                                          state.profile?.notificationsEnabled ??
+                                              false;
+                                      profileBloc.add(UpdateNotificationEvent(
+                                          params: ProfileModel(
+                                              // full and email are required to patch p rofile data on the api endpoint
+                                              fullName: state.profile?.fullName,
+                                              email: state.profile?.email,
+                                              notificationsEnabled: !enabled)));
+                                    },
+                                  ),
                           ),
                         ),
                         space(h: AppSize.s20),
@@ -327,6 +245,123 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
+class ProfileInfoCard extends StatelessWidget {
+  const ProfileInfoCard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        return RoundCorner(
+          child: InkWell(
+            borderRadius: BorderRadius.circular(
+              AppSize.s10,
+            ),
+            onTap: () {
+              goPush(context, Routes.editProfilePage);
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(AppPadding.p20),
+              child: Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ProfileInfoWidget(
+                        data: state.profile?.phone ?? "-",
+                        iconData: Iconsax.call,
+                        title: AppStrings.phone,
+                      ),
+                      space(h: AppSize.s20),
+                      ProfileInfoWidget(
+                        data: state.profile?.shippingAddress ?? "-",
+                        iconData: Iconsax.location,
+                        title: AppStrings.shippingAddress,
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    right: AppSize.s1,
+                    child: Icon(
+                      Icons.arrow_forward_ios_rounded,
+                      size: AppSize.s20,
+                      color: colorScheme.secondary,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+}
+
+class ProfileNameListTile extends StatelessWidget {
+  const ProfileNameListTile({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<ProfileBloc, ProfileState>(
+      builder: (context, state) {
+        return ListTile(
+          onTap: () {
+            goPush(context, Routes.editProfilePage);
+          },
+          hoverColor: Colors.transparent,
+          contentPadding: const EdgeInsets.symmetric(
+              horizontal: AppPadding.p2, vertical: AppPadding.p5),
+          dense: false,
+          trailing: const EnterArrow(),
+          leading: SizedBox(
+            width: 50,
+            height: 50,
+            child: AnimatedExpressiveShape(
+              morphDuration: const Duration(seconds: 2),
+              shapes: [
+                MaterialShapes.square,
+                MaterialShapes.arch,
+                MaterialShapes.pill,
+                MaterialShapes.cookie4Sided,
+                MaterialShapes.clover4Leaf,
+                MaterialShapes.ghostish,
+                MaterialShapes.bun,
+              ],
+              child: const UserProfilePicture(),
+            ),
+          ),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(AppSize.s10)),
+          horizontalTitleGap: AppSize.s14,
+          title: Text(
+            state.profile?.fullName ?? "",
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: getSemiBoldStyle(
+              context,
+              font: FontConstants.ojuju,
+              fontSize: FontSize.s20,
+            ),
+          ),
+          subtitle: Text(
+            state.profile?.email ?? "",
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: getRegularStyle(context,
+                font: FontConstants.poppins, color: ColorManager.grey),
+          ),
+        );
+      },
+    );
+  }
+}
+
 class UserProfilePicture extends StatelessWidget {
   const UserProfilePicture({
     super.key,
@@ -337,7 +372,9 @@ class UserProfilePicture extends StatelessWidget {
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
         return CachedNetworkImage(
-          imageUrl: ApiUrls.baseUrl + state.profile?.profilePicture,
+          imageUrl: state.profile?.profilePicture != null
+              ? ApiUrls.baseUrl + state.profile?.profilePicture
+              : "",
           height: 40,
           fit: BoxFit.cover,
           placeholder: (context, url) => Skeletonizer(

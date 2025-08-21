@@ -12,24 +12,26 @@ class FilterBottomsheetState extends Equatable {
   final RangeValues priceRange;
   final bool isFilterEnabled;
 
-  const FilterBottomsheetState(
-      {this.isFilterEnabled = false,
-      this.selectedCategoryId,
-      this.sortProductBy,
-      this.priceRange = const RangeValues(0, 1)});
+  const FilterBottomsheetState({
+    this.isFilterEnabled = false,
+    this.selectedCategoryId,
+    this.sortProductBy,
+    this.priceRange =  const RangeValues(0, Constant.sliderMaxRange),
+  });
 
   @override
-  List<Object?> get props => [selectedCategoryId, sortProductBy, priceRange];
+  List<Object?> get props =>
+      [selectedCategoryId, sortProductBy, priceRange, isFilterEnabled];
 
   FilterBottomsheetState copyWith({
-    String? selectedCategory,
+    String? selectedCategoryId,
     SortProductBy? sortProductBy,
     RangeValues? priceRange,
     bool? isFilterEnabled,
   }) {
     return FilterBottomsheetState(
-      selectedCategoryId: selectedCategory,
-      sortProductBy: sortProductBy,
+      selectedCategoryId: selectedCategoryId ?? this.selectedCategoryId,
+      sortProductBy: sortProductBy ?? this.sortProductBy,
       priceRange: priceRange ?? this.priceRange,
       isFilterEnabled: isFilterEnabled ?? this.isFilterEnabled,
     );

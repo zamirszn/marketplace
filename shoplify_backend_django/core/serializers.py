@@ -10,16 +10,20 @@ class UserCreateSerializer(UserCreateSerializer):
     class Meta(UserCreateSerializer.Meta):
         fields = ["id", "email", "full_name", "password"]
 
-
-
-
 class ProfileSerializer(serializers.ModelSerializer):
-    full_name = serializers.CharField(source='owner.full_name', read_only=True)
+    full_name = serializers.CharField(source='owner.full_name', read_only=False)
+    email = serializers.CharField(source='owner.email', read_only=False)
+
     class Meta:
         model = Profile
-        fields = ["id", "phone", "profilePicture", "shipping_address", "notifications_enabled", "full_name", "email" ]
+        fields = ["id", "phone", "profilePicture", "shipping_address", "notifications_enabled", "full_name", "email"]
 
-
+    def update(self, instance, validated_data):
+        owner_data = validated_data.pop('owner', {})
+        for attr, value in owner_data.items():
+            setattr(instance.owner, attr, value)
+        instance.owner.save()
+        return super().update(instance, validated_data)
 
 class CustomJWTSerializer(TokenObtainPairSerializer):
     

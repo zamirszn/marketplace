@@ -22,4 +22,3 @@ final class FilterPriceRangeEvent extends FilterBottomsheetEvent {
 }
 
 final class ResetFilterEvent extends FilterBottomsheetEvent {}
-final class ApplyFilterEvent extends FilterBottomsheetEvent {}

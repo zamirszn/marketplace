@@ -98,9 +98,22 @@ class Product(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     discount = models.BooleanField(default=False)
-    old_price = models.FloatField(
-        default=0, 
+    
+    price = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        default=0
     )
+
+    # Discount percentage (0 - 100)
+    discount_percentage = models.DecimalField(
+        max_digits=5,
+        decimal_places=2,
+        default=0,
+        validators=[MinValueValidator(0), MaxValueValidator(100)],
+        help_text="Enter discount as a percentage (0 - 100)"
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
     category = models.ForeignKey(
         Category,
@@ -124,14 +137,15 @@ class Product(models.Model):
     def reviews_length(self):
         count = self.reviews.count()
         return count
-
+    
     @property
-    def price(self):
-        if self.discount:
-            new_price = self.old_price - ((20 / 100) * self.old_price)
-        else:
-            new_price = self.old_price
-        return round(new_price, 2)
+    def discounted_price(self):
+        if self.discount_percentage > 0:
+            discount_amount = (self.discount_percentage / Decimal("100")) * self.price
+            return (self.price - discount_amount).quantize(Decimal("0.01"))
+        return None
+
+    
 
     def __str__(self):
         return self.slug
@@ -172,8 +186,6 @@ class ProductImage(models.Model):
         verbose_name_plural = "Products Images"
 
     
-
-
 class CartItem(models.Model):
     cart = models.ForeignKey(
         Cart, on_delete=models.SET_NULL, related_name="items", null=True, blank=True
@@ -190,41 +202,76 @@ class CartItem(models.Model):
     def __str__(self):
         return str(self.cart.id)
 
-
 class Order(models.Model):
-    PAYMENT_STATUS_PENDING = "PAYMENT_STATUS_PENDING"
-    PAYMENT_STATUS_COMPLETE = "PAYMENT_STATUS_COMPLETE"
-    PAYMENT_STATUS_FAILED = "PAYMENT_STATUS_FAILED"
-    ORDER_DELIVERED = "ORDER_DELIVERED"
-    ORDER_CANCELLED = "ORDER_CANCELLED"
+    class PaymentStatus(models.TextChoices):
+        PENDING = "PENDING", "Pending"
+        COMPLETE = "COMPLETE", "Complete"
+        FAILED = "FAILED", "Failed"
 
-    PAYMENT_STATUS_CHOICES = [
-        (PAYMENT_STATUS_FAILED, "Payment Failed"),
-        (ORDER_CANCELLED, "Order Cancelled"),
-        (PAYMENT_STATUS_PENDING, "Pending Payment"),
-        (PAYMENT_STATUS_COMPLETE, "Payment Complete"),
-        (ORDER_DELIVERED, "Order Delivered"),
-   
-    ]
+    class OrderStatus(models.TextChoices):
+        PENDING = "PENDING", "Pending"
+        PROCESSING = "PROCESSING", "Processing"
+        SHIPPED = "SHIPPED", "Shipped"
+        DELIVERED = "DELIVERED", "Delivered"
+        CANCELLED = "CANCELLED", "Cancelled"
+
+    class PaymentMethod(models.TextChoices):
+        STRIPE = "STRIPE", "Stripe"
+        PAYPAL = "PAYPAL", "PayPal"
+        COD = "COD", "Cash on Delivery"
+
+
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="orders"
+    )
 
     placed_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
     order_status = models.CharField(
-        max_length=50,
-        choices=PAYMENT_STATUS_CHOICES,
-        default=PAYMENT_STATUS_PENDING,
+        max_length=20, choices=OrderStatus.choices, default=OrderStatus.PENDING
     )
-    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, blank=True,
-        null=True,)
+    payment_status = models.CharField(
+        max_length=20, choices=PaymentStatus.choices, default=PaymentStatus.PENDING
+    )
+    payment_method = models.CharField(
+        max_length=20, choices=PaymentMethod.choices, default=PaymentMethod.STRIPE
+    )
+    transaction_id = models.CharField(
+        max_length=100, blank=True, null=True, help_text="Payment gateway reference (Stripe PI, PayPal ID, etc.)"
+    )
+    paid_at = models.DateTimeField(blank=True, null=True)
 
-    def __str__(self):
-        return self.owner.email + " - " + str(self.placed_at)
+    # Snapshot of phone number at checkout
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
 
+    # Optional customer notes for special instructions
+    notes = models.TextField(blank=True, null=True)
+
+    # Shipping fields
+    shipping_address = models.TextField(blank=True, null=True)
+    shipping_cost = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    delivered_at = models.DateTimeField(blank=True, null=True)
+
+   
     @property
     def total_price(self):
-        items = self.items.all()
+        total = Decimal("0.00")
+        for item in self.items.all():
+            total += Decimal(str(item.product.price)) * item.quantity
+        return total.quantize(Decimal("0.01"))
 
-        total = sum([item.quantity * item.product.price for item in items])
-        return total
+    @property
+    def grand_total(self):
+        return (self.total_price + self.shipping_cost).quantize(Decimal("0.01"))
+
+
+    def __str__(self):
+        return f"Order {self.id} - {self.owner.email if self.owner else 'Guest'}"
 
 
 class OrderItem(models.Model):

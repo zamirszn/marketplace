@@ -2,10 +2,14 @@
 part of 'profile_bloc.dart';
 
 enum ProfileStatus { initial, loading, success, failure }
+enum UpdateProfileStatus { initial, loading, success, failure }
+enum UpdateNotificationStatus { initial, loading, success, failure }
 
 class ProfileState extends Equatable {
-  final GetProfileResponseModel? profile;
+  final ProfileModel? profile;
   final ProfileStatus profileStatus;
+  final UpdateProfileStatus updateProfileStatus;
+  final UpdateNotificationStatus updateNotificationStatus;
   final String? successMessage;
   final String? errorMessage;
 
@@ -14,6 +18,8 @@ class ProfileState extends Equatable {
     this.profileStatus = ProfileStatus.initial,
     this.successMessage,
     this.errorMessage,
+    this.updateProfileStatus = UpdateProfileStatus.initial,
+    this.updateNotificationStatus = UpdateNotificationStatus.initial
   });
 
   @override
@@ -22,21 +28,25 @@ class ProfileState extends Equatable {
         profileStatus,
         successMessage,
         errorMessage,
+        updateProfileStatus,
+        updateNotificationStatus,
       ];
 
-  
-
   ProfileState copyWith({
-    GetProfileResponseModel? profile,
+    ProfileModel? profile,
     ProfileStatus? profileStatus,
     String? successMessage,
     String? errorMessage,
+    UpdateProfileStatus? updateProfileStatus,
+    UpdateNotificationStatus? updateNotificationStatus
   }) {
     return ProfileState(
       profile: profile ?? this.profile,
       profileStatus: profileStatus ?? this.profileStatus,
       successMessage: successMessage ?? this.successMessage,
       errorMessage: errorMessage ?? this.errorMessage,
+      updateProfileStatus: updateProfileStatus ?? this.updateProfileStatus,
+      updateNotificationStatus: updateNotificationStatus ?? this.updateNotificationStatus,
     );
   }
 }

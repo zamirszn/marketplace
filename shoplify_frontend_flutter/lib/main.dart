@@ -1,6 +1,5 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoplify/bloc_providers.dart';
 import 'package:shoplify/core/config/theme/color_manager.dart';
@@ -11,7 +10,6 @@ import 'package:shoplify/presentation/service_locator.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
   setupServiceLocator();
   runApp(const MarketPlaceApp());
 }
@@ -26,7 +24,6 @@ class MarketPlaceApp extends StatefulWidget {
 class _MarketPlaceAppState extends State<MarketPlaceApp> {
   @override
   Widget build(BuildContext context) {
-   
     return MultiBlocProvider(
       providers: blocProviders,
       child: DynamicColorBuilder(
